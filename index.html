@@ -982,6 +982,10 @@
                     <input type="range" id="shoulder" min="-90" max="90" value="45">
                     <span class="slider-value" id="shoulder-value">45°</span>
                 </div>
+                <div class="slider-container">
+                    <label>Elbow:</label>
+                    <input type="range" id="elbow" min="0" max="180" value="90">
+                    <span class="slider-value" id="elbow-value">90°</span>
                 </div>
                 <div class="slider-container">
                     <label>Wrist Pitch:</label>
@@ -1633,6 +1637,7 @@
                                 loadingScreen.style.display = 'none';
                                 document.body.classList.remove('loading');
                                 if (matrixAnimationId) cancelAnimationFrame(matrixAnimationId); // Stop matrix animation
+
                             }, screenFadeOutDuration);
                         }, textFadeOutDuration);
                     }, matrixDisplayDuration - textFadeOutDuration); // Start text fade out earlier
