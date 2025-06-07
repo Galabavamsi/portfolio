@@ -478,7 +478,7 @@
             align-items: center;
             z-index: 9999;
             opacity: 1;
-            transition: opacity 1.5s ease-in-out; /* Smoother fade out */
+            transition: opacity 2s ease-in-out; /* Smoother fade out */
         }
 
         .loading-content {
@@ -572,7 +572,81 @@
             display: none;
             opacity: 0;
             transition: opacity 0.8s ease-in-out; /* Fade transition for the text itself */
-            text-align: center;
+            text-align: center;        }
+
+        /* CRT/VHS Terminal Styles */
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        
+        .crt-screen {
+            background: linear-gradient(to bottom, #001100 0%, #002200 50%, #001100 100%);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .crt-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(0, 255, 0, 0.03) 50%,
+                transparent 100%
+            );
+            animation: screen-flicker 0.15s linear infinite;
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent 0px,
+                rgba(0, 255, 0, 0.03) 1px,
+                transparent 2px,
+                transparent 4px
+            );
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        .screen-flicker {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 255, 0, 0.02);
+            animation: screen-flicker 0.15s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        @keyframes screen-flicker {
+            0% { opacity: 1; }
+            98% { opacity: 1; }
+            99% { opacity: 0.98; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes text-glitch {
+            0% { text-shadow: 0 0 5px #00FF00; }
+            10% { text-shadow: 2px 0 5px #FF0000, -2px 0 5px #00FFFF; }
+            20% { text-shadow: 0 0 5px #00FF00; }
+            100% { text-shadow: 0 0 5px #00FF00; }
+        }
+        
+        #animated-command-text {
+            animation: text-glitch 3s ease-in-out infinite;
         }
 
         /* Animation for sections */
@@ -721,8 +795,10 @@
 <body>
     <div class="loading-screen">
         <div class="loading-content">
-            <div class="gear"></div>
-            <div id="percentage-counter">0%</div>
+        </div>        <div id="animated-command-container" class="crt-screen" style="display: none; width: 80%; max-width: 600px; min-height: 600px; padding: 20px; margin-bottom: 20px; text-align: left; background: #001100; border: 3px solid #00FF00; border-radius: 15px; box-shadow: 0 0 20px #00FF00, inset 0 0 20px rgba(0,255,0,0.1); position: relative; overflow: hidden;">
+            <div class="scanlines"></div>
+            <div class="screen-flicker"></div>
+            <span id="animated-command-text" style="white-space: pre-wrap; word-break: break-all; font-family: 'VT323', 'Courier New', monospace; color: #00FF00; font-size: 18px; text-shadow: 0 0 5px #00FF00; line-height: 1.4; position: relative; z-index: 3;"></span>
         </div>
         <canvas id="matrix-canvas"></canvas>
         <div id="matrix-entry-text">Entering the Matrix...</div>
@@ -738,11 +814,11 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#projects">Projects</a></li>
-                    <li><a href="#skills">Skills</a></li>
-                    <li><a href="#arm-controls">Arm Controls</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#about">$ About</a></li>
+                    <li><a href="#projects">$ Projects</a></li>
+                    <li><a href="#skills">$ Skills</a></li>
+                    <li><a href="#arm-controls">$ Arm Controls</a></li>
+                    <li><a href="#contact">$ Contact</a></li>
                 </ul>
             </nav>
         </header>
@@ -750,14 +826,14 @@
         <section class="hero">
             <h1>Engineering the Future: Robotics & Automation</h1>
             <h2>Mechatronics Engineering Student | Robotics Enthusiast</h2>
-            <p>Welcome to my interactive portfolio! As a mechatronics student, I specialize in creating integrated systems that combine mechanical design, electronic control, and intelligent software. Explore my projects and interact with the robotic arm below.</p>
+            <p>Welcome to my portfolio! As a mechatronics student, I specialize in creating integrated systems that combine mechanical design, electronic control, and intelligent software. Explore my projects and interact with the robotic arm below.</p>
             <a href="#projects" class="btn btn-primary">View Projects</a>
             <a href="#arm-controls" class="btn">Control Arm</a>
         </section>
 
         <section id="about" class="fade-in-section" style="padding-top: 6rem; padding-bottom: 6rem; position: relative; overflow: hidden;">
             <canvas id="about-matrix-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.2;"></canvas>
-            <h2 class="section-title matrix-text-glow" style="text-align: center; margin-bottom: 4rem; font-size: 3rem;">INITIATE: Profile_Vamsi.exe</h2>
+            <h2 class="section-title matrix-text-glow" style="text-align: center; margin-bottom: 4rem; font-size: 3rem;">> ./INITIATE: Profile_Vamsi.exe</h2>
             
             <div class="matrix-terminal-output" style="max-width: 900px; margin: 0 auto; background: rgba(0, 20, 0, 0.85); border: 1px solid #00FF00; border-radius: 8px; padding: 25px; box-shadow: 0 0 15px #00FF00, inset 0 0 10px rgba(0,255,0,0.3); font-family: 'Fira Code', 'Courier New', monospace; color: #00FF00;">
                 <p class="matrix-prompt">[user@matrix ~]$ ./load_profile --vamsi</p>
@@ -813,7 +889,7 @@
         </section>
 
         <section id="projects">
-            <h2 class="section-title">Robotics Projects</h2>
+            <h2 class="section-title">> ./Robotics Projects</h2>
             <div class="projects-grid">
                 <div class="project-card">
                     <div class="project-img">
@@ -851,7 +927,7 @@
         </section>
 
         <section id="skills">
-            <h2 class="section-title">Technical Expertise</h2>
+            <h2 class="section-title">> ./Technical Expertise</h2>
             <div class="skills-container">
                 <div class="skill-category">
                     <h3>Mechanical Design</h3>
@@ -925,18 +1001,18 @@
             </div>
             
             <div class="control-group">
-                <h3>Movement Presets</h3>
+                <h3>> ./Movement_Presets</h3>
                 <div class="preset-buttons">
-                    <button class="preset-btn" data-preset="reset">Reset Position</button>
-                    <button class="preset-btn" data-preset="wave">Wave Motion</button>
-                    <button class="preset-btn" data-preset="inspect">Inspection Mode</button>
-                    <button class="preset-btn" data-preset="pickupAndPlace">Pick Up and Place Cube</button>
+                    <button class="preset-btn" data-preset="reset">Reset_Position.exe</button>
+                    <button class="preset-btn" data-preset="wave">Wave_Motion.exe</button>
+                    <button class="preset-btn" data-preset="inspect">Inspection_Mode.exe</button>
+                    <button class="preset-btn" data-preset="pickupAndPlace">Pick_Up_and_Place_Cube.exe</button>
                 </div>
             </div>
         </section>
 
         <section id="contact">
-            <h2 class="section-title">Get In Touch</h2>
+            <h2 class="section-title">> ./Get In Touch</h2>
             <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto 3rem; text-align: center; line-height: 1.7;">
                 I'm currently seeking internship opportunities and collaborative projects in robotics and automation. Feel free to reach out if you'd like to discuss potential opportunities or just chat about mechatronics!
             </p>
@@ -974,13 +1050,14 @@
             gripperLeft: null,
             gripperRight: null
         };
-        
-        // Loading screen
+          // Loading screen
         const loadingScreen = document.querySelector('.loading-screen');
         const loadingContent = document.querySelector('.loading-content'); 
         const percentageCounter = document.getElementById('percentage-counter');
+        const animatedCommandContainer = document.getElementById('animated-command-container');
+        const animatedCommandText = document.getElementById('animated-command-text');
         const matrixCanvas = document.getElementById('matrix-canvas');
-        const matrixEntryText = document.getElementById('matrix-entry-text'); // Get the new text element
+        const matrixEntryText = document.getElementById('matrix-entry-text');
         let matrixAnimationId;
 
 
@@ -1501,48 +1578,66 @@
         // Loading screen sequence
         function startLoadingSequence() {
             document.body.classList.add('loading'); 
-
-            let percentage = 0;
-            const counterInterval = 30; // ms per percentage point
-            const totalCounterDuration = counterInterval * 100; // e.g., 3000ms for counter
-
-            const interval = setInterval(() => {
-                percentage++;
-                percentageCounter.textContent = percentage + '%';
-                if (percentage >= 100) {
-                    clearInterval(interval);
-                    
-                    loadingContent.style.display = 'none'; 
+            
+            // Hide percentage counter elements
+            if (percentageCounter) percentageCounter.style.display = 'none';
+            if (loadingContent) loadingContent.style.display = 'none';
+            
+            // Get command container elements without creating additional global variables
+            const cmdContainer = document.getElementById('animated-command-container');
+            const cmdText = document.getElementById('animated-command-text');
+            
+            if (!cmdContainer || !cmdText) {
+                console.error('Command animation elements not found');
+                // Fallback to immediately show main content
+                if (loadingScreen) loadingScreen.style.display = 'none';
+                document.body.classList.remove('loading');
+                return;
+            }
+              // Show command container
+            cmdContainer.style.display = 'block';
+            
+            // Command to type
+            const command = '[user@matrix ~]$ connect --construct=Portfolio';
+            
+            // Use the existing typeWriter function to type the command
+            typeWriter(cmdText, command, 50, () => {
+                // After command is typed, wait a moment
+                setTimeout(() => {
+                    // Hide command and show matrix animation
+                    cmdContainer.style.display = 'none';
                     matrixCanvas.style.display = 'block';
                     matrixEntryText.style.display = 'block';
                     
                     // Timeout to ensure display:block is applied before opacity transition
                     setTimeout(() => {
-                        matrixEntryText.style.opacity = '1'; 
+                        matrixEntryText.style.opacity = '1';
                     }, 50);
-
+                    
+                    // Start the matrix animation
                     initMatrixAnimation();
-
-                    const matrixDisplayDuration = 5000; // How long matrix + text are shown
-                    const textFadeOutDuration = 800; // Must match #matrix-entry-text transition
-                    const screenFadeOutDuration = 1500; // Must match .loading-screen transition
-
+                    
+                    const matrixDisplayDuration = 3000; // How long matrix + text are shown (shortened from 5000)
+                    const textFadeOutDuration = 800;    // Must match #matrix-entry-text transition
+                    const screenFadeOutDuration = 2000; // Must match .loading-screen transition (shortened from 1500)
+                    
+                    // After matrixDisplayDuration, start fading out the text
                     setTimeout(() => {
                         matrixEntryText.style.opacity = '0'; // Start fading out text
-
+                        
                         setTimeout(() => {
                             matrixEntryText.style.display = 'none';
                             loadingScreen.style.opacity = '0'; // Start fading out whole screen
-                            if (matrixAnimationId) cancelAnimationFrame(matrixAnimationId);
-
+                            
                             setTimeout(() => {
                                 loadingScreen.style.display = 'none';
-                                document.body.classList.remove('loading'); 
-                            }, screenFadeOutDuration); 
+                                document.body.classList.remove('loading');
+                                if (matrixAnimationId) cancelAnimationFrame(matrixAnimationId); // Stop matrix animation
+                            }, screenFadeOutDuration);
                         }, textFadeOutDuration);
                     }, matrixDisplayDuration - textFadeOutDuration); // Start text fade out earlier
-                }
-            }, counterInterval); 
+                }, 800); // Pause after command typing is done
+            });
         }
 
         function initMatrixAnimation() {
@@ -1646,6 +1741,7 @@
 
                     // Check if the intersecting section is 'about' and if animation hasn't run
                     if (entry.target.id === 'about' && !entry.target.dataset.aboutAnimated) {
+
                         entry.target.dataset.aboutAnimated = 'true'; // Set flag to true using a data attribute
 
                         // Initialize typing effects for the about section
@@ -1694,18 +1790,70 @@
                 section.classList.add('fade-in-section');
             }
             newSectionObserver.observe(section);
-        });
-
-        function typeWriter(element, text, delay = 50, callback) {
+        });        function typeWriter(element, text, delay = 50, callback) {
             element.innerHTML = ''; // Clear existing content
             let i = 0;
             element.style.opacity = '1'; // Make sure it's visible before typing
             element.style.borderRight = '.15em solid #00FF00'; // Start with caret
+            
+            // Audio context for typing sounds
+            let audioContext;
+            let oscillator;
+            
+            function createTypingSound() {
+                try {
+                    if (!audioContext) {
+                        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+                    
+                    oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    // Random frequency for old terminal sound
+                    oscillator.frequency.value = 800 + Math.random() * 400;
+                    oscillator.type = 'square';
+                    
+                    gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.1);
+                } catch (e) {
+                    // Audio might not be supported, continue silently
+                }
+            }
+            
             function typing() {
                 if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
+                    const char = text.charAt(i);
+                    element.innerHTML += char;
+                    
+                    // Create typing sound for each character
+                    createTypingSound();
+                    
+                    // Variable delay for realistic typing
+                    let currentDelay = delay;
+                    
+                    // Add variance to typing speed
+                    currentDelay += Math.random() * 30 - 15;
+                    
+                    // Longer pauses after punctuation
+                    if (char === '.' || char === '!' || char === '?') {
+                        currentDelay += 200;
+                    } else if (char === ',' || char === ';') {
+                        currentDelay += 100;
+                    } else if (char === ' ') {
+                        currentDelay += 20;
+                    }
+                    
+                    // Ensure minimum delay
+                    currentDelay = Math.max(currentDelay, 20);
+                    
                     i++;
-                    setTimeout(typing, delay);
+                    setTimeout(typing, currentDelay);
                 } else {
                     element.style.borderRightColor = 'transparent'; // Remove caret after typing
                     element.classList.add('finished-typing-cursor');
