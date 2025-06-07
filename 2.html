@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechatronics Portfolio | 3D Robotic Arm</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #0a1929, #0d1b2a);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        #three-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .content {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            z-index: 10;
+        }
+
+        header {
+            padding: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #4dabf5;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #a0b3c6;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #64ffda;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #64ffda;
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            padding: 8rem 0 4rem;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #4dabf5, #64ffda);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero h2 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            color: #a0b3c6;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            max-width: 700px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: rgba(77, 171, 245, 0.1);
+            color: #4dabf5;
+            border: 1px solid rgba(77, 171, 245, 0.3);
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn:hover {
+            background: rgba(77, 171, 245, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4dabf5, #64ffda);
+            color: #0a1929;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #64b5f6, #80ffdb);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin: 6rem 0 3rem;
+            position: relative;
+            padding-bottom: 1rem;
+            color: #4dabf5;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(45deg, #4dabf5, #64ffda);
+            border-radius: 2px;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 6rem;
+        }
+
+        .project-card {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(77, 171, 245, 0.1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(77, 171, 245, 0.3);
+        }
+
+        .project-img {
+            height: 220px;
+            background: linear-gradient(45deg, #1e293b, #0f172a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(77, 171, 245, 0.1), rgba(100, 255, 218, 0.1));
+            opacity: 0.5;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #e0e0e0;
+        }
+
+        .project-content p {
+            color: #a0b3c6;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 6rem;
+        }
+
+        .skill-category {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 10px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(77, 171, 245, 0.1);
+        }
+
+        .skill-category h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #64ffda;
+        }
+
+        .skill-list {
+            list-style: none;
+        }
+
+        .skill-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(160, 179, 198, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .skill-list li:last-child {
+            border-bottom: none;
+        }
+
+        .skill-list li::before {
+            content: '▹';
+            color: #64ffda;
+            margin-right: 10px;
+        }
+
+        #arm-controls {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 6rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(77, 171, 245, 0.1);
+        }
+
+        .control-group {
+            margin-bottom: 2rem;
+        }
+
+        .control-group h3 {
+            margin-bottom: 1rem;
+            color: #64ffda;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .slider-container label {
+            min-width: 120px;
+            color: #a0b3c6;
+        }
+
+        .slider-container input[type="range"] {
+            flex-grow: 1;
+            height: 6px;
+            background: rgba(160, 179, 198, 0.2);
+            border-radius: 3px;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #4dabf5;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider-value {
+            min-width: 40px;
+            text-align: right;
+            color: #64ffda;
+        }
+
+        .preset-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .preset-btn {
+            padding: 8px 16px;
+            background: rgba(77, 171, 245, 0.1);
+            color: #4dabf5;
+            border: 1px solid rgba(77, 171, 245, 0.3);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .preset-btn:hover {
+            background: rgba(77, 171, 245, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(77, 171, 245, 0.1);
+            color: #a0b3c6;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(77, 171, 245, 0.1);
+            color: #4dabf5;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: rgba(77, 171, 245, 0.3);
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            nav ul {
+                margin-top: 1.5rem;
+                gap: 1.5rem;
+            }
+            
+            .hero {
+                padding: 5rem 0 3rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.5rem;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* UPDATED LOADING SCREEN STYLES */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000; /* Black background for loading */
+            display: flex;
+            flex-direction: column; /* Align items vertically */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 1.5s ease-in-out; /* Smoother fade out */
+        }
+
+        .loading-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative; /* For positioning counter if needed */
+        }
+
+        .gear {
+            width: 80px;
+            height: 80px;
+            border: 8px solid #64ffda; /* Accent color for gear teeth */
+            border-right-color: transparent;
+            border-left-color: transparent;
+            border-radius: 50%;
+            animation: spin 2s linear infinite, pulse-glow 1.5s ease-in-out infinite alternate; /* Added pulse-glow */
+            position: relative;
+            margin-bottom: 20px; /* Space between gear and counter */
+        }
+
+        .gear::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px; /* Inner rotating part */
+            height: 60px;
+            border: 6px solid #4dabf5; /* Secondary accent color */
+            border-top-color: transparent;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            animation: spin-reverse 1.5s linear infinite;
+            transform: translate(-50%, -50%);
+        }
+
+        .gear::after { /* Center dot */
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 15px;
+            height: 15px;
+            background-color: #ccd6f6; /* Light color for center */
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes spin-reverse {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(-360deg); }
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 5px rgba(100, 255, 218, 0.7), 0 0 10px rgba(100, 255, 218, 0.5); }
+            100% { box-shadow: 0 0 15px rgba(100, 255, 218, 1), 0 0 25px rgba(100, 255, 218, 0.8); }
+        }
+
+        #percentage-counter {
+            font-size: 24px;
+            color: #ccd6f6; /* Light text color */
+            font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+        }
+
+        #matrix-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none; /* Initially hidden */
+            z-index: 9998; 
+        }
+
+        #matrix-entry-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5em; /* Adjusted size */
+            color: #00FF00; /* Bright Green */
+            font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace; /* Consistent mono font */
+            text-shadow: 0 0 5px #00FF00, 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 30px #00FF00, 0 0 40px #00FF00, 0 0 50px #00FF00;
+            z-index: 9999; /* On top of matrix canvas */
+            display: none;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out; /* Fade transition for the text itself */
+            text-align: center;
+        }
+
+        /* Animation for sections */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(25px); /* Slightly increased translate */
+            transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out; /* Smoother and longer */
+            visibility: hidden; /* Ensure it's not focusable/interactive when hidden */
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen">
+        <div class="loading-content">
+            <div class="gear"></div>
+            <div id="percentage-counter">0%</div>
+        </div>
+        <canvas id="matrix-canvas"></canvas>
+        <div id="matrix-entry-text">Entering the Matrix...</div>
+    </div>
+    
+    <div id="three-container"></div>
+
+    <div class="content">
+        <header>
+            <div class="logo">
+                <span class="logo-icon">🤖</span>
+                Galaba Vamsi
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#arm-controls">Arm Controls</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1>Engineering the Future: Robotics & Automation</h1>
+            <h2>Mechatronics Engineering Student | Robotics Enthusiast</h2>
+            <p>Welcome to my interactive portfolio! As a mechatronics student, I specialize in creating integrated systems that combine mechanical design, electronic control, and intelligent software. Explore my projects and interact with the robotic arm below.</p>
+            <a href="#projects" class="btn btn-primary">View Projects</a>
+            <a href="#arm-controls" class="btn">Control Arm</a>
+        </section>
+
+        <section id="about" style="padding-top: 4rem; padding-bottom: 4rem;">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 3rem;">Meet Galaba Vamsi: Part-Time Student, Full-Time Brainiac (Now with Extra Robotics!)</h2>
+            
+            <div style="max-width: 800px; margin: 0 auto; text-align: left; line-height: 1.7; color: #a0b3c6;">
+                <p style="margin-bottom: 1.5rem;">
+                    Hailing from the prestigious IIT Bhilai, where they apparently forge future-shapers out of sheer brainpower and caffeine, Galaba Vamsi is a Mechatronics undergrad on a mission. Set to graduate in 2027 (mark your calendars, world!), he's not just learning to build robots; he's learning to make them polite enough to ask before taking over. Vamsi's on a relentless quest for knowledge, consuming information like a caffeinated Roomba in a library, all in the noble pursuit of making the world a slightly more awesome (and automated) place. He believes success is best served shared, preferably with a side of well-written code.
+                </p>
+        
+                <h3 style="color: #64ffda; font-size: 1.8rem; margin-top: 2.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid #4dabf5; padding-bottom: 0.5rem;">The Arsenal of Awesome (aka Skills):</h3>
+                <p style="margin-bottom: 1rem;">What's in Vamsi's utility belt? More than just pocket lint, that's for sure!</p>
+                <ul style="list-style: none; padding-left: 0; margin-bottom: 1.5rem;">
+                    <li style="margin-bottom: 0.7rem; display: flex; align-items: flex-start;"><strong style="color: #4dabf5; min-width: 150px; display: inline-block;">Code Wizardry:</strong> Fluent in Python, C, C++, JavaScript, and enough web/app frameworks (React, Node, Three.js, Flutter, and the gang) to build a digital empire. He even speaks ROS2, which is like a secret handshake for robots.</li>
+                    <li style="margin-bottom: 0.7rem; display: flex; align-items: flex-start;"><strong style="color: #4dabf5; min-width: 150px; display: inline-block;">Robot Whisperer:</strong> From drone development to complex navigation systems, he's teaching machines to do his bidding (politely, of course).</li>
+                    <li style="margin-bottom: 0.7rem; display: flex; align-items: flex-start;"><strong style="color: #4dabf5; min-width: 150px; display: inline-block;">Data Detective & ML Maestro:</strong> Armed with Numpy, Pandas, and TensorFlow, he can make data sing and algorithms dance.</li>
+                    <li style="margin-bottom: 0.7rem; display: flex; align-items: flex-start;"><strong style="color: #4dabf5; min-width: 150px; display: inline-block;">Master of Dimensions:</strong> Wields SolidWorks and AutoCAD like a digital sculptor.</li>
+                    <li style="margin-bottom: 0.7rem; display: flex; align-items: flex-start;"><strong style="color: #4dabf5; min-width: 150px; display: inline-block;">The Creative Spark:</strong> Not just a tech head! He's got UI/UX chops (Figma, Adobe XD), can make Blender and Unreal Engine do his artistic bidding, and probably edits home videos with DaVinci Resolve like a Hollywood pro.</li>
+                </ul>
+        
+                <h3 style="color: #64ffda; font-size: 1.8rem; margin-top: 2.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid #4dabf5; padding-bottom: 0.5rem;">Epic Quests (aka Projects & Experience):</h3>
+                <p style="margin-bottom: 1rem;">Vamsi doesn't just dream of the future; he builds it, one groundbreaking project at a time:</p>
+                <ul style="list-style: disc; padding-left: 20px; margin-bottom: 1.5rem;">
+                    <li style="margin-bottom: 0.5rem;"><strong>Mind-Controlled Mobility:</strong> Currently leveling up with a Brain-Controlled Wheelchair project. Yes, you read that right. He's probably trying to patent telepathy next.</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Guiding Newbies:</strong> Designed the <code>Polaris Website</code> for IIT Bhilai freshers, because even geniuses need a good map.</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Digital Zen Master:</strong> Created <code>Serenity</code>, a Flutter app for mental well-being, complete with ML-powered stress-o-meters. Because even robots get stressed sometimes.</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Martian Explorer (Almost):</strong> Lent his CAD and navigation brain cells to the Epsilon Club’s Mars Rover.</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Marketing Maverick (Intern Edition):</strong> Briefly swapped circuits for strategy as a Marketing Intern at Swiggy, proving he can sell an idea as well as build one.</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Film Festival Tycoon:</strong> As President of the Film and Photography Society, he didn't just watch movies; he made the club a star, boosting its Inter-IIT ranking. From coding scenes to cinematic scenes!</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>RIS-ky Business:</strong> Currently a Research Intern conjuring up a GUI-based RIS Simulator. That's 'Reconfigurable Intelligent Surface,' for those not yet fluent in cutting-edge tech.</li>
+                </ul>
+        
+                <h3 style="color: #64ffda; font-size: 1.8rem; margin-top: 2.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid #4dabf5; padding-bottom: 0.5rem;">Off-Duty Shenanigans (When the Soldering Iron Cools Down):</h3>
+                <p style="margin-bottom: 1rem;">Believe it or not, Vamsi does unplug occasionally!</p>
+                <ul style="list-style: disc; padding-left: 20px; margin-bottom: 1.5rem;">
+                    <li style="margin-bottom: 0.5rem;"><strong>Sporty Spice (of the Engineering Variety):</strong> A badminton champ who also dabbles in basketball, football, and cricket. He's probably calculating trajectory vectors for fun.</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Bookworm Extraordinaire:</strong> Devours sci-fi novels like <em>The Martian</em>, <em>Dune</em>, and <em>The Three-Body Problem</em>. Clearly planning his escape to another planet if the robot uprising goes sideways.</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Puzzle Master:</strong> Sudoku and crosswords don't stand a chance.</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Cinephile & Storyteller:</strong> Has probably seen more movies than your Netflix account.</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Gaming Guru:</strong> If it involves a controller or a deck of cards, he's in.</li>
+                </ul>
+                
+                <p style="margin-top: 2rem; font-style: italic;">So, if you're looking for someone who can debug your code, design your next-gen robot, direct a short film, AND school you in badminton, you've found your guy. Reach out before he accidentally invents sentient AI and becomes too busy ruling his new robot kingdom (kidding... mostly).</p>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2 class="section-title">Robotics Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-img">
+                        <span style="font-size: 4rem; color: #4dabf5;">🤖</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>Autonomous Mobile Robot</h3>
+                        <p>Designed and built an autonomous robot capable of navigating complex environments using LiDAR and SLAM algorithms. Integrated motor control, sensor fusion, and path planning.</p>
+                        <a href="#" class="btn">View Details</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-img">
+                        <span style="font-size: 4rem; color: #64ffda;">🦾</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>Robotic Arm Control System</h3>
+                        <p>Developed a 6-DOF robotic arm with inverse kinematics control. Implemented real-time trajectory planning and haptic feedback using Arduino and Raspberry Pi.</p>
+                        <a href="#" class="btn">View Details</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-img">
+                        <span style="font-size: 4rem; color: #ff6b6b;">📊</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>Smart Factory Monitoring</h3>
+                        <p>Created an IoT-based monitoring system for industrial equipment using vibration sensors and machine learning algorithms to predict maintenance needs.</p>
+                        <a href="#" class="btn">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <h2 class="section-title">Technical Expertise</h2>
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3>Mechanical Design</h3>
+                    <ul class="skill-list">
+                        <li>CAD (SolidWorks, Fusion 360)</li>
+                        <li>Finite Element Analysis</li>
+                        <li>3D Printing & Prototyping</li>
+                        <li>Material Selection</li>
+                        <li>Thermodynamics & Fluid Dynamics</li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Electronics & Control</h3>
+                    <ul class="skill-list">
+                        <li>Circuit Design & PCB Layout</li>
+                        <li>Microcontrollers (Arduino, ESP32)</li>
+                        <li>PLC Programming</li>
+                        <li>Sensors & Actuators</li>
+                        <li>Control Systems (PID, Fuzzy Logic)</li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Software & Programming</h3>
+                    <ul class="skill-list">
+                        <li>Python (NumPy, Pandas)</li>
+                        <li>C/C++ for Embedded Systems</li>
+                        <li>MATLAB & Simulink</li>
+                        <li>ROS (Robot Operating System)</li>
+                        <li>Machine Learning Basics</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="arm-controls">
+            <h2 class="section-title">Robotic Arm Controls</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 2rem; max-width: 800px; color: #a0b3c6;">
+                Interact with the 6-DOF robotic arm in real-time. Adjust the sliders to control each joint or select a preset movement pattern.
+            </p>
+            
+            <div class="control-group">
+                <h3>Joint Controls</h3>
+                <div class="slider-container">
+                    <label>Base Rotation:</label>
+                    <input type="range" id="base-rotation" min="-180" max="180" value="0">
+                    <span class="slider-value" id="base-value">0°</span>
+                </div>
+                <div class="slider-container">
+                    <label>Shoulder:</label>
+                    <input type="range" id="shoulder" min="-90" max="90" value="45">
+                    <span class="slider-value" id="shoulder-value">45°</span>
+                </div>
+                <div class="slider-container">
+                    <label>Elbow:</label>
+                    <input type="range" id="elbow" min="0" max="135" value="90">
+                    <span class="slider-value" id="elbow-value">90°</span>
+                </div>
+                <div class="slider-container">
+                    <label>Wrist Pitch:</label>
+                    <input type="range" id="wrist-pitch" min="-90" max="90" value="0">
+                    <span class="slider-value" id="wrist-pitch-value">0°</span>
+                </div>
+                <div class="slider-container">
+                    <label>Wrist Roll:</label>
+                    <input type="range" id="wrist-roll" min="-180" max="180" value="0">
+                    <span class="slider-value" id="wrist-roll-value">0°</span>
+                </div>
+                <div class="slider-container">
+                    <label>Gripper:</label>
+                    <input type="range" id="gripper" min="0" max="100" value="50">
+                    <span class="slider-value" id="gripper-value">50%</span>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <h3>Movement Presets</h3>
+                <div class="preset-buttons">
+                    <button class="preset-btn" data-preset="reset">Reset Position</button>
+                    <button class="preset-btn" data-preset="wave">Wave Motion</button>
+                    <button class="preset-btn" data-preset="pickup">Pick & Place (Old)</button> 
+                    <button class="preset-btn" data-preset="inspect">Inspection Mode</button>
+                    <button class="preset-btn" data-preset="pickupAndPlace">Pick Up and Place Cube</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2 class="section-title">Get In Touch</h2>
+            <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto 3rem; text-align: center; line-height: 1.7;">
+                I'm currently seeking internship opportunities and collaborative projects in robotics and automation. Feel free to reach out if you'd like to discuss potential opportunities or just chat about mechatronics!
+            </p>
+            <div style="text-align: center; margin-bottom: 6rem;">
+                <a href="mailto:contact@mechatronics-portfolio.com" class="btn btn-primary">Send Email</a>
+            </div>
+        </section>
+
+        <footer>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/galaba-vamsi-334758211/" target="_blank" rel="noopener noreferrer"><span>in</span></a>
+                <a href="https://github.com/Galabavamsi" target="_blank" rel="noopener noreferrer"><span>gh</span></a>
+                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><span>ig</span></a> 
+                <a href="https://www.youtube.com/@galabavamsi12" target="_blank" rel="noopener noreferrer"><span>yt</span></a>
+            </div>
+            <p>© 2023 Mechatronics Portfolio. All rights reserved.</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">Engineered with passion for robotics and automation</p>
+        </footer>
+    </div>
+
+    <script>
+        // Three.js Scene Setup
+        let scene, camera, renderer, controls;
+        let armModel, mixer;
+        let clock = new THREE.Clock();
+        
+        // Joints for the robotic arm
+        const joints = {
+            base: null,
+            shoulder: null,
+            elbow: null,
+            wristPitch: null,
+            wristRoll: null,
+            gripperLeft: null,
+            gripperRight: null
+        };
+        
+        // Loading screen
+        const loadingScreen = document.querySelector('.loading-screen');
+        const loadingContent = document.querySelector('.loading-content'); 
+        const percentageCounter = document.getElementById('percentage-counter');
+        const matrixCanvas = document.getElementById('matrix-canvas');
+        const matrixEntryText = document.getElementById('matrix-entry-text'); // Get the new text element
+        let matrixAnimationId;
+
+
+        // Cube and interaction variables
+        let pickupCube = null;
+        let isCubePickedUp = false;
+        const initialCubePosition = new THREE.Vector3(3, -1.8, 2); // Y so it sits on grid (y=-2) + half cube height (0.2)
+        const dropOffPosition = new THREE.Vector3(-3, -1.8, 2);
+
+        // Animation variables
+        let currentAnimation = null;
+        let animationTime = 0;
+
+        const animations = {
+            wave: {
+                duration: 2, // seconds
+                loop: true,
+                joints: {
+                    shoulder: [ { time: 0, value: 45 }, { time: 1, value: 75 }, { time: 2, value: 45 } ],
+                    elbow:    [ { time: 0, value: 90 }, { time: 0.5, value: 60 }, { time: 1.5, value: 120 }, { time: 2, value: 90 } ],
+                    wristRoll:[ { time: 0, value: 0 },  { time: 0.5, value: -30 }, { time: 1.5, value: 30 }, { time: 2, value: 0 } ]
+                }
+            },
+            pickup: { 
+                duration: 6,
+                loop: false,
+                joints: {
+                    base:     [ {time: 0, value: 0},  {time: 1, value: 45}, {time: 4, value: 45},  {time: 5, value: 0}, {time: 6, value: 0} ],
+                    shoulder: [ {time: 0, value: 45}, {time: 1, value: 30}, {time: 2, value: 20},  {time: 3, value: 20}, {time: 4, value: 30}, {time: 5, value: 45}, {time: 6, value: 45} ],
+                    elbow:    [ {time: 0, value: 90}, {time: 1, value: 120},{time: 2, value: 135}, {time: 3, value: 135},{time: 4, value: 120},{time: 5, value: 90}, {time: 6, value: 90} ],
+                    gripper:  [ {time: 0, value: 80}, {time: 1.5, value: 80},{time: 2.5, value: 20},{time: 3.5, value: 20},{time: 4.5, value: 80},{time: 6, value: 80} ],
+                    wristPitch:[ {time: 0, value: 0}, {time: 1, value: -20}, {time: 2, value: -45}, {time: 3, value: -45}, {time: 4, value: -20}, {time: 5, value: 0}, {time: 6, value: 0}]
+                }
+            },
+            inspect: { 
+                duration: 8,
+                loop: true,
+                joints: {
+                    base:       [ {time: 0, value: 0}, {time: 2, value: -60}, {time: 4, value: 0}, {time: 6, value: 60}, {time: 8, value: 0} ],
+                    shoulder:   [ {time: 0, value: 45}, {time: 4, value: 30}, {time: 8, value: 45}],
+                    wristPitch: [ {time: 0, value: 0}, {time: 2, value: 45}, {time: 4, value: 0}, {time: 6, value: -45}, {time: 8, value: 0} ],
+                    wristRoll:  [ {time: 0, value: 0}, {time: 1, value: 30}, {time: 3, value: -30}, {time: 5, value: 30}, {time: 7, value: -30}, {time: 8, value: 0}]
+                }
+            },
+            pickupAndPlace: {
+                name: 'pickupAndPlace',
+                duration: 12, // seconds
+                loop: false,
+                pickupTime: 4.5, // Time when gripper is closed and cube should be attached
+                releaseTime: 8.5, // Time when gripper is open and cube should be detached
+                joints: {
+                    base: [
+                        { time: 0, value: 0 },
+                        { time: 2, value: 50 },   // Rotate towards pickup X=3, Z=2
+                        { time: 5.5, value: 50 }, // Hold during lift
+                        { time: 7.5, value: -50 },// Rotate towards dropoff X=-3, Z=2
+                        { time: 12, value: 0 }
+                    ],
+                    shoulder: [ // Slider: 45 default. Lower value = arm lower.
+                        { time: 0, value: 45 },
+                        { time: 2, value: 30 },   // Approach pickup height
+                        { time: 4, value: 10 },   // Lower to pickup (was 15)
+                        { time: 4.5, value: 10 }, // Hold (was 15)
+                        { time: 5.5, value: 30 }, // Lift
+                        { time: 7.5, value: 30 }, // Move at height
+                        { time: 8.5, value: 10 }, // Lower to dropoff (was 15)
+                        { time: 9, value: 10 },   // Hold (was 15)
+                        { time: 12, value: 45 }
+                    ],
+                    elbow: [ // Slider: 90 default (straight). Higher = more outward reach.
+                        { time: 0, value: 90 },
+                        { time: 2, value: 110 },  // Extend
+                        { time: 4, value: 125 },  // Extend further (was 120)
+                        { time: 4.5, value: 125 },// Hold (was 120)
+                        { time: 5.5, value: 110 },// Retract slightly
+                        { time: 7.5, value: 110 },// Hold
+                        { time: 8.5, value: 125 },// Extend (was 120)
+                        { time: 9, value: 125 },  // Hold (was 120)
+                        { time: 12, value: 90 }
+                    ],
+                    wristPitch: [ // Slider: 0 default (horizontal). -90 (down).
+                        { time: 0, value: 0 },
+                        { time: 1.5, value: -90 },// Pitch down
+                        { time: 9.5, value: -90 },// Keep down
+                        { time: 12, value: 0 }
+                    ],
+                    gripper: [ // Slider: 0-100. 80 (open), 20 (closed for pickup), 50 (reset default).
+                        { time: 0, value: 80 },
+                        { time: 4, value: 80 },    // Arrive open
+                        { time: 4.5, value: 20 },  // Close (pickupTime)
+                        { time: 8.0, value: 20 },  // Hold closed
+                        { time: 8.5, value: 80 },  // Open (releaseTime)
+                        { time: 12, value: 50 }    // Reset to default
+                    ]
+                }
+            }
+        };
+
+        function mapJointToSliderId(jointName) {
+            const mapping = {
+                base: 'base-rotation',
+                shoulder: 'shoulder',
+                elbow: 'elbow',
+                wristPitch: 'wrist-pitch',
+                wristRoll: 'wrist-roll',
+                gripper: 'gripper'
+            };
+            return mapping[jointName];
+        }
+
+        function interpolateKeyframes(keyframes, currentTime) {
+            if (!keyframes || keyframes.length === 0) return 0;
+            if (keyframes.length === 1) return keyframes[0].value;
+
+            if (currentTime <= keyframes[0].time) {
+                return keyframes[0].value;
+            }
+            if (currentTime >= keyframes[keyframes.length - 1].time) {
+                return keyframes[keyframes.length - 1].value;
+            }
+
+            let p0, p1;
+            for (let i = 0; i < keyframes.length - 1; i++) {
+                if (currentTime >= keyframes[i].time && currentTime <= keyframes[i + 1].time) {
+                    p0 = keyframes[i];
+                    p1 = keyframes[i + 1];
+                    break;
+                }
+            }
+
+            if (!p0 || !p1) return keyframes[keyframes.length - 1].value; 
+
+            const t = (currentTime - p0.time) / (p1.time - p0.time);
+            if (isNaN(t) || !isFinite(t) || (p1.time - p0.time === 0)) return p0.value;
+
+            return p0.value + (p1.value - p0.value) * t;
+        }
+        
+        function initThree() {
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a1929);
+            scene.fog = new THREE.Fog(0x0a1929, 20, 100);
+            
+            // Create camera
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 2, 8);
+            
+            // Create renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.outputEncoding = THREE.sRGBEncoding;
+            document.getElementById('three-container').appendChild(renderer.domElement);
+            
+            // Add lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0x4dabf5, 1.2);
+            directionalLight.position.set(5, 10, 7);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+            
+            const backLight = new THREE.DirectionalLight(0x64ffda, 0.8);
+            backLight.position.set(-5, -5, -5);
+            scene.add(backLight);
+            
+            // Add orbit controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.minDistance = 3;
+            controls.maxDistance = 15;
+            controls.enablePan = true;
+            
+            // Create a simple floor grid
+            const gridHelper = new THREE.GridHelper(20, 20, 0x3a506b, 0x1c2541);
+            gridHelper.position.y = -2;
+            scene.add(gridHelper);
+            
+            // Create the pickup cube
+            const cubeGeometry = new THREE.BoxGeometry(0.4, 0.4, 0.4); // Cube dimensions
+            const cubeMaterial = new THREE.MeshStandardMaterial({ color: 0x00ffaa }); // A nice cyan color
+            pickupCube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+            pickupCube.position.copy(initialCubePosition);
+            scene.add(pickupCube);
+
+            // Load the robotic arm model
+            const loader = new THREE.GLTFLoader();
+            
+            // For demo purposes, we'll create a placeholder arm since we don't have an actual GLB file
+            createPlaceholderArm();
+            
+            // In a real scenario, you would load your GLB model:
+            /*
+            loader.load('/models/robotic-arm.glb', (gltf) => {
+                armModel = gltf.scene;
+                armModel.scale.set(0.8, 0.8, 0.8);
+                armModel.position.y = -1.5;
+                
+                // Traverse the model to find joints
+                armModel.traverse((child) => {
+                    if (child.isBone) {
+                        if (child.name.includes('base')) joints.base = child;
+                        if (child.name.includes('shoulder')) joints.shoulder = child;
+                        if (child.name.includes('elbow')) joints.elbow = child;
+                        if (child.name.includes('wrist_pitch')) joints.wristPitch = child;
+                        if (child.name.includes('wrist_roll')) joints.wristRoll = child;
+                        if (child.name.includes('gripper_left')) joints.gripperLeft = child;
+                        if (child.name.includes('gripper_right')) joints.gripperRight = child;
+                    }
+                });
+                
+                scene.add(armModel);
+                
+                // Animation mixer
+                mixer = new THREE.AnimationMixer(armModel);
+                
+                // Hide loading screen
+                setTimeout(() => {
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 500);
+                }, 1500);
+            }, undefined, (error) => {
+                console.error('Error loading model:', error);
+                // Hide loading screen even if error occurs
+                loadingScreen.style.display = 'none';
+            });
+            */
+            
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize);
+            
+            // Start animation loop
+            animate();
+        }
+        
+        function createPlaceholderArm() {
+            // Base
+            const baseGeometry = new THREE.CylinderGeometry(1.2, 1.2, 0.4, 32);
+            const baseMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x3a506b,
+                metalness: 0.7,
+                roughness: 0.3
+            });
+            const base = new THREE.Mesh(baseGeometry, baseMaterial);
+            base.position.y = -1.5;
+            scene.add(base);
+            
+            // Shoulder
+            const shoulderGroup = new THREE.Group();
+            shoulderGroup.position.y = -1.3;
+            scene.add(shoulderGroup);
+            joints.base = shoulderGroup;
+            
+            const shoulderGeometry = new THREE.BoxGeometry(0.8, 1.2, 0.8);
+            const shoulderMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x4dabf5,
+                metalness: 0.6,
+                roughness: 0.2
+            });
+            const shoulder = new THREE.Mesh(shoulderGeometry, shoulderMaterial);
+            shoulder.position.y = 0.6;
+            shoulderGroup.add(shoulder);
+            joints.shoulder = shoulderGroup;
+            
+            // Upper arm
+            const upperArmGroup = new THREE.Group();
+            upperArmGroup.position.y = 1.2;
+            shoulderGroup.add(upperArmGroup);
+            
+            const upperArmGeometry = new THREE.BoxGeometry(0.6, 2, 0.6);
+            const upperArm = new THREE.Mesh(upperArmGeometry, shoulderMaterial);
+            upperArm.position.y = 1;
+            upperArmGroup.add(upperArm);
+            joints.elbow = upperArmGroup;
+            
+            // Lower arm
+            const lowerArmGroup = new THREE.Group();
+            lowerArmGroup.position.y = 2;
+            upperArmGroup.add(lowerArmGroup);
+            
+            const lowerArmGeometry = new THREE.BoxGeometry(0.5, 1.8, 0.5);
+            const lowerArm = new THREE.Mesh(lowerArmGeometry, shoulderMaterial);
+            lowerArm.position.y = 0.9;
+            lowerArmGroup.add(lowerArm);
+            joints.wristPitch = lowerArmGroup;
+            
+            // Wrist
+            const wristGroup = new THREE.Group();
+            wristGroup.position.y = 1.8;
+            lowerArmGroup.add(wristGroup);
+            
+            const wristGeometry = new THREE.BoxGeometry(0.6, 0.4, 0.6);
+            const wrist = new THREE.Mesh(wristGeometry, new THREE.MeshStandardMaterial({ 
+                color: 0x64ffda,
+                metalness: 0.7,
+                roughness: 0.1
+            }));
+            wristGroup.add(wrist);
+            joints.wristRoll = wristGroup;
+            
+            // Gripper left
+            const gripperLeftGeometry = new THREE.BoxGeometry(0.2, 0.8, 0.4);
+            const gripperLeft = new THREE.Mesh(gripperLeftGeometry, new THREE.MeshStandardMaterial({ 
+                color: 0xff6b6b,
+                metalness: 0.8,
+                roughness: 0.1
+            }));
+            gripperLeft.position.set(-0.3, -0.4, 0);
+            wristGroup.add(gripperLeft);
+            joints.gripperLeft = gripperLeft;
+            
+            // Gripper right
+            const gripperRightGeometry = new THREE.BoxGeometry(0.2, 0.8, 0.4);
+            const gripperRight = new THREE.Mesh(gripperRightGeometry, new THREE.MeshStandardMaterial({ 
+                color: 0xff6b6b,
+                metalness: 0.8,
+                roughness: 0.1
+            }));
+            gripperRight.position.set(0.3, -0.4, 0);
+            wristGroup.add(gripperRight);
+            joints.gripperRight = gripperRight;
+        }
+        
+        function updateArmJoints() {
+            // Update base rotation
+            if (joints.base) {
+                joints.base.rotation.y = THREE.MathUtils.degToRad(document.getElementById('base-rotation').value);
+            }
+            
+            // Update shoulder
+            if (joints.shoulder) {
+                joints.shoulder.rotation.z = THREE.MathUtils.degToRad(document.getElementById('shoulder').value);
+            }
+            
+            // Update elbow
+            if (joints.elbow) {
+                joints.elbow.rotation.z = THREE.MathUtils.degToRad(document.getElementById('elbow').value - 90);
+            }
+            
+            // Update wrist pitch
+            if (joints.wristPitch) {
+                joints.wristPitch.rotation.z = THREE.MathUtils.degToRad(document.getElementById('wrist-pitch').value);
+            }
+            
+            // Update wrist roll
+            if (joints.wristRoll) {
+                joints.wristRoll.rotation.y = THREE.MathUtils.degToRad(document.getElementById('wrist-roll').value);
+            }
+            
+            // Update gripper
+            if (joints.gripperLeft && joints.gripperRight) {
+                const gripperValue = document.getElementById('gripper').value / 100;
+                const gripperOffset = 0.3 * (1 - gripperValue);
+                joints.gripperLeft.position.x = -0.3 - gripperOffset;
+                joints.gripperRight.position.x = 0.3 + gripperOffset;
+            }
+        }
+        
+        function applyPreset(preset) {
+            const baseSlider = document.getElementById('base-rotation');
+            const shoulderSlider = document.getElementById('shoulder');
+            const elbowSlider = document.getElementById('elbow');
+            const wristPitchSlider = document.getElementById('wrist-pitch');
+            const wristRollSlider = document.getElementById('wrist-roll');
+            const gripperSlider = document.getElementById('gripper');
+            
+            // Always reset cube to its initial position when a preset is applied or arm is reset
+            if (pickupCube) {
+                if (isCubePickedUp) {
+                    scene.attach(pickupCube); // Ensure it's parented to scene before moving
+                    isCubePickedUp = false;
+                }
+                pickupCube.position.copy(initialCubePosition);
+            }
+
+            if (preset === 'reset') {
+                currentAnimation = null; // Stop any ongoing animation
+                animationTime = 0;
+                baseSlider.value = 0;
+                shoulderSlider.value = 45;
+                elbowSlider.value = 90;
+                wristPitchSlider.value = 0;
+                wristRollSlider.value = 0;
+                gripperSlider.value = 50;
+                
+                // Update display values
+                document.getElementById('base-value').textContent = baseSlider.value + '°';
+                document.getElementById('shoulder-value').textContent = shoulderSlider.value + '°';
+                document.getElementById('elbow-value').textContent = elbowSlider.value + '°';
+                document.getElementById('wrist-pitch-value').textContent = wristPitchSlider.value + '°';
+                document.getElementById('wrist-roll-value').textContent = wristRollSlider.value + '°';
+                document.getElementById('gripper-value').textContent = gripperSlider.value + '%';
+                
+                updateArmJoints(); // Apply static reset pose
+                return;
+            }
+
+            const animationData = animations[preset];
+            if (animationData) {
+                currentAnimation = animationData;
+                animationTime = 0;
+                // Sliders and joints will be updated by the animate() function
+            } else {
+                console.warn(`Animation for preset "${preset}" not found.`);
+                // Optionally, stop current animation if a preset button without animation is clicked
+                // currentAnimation = null; 
+            }
+        }
+        
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const delta = clock.getDelta();
+
+            if (currentAnimation) {
+                animationTime += delta;
+                const duration = currentAnimation.duration;
+                let animationEnded = false;
+
+                if (animationTime >= duration) {
+                    if (currentAnimation.loop) {
+                        animationTime %= duration; // Loop animation
+                    } else {
+                        animationTime = duration; // Clamp to end
+                        animationEnded = true;
+                    }
+                }
+
+                for (const jointName in currentAnimation.joints) {
+                    const keyframes = currentAnimation.joints[jointName];
+                    const currentValue = interpolateKeyframes(keyframes, animationTime);
+                    const jointObject = joints[jointName];
+
+                    if (jointObject) {
+                        if (jointName === 'base') {
+                            jointObject.rotation.y = THREE.MathUtils.degToRad(currentValue);
+                        } else if (jointName === 'shoulder') {
+                            jointObject.rotation.z = THREE.MathUtils.degToRad(currentValue);
+                        } else if (jointName === 'elbow') {
+                            jointObject.rotation.z = THREE.MathUtils.degToRad(currentValue - 90);
+                        } else if (jointName === 'wristPitch') {
+                            jointObject.rotation.z = THREE.MathUtils.degToRad(currentValue);
+                        } else if (jointName === 'wristRoll') {
+                            jointObject.rotation.y = THREE.MathUtils.degToRad(currentValue);
+                        } else if (jointName === 'gripper') {
+                            const gripperOffset = 0.3 * (1 - (currentValue / 100));
+                            if (joints.gripperLeft && joints.gripperRight) {
+                                joints.gripperLeft.position.x = -0.3 - gripperOffset;
+                                joints.gripperRight.position.x = 0.3 + gripperOffset;
+                            }
+                        }
+                    }
+
+                    const sliderId = mapJointToSliderId(jointName);
+                    const slider = document.getElementById(sliderId);
+                    if (slider) {
+                        slider.value = currentValue;
+                        const valueDisplay = document.getElementById(slider.id + '-value');
+                        if (valueDisplay) {
+                            valueDisplay.textContent = slider.id === 'gripper' ? currentValue.toFixed(0) + '%' : currentValue.toFixed(0) + '°';
+                        }
+                    }
+                }
+
+                // Cube interaction logic specifically for pickupAndPlace
+                if (currentAnimation.name === 'pickupAndPlace' && pickupCube) {
+                    const time = animationTime;
+                    const pickupEventTime = currentAnimation.pickupTime;
+                    const releaseEventTime = currentAnimation.releaseTime;
+
+                    // Check if it's time to pick up
+                    if (time >= pickupEventTime && time < releaseEventTime && !isCubePickedUp) {
+                        joints.wristRoll.attach(pickupCube); // Attach to gripper (wristRoll group)
+                        pickupCube.position.set(0, -0.45, 0.15); // Position relative to wristRoll center
+                        isCubePickedUp = true;
+                    }
+                    // Check if it's time to release
+                    else if (time >= releaseEventTime && isCubePickedUp) {
+                        scene.attach(pickupCube); // Detach from gripper, attach to scene
+                        pickupCube.position.copy(dropOffPosition);
+                        isCubePickedUp = false;
+                    }
+                }
+
+
+                if (animationEnded && !currentAnimation.loop) {
+                    currentAnimation = null; // Stop animation
+                }
+            }
+            
+            // Update animation mixer if we have one
+            if (mixer) mixer.update(delta);
+            
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        
+        // Loading screen sequence
+        function startLoadingSequence() {
+            document.body.classList.add('loading'); 
+
+            let percentage = 0;
+            const counterInterval = 30; // ms per percentage point
+            const totalCounterDuration = counterInterval * 100; // e.g., 3000ms for counter
+
+            const interval = setInterval(() => {
+                percentage++;
+                percentageCounter.textContent = percentage + '%';
+                if (percentage >= 100) {
+                    clearInterval(interval);
+                    
+                    loadingContent.style.display = 'none'; 
+                    matrixCanvas.style.display = 'block';
+                    matrixEntryText.style.display = 'block';
+                    
+                    // Timeout to ensure display:block is applied before opacity transition
+                    setTimeout(() => {
+                        matrixEntryText.style.opacity = '1'; 
+                    }, 50);
+
+                    initMatrixAnimation();
+
+                    const matrixDisplayDuration = 5000; // How long matrix + text are shown
+                    const textFadeOutDuration = 800; // Must match #matrix-entry-text transition
+                    const screenFadeOutDuration = 1500; // Must match .loading-screen transition
+
+                    setTimeout(() => {
+                        matrixEntryText.style.opacity = '0'; // Start fading out text
+
+                        setTimeout(() => {
+                            matrixEntryText.style.display = 'none';
+                            loadingScreen.style.opacity = '0'; // Start fading out whole screen
+                            if (matrixAnimationId) cancelAnimationFrame(matrixAnimationId);
+
+                            setTimeout(() => {
+                                loadingScreen.style.display = 'none';
+                                document.body.classList.remove('loading'); 
+                            }, screenFadeOutDuration); 
+                        }, textFadeOutDuration);
+                    }, matrixDisplayDuration - textFadeOutDuration); // Start text fade out earlier
+                }
+            }, counterInterval); 
+        }
+
+        function initMatrixAnimation() {
+            const ctx = matrixCanvas.getContext('2d');
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = window.innerHeight;
+
+            const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+            const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const nums = '0123456789';
+            const characters = katakana + latin + nums;
+
+            const fontSize = 16;
+            const columns = Math.floor(matrixCanvas.width / fontSize);
+            const drops = [];
+            for (let x = 0; x < columns; x++) {
+                drops[x] = 1;
+            }
+
+            function drawMatrix() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // Semi-transparent black for fading effect
+                ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+
+                ctx.fillStyle = '#0F0'; // Green text
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                        drops[i] = 0; // Reset drop to top
+                    }
+                    drops[i]++;
+                }
+                matrixAnimationId = requestAnimationFrame(drawMatrix);
+            }
+            drawMatrix();
+            
+            window.addEventListener('resize', () => { // Adjust canvas on resize during matrix
+                if (matrixCanvas.style.display === 'block') {
+                    matrixCanvas.width = window.innerWidth;
+                    matrixCanvas.height = window.innerHeight;
+                    // Recalculate columns if needed, or simply let it adjust
+                    // For simplicity, not re-initializing drops here, might cause visual jump on resize
+                }
+            });
+        }
+
+
+        // Initialize Three.js when page loads
+        window.addEventListener('load', () => {
+            initThree(); 
+            startLoadingSequence(); 
+
+            // Setup event listeners for sliders
+            const sliders = document.querySelectorAll('input[type="range"]');
+            sliders.forEach(slider => {
+                slider.addEventListener('input', () => {
+                    // If user manually controls, and cube was picked up, reset it.
+                    if (isCubePickedUp && pickupCube) {
+                        scene.attach(pickupCube);
+                        pickupCube.position.copy(initialCubePosition);
+                        isCubePickedUp = false;
+                    }
+                    currentAnimation = null; // Stop animation on manual control
+                    animationTime = 0;
+
+                    const valueDisplay = document.getElementById(slider.id + '-value');
+                    if (slider.id === 'gripper') {
+                        valueDisplay.textContent = slider.value + '%';
+                    } else {
+                        valueDisplay.textContent = slider.value + '°';
+                    }
+                    updateArmJoints();
+                });
+            });
+            
+            // Setup event listeners for preset buttons
+            const presetButtons = document.querySelectorAll('.preset-btn');
+            presetButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const preset = button.getAttribute('data-preset');
+                    applyPreset(preset);
+                });
+            });
+        });
+
+        // Intersection Observer for section animations
+        const sections = document.querySelectorAll('section[id]');
+        const observerOptions = {
+            root: null, // relative to document viewport
+            rootMargin: '0px',
+            threshold: 0.1 // 10% of the section is visible
+        };
+
+        const observerCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Optional: unobserve after animation to save resources
+                    // observer.unobserve(entry.target); 
+                } else {
+                    // Optional: remove class if you want animation to re-trigger on scroll up
+                    // entry.target.classList.remove('is-visible');
+                }
+            });
+        };
+
+        const sectionObserver = new IntersectionObserver(observerCallback, observerOptions);
+        sections.forEach(section => {
+            section.classList.add('fade-in-section'); // Add base class for initial state
+            sectionObserver.observe(section);
+        });
+    </script>
+</body>
+</html>
