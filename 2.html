@@ -59,6 +59,18 @@
             align-items: center;
         }
 
+        #animated-logo-text {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            letter-spacing: .05em; /* Consistent with other typing effects */
+            border-right: .15em solid transparent; /* Caret, managed by animation */
+            animation: typing 2s steps(15, end) 0.5s forwards, /* Adjusted steps to 15 */
+                       blink-caret .75s step-end 0.5s infinite;
+            opacity: 0; /* Start hidden, animation makes it appear */
+            vertical-align: middle; /* Better alignment with a potential icon */
+        }
+
         .logo-icon {
             margin-right: 10px;
             font-size: 2rem;
@@ -195,8 +207,11 @@
 
         .project-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 30px rgba(0, 50, 0, 0.3); /* Greenish shadow */
-            border-color: rgba(0, 255, 0, 0.4); /* Brighter green border */
+            box-shadow: 0 0 5px #00FF00, 
+                        0 0 10px #00FF00, 
+                        0 0 15px #00FF00, 
+                        0 0 20px #33FF33; /* Neon green glow */
+            border-color: rgba(0, 255, 0, 0.6); /* Brighter green border for glow */
         }
 
         .project-img {
@@ -254,6 +269,16 @@
             padding: 2rem;
             /* backdrop-filter: blur(5px); */
             border: 1px solid rgba(0, 255, 0, 0.2); /* Dim green border */
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s; /* Added transitions */
+        }
+
+        .skill-category:hover {
+            transform: translateY(-5px); /* Optional: slight lift effect */
+            box-shadow: 0 0 5px #00FF00, 
+                        0 0 10px #00FF00, 
+                        0 0 15px #00FF00, 
+                        0 0 20px #33FF33; /* Neon green glow */
+            border-color: rgba(0, 255, 0, 0.6); /* Brighter green border for glow */
         }
 
         .skill-category h3 {
@@ -300,6 +325,7 @@
         .control-group h3 {
             margin-bottom: 1rem;
             color: #33FF33; /* Brighter green */
+            text-align: center; /* Center the heading */
         }
 
         .slider-container {
@@ -354,6 +380,7 @@
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
+            justify-content: center; /* Center the buttons */
         }
 
         .preset-btn {
@@ -402,7 +429,11 @@
         .social-links a:hover {
             background: rgba(0, 255, 0, 0.3); /* Darker transparent green */
             transform: translateY(-5px);
-            box-shadow: 0 0 10px #00FF00; /* Green glow */
+            /* Enhanced neon glow effect */
+            box-shadow: 0 0 5px #00FF00, 
+                        0 0 10px #00FF00, 
+                        0 0 20px #00FF00, 
+                        0 0 30px #33FF33; /* Brighter green for wider glow */
         }
 
         @media (max-width: 768px) {
@@ -702,8 +733,8 @@
     <div class="content">
         <header>
             <div class="logo">
-                <span class="logo-icon">🤖</span>
-                Galaba Vamsi
+                <span class="logo-icon"></span>
+                <span id="animated-logo-text">>./Galaba Vamsi</span> <!-- Restored '>' and ensured text matches animation -->
             </div>
             <nav>
                 <ul>
@@ -868,17 +899,13 @@
                 <div class="slider-container">
                     <label>Base Rotation:</label>
                     <input type="range" id="base-rotation" min="-180" max="180" value="0">
-                    <span class="slider-value" id="base-value">0°</span>
+                    <span class="slider-value" id="base-rotation-value">0°</span>
                 </div>
                 <div class="slider-container">
                     <label>Shoulder:</label>
                     <input type="range" id="shoulder" min="-90" max="90" value="45">
                     <span class="slider-value" id="shoulder-value">45°</span>
                 </div>
-                <div class="slider-container">
-                    <label>Elbow:</label>
-                    <input type="range" id="elbow" min="0" max="135" value="90">
-                    <span class="slider-value" id="elbow-value">90°</span>
                 </div>
                 <div class="slider-container">
                     <label>Wrist Pitch:</label>
@@ -902,7 +929,6 @@
                 <div class="preset-buttons">
                     <button class="preset-btn" data-preset="reset">Reset Position</button>
                     <button class="preset-btn" data-preset="wave">Wave Motion</button>
-                    <button class="preset-btn" data-preset="pickup">Pick & Place (Old)</button> 
                     <button class="preset-btn" data-preset="inspect">Inspection Mode</button>
                     <button class="preset-btn" data-preset="pickupAndPlace">Pick Up and Place Cube</button>
                 </div>
@@ -915,7 +941,7 @@
                 I'm currently seeking internship opportunities and collaborative projects in robotics and automation. Feel free to reach out if you'd like to discuss potential opportunities or just chat about mechatronics!
             </p>
             <div style="text-align: center; margin-bottom: 6rem;">
-                <a href="mailto:contact@mechatronics-portfolio.com" class="btn btn-primary">Send Email</a>
+                <a href="mailto:galabavamsi12@gmail.com,galabav@iitbhilai.ac.in" class="btn btn-primary">Send Email</a>
             </div>
         </section>
 
@@ -923,10 +949,11 @@
             <div class="social-links">
                 <a href="https://www.linkedin.com/in/galaba-vamsi-334758211/" target="_blank" rel="noopener noreferrer"><span>in</span></a>
                 <a href="https://github.com/Galabavamsi" target="_blank" rel="noopener noreferrer"><span>gh</span></a>
+                <a href="https://x.com/Galaba_Vamsi" target="_blank" rel="noopener noreferrer"><span>X</span></a>
                 <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><span>ig</span></a> 
                 <a href="https://www.youtube.com/@galabavamsi12" target="_blank" rel="noopener noreferrer"><span>yt</span></a>
             </div>
-            <p>© 2023 Mechatronics Portfolio. All rights reserved.</p>
+            <p>© 2025 Galaba Vamsi Portfolio. All rights reserved.</p>
             <p style="margin-top: 1rem; font-size: 0.9rem;">Engineered with passion for robotics and automation</p>
         </footer>
     </div>
@@ -977,17 +1004,6 @@
                     wristRoll:[ { time: 0, value: 0 },  { time: 0.5, value: -30 }, { time: 1.5, value: 30 }, { time: 2, value: 0 } ]
                 }
             },
-            pickup: { 
-                duration: 6,
-                loop: false,
-                joints: {
-                    base:     [ {time: 0, value: 0},  {time: 1, value: 45}, {time: 4, value: 45},  {time: 5, value: 0}, {time: 6, value: 0} ],
-                    shoulder: [ {time: 0, value: 45}, {time: 1, value: 30}, {time: 2, value: 20},  {time: 3, value: 20}, {time: 4, value: 30}, {time: 5, value: 45}, {time: 6, value: 45} ],
-                    elbow:    [ {time: 0, value: 90}, {time: 1, value: 120},{time: 2, value: 135}, {time: 3, value: 135},{time: 4, value: 120},{time: 5, value: 90}, {time: 6, value: 90} ],
-                    gripper:  [ {time: 0, value: 80}, {time: 1.5, value: 80},{time: 2.5, value: 20},{time: 3.5, value: 20},{time: 4.5, value: 80},{time: 6, value: 80} ],
-                    wristPitch:[ {time: 0, value: 0}, {time: 1, value: -20}, {time: 2, value: -45}, {time: 3, value: -45}, {time: 4, value: -20}, {time: 5, value: 0}, {time: 6, value: 0}]
-                }
-            },
             inspect: { 
                 duration: 8,
                 loop: true,
@@ -1006,47 +1022,69 @@
                 releaseTime: 8.5, // Time when gripper is open and cube should be detached
                 joints: {
                     base: [
-                        { time: 0, value: 0 },
-                        { time: 2, value: 50 },   // Rotate towards pickup X=3, Z=2
-                        { time: 5.5, value: 50 }, // Hold during lift
-                        { time: 7.5, value: -50 },// Rotate towards dropoff X=-3, Z=2
-                        { time: 12, value: 0 }
+                        { time: 0, value: 0 },    // Initial
+                        { time: 2, value: 0 },    // Transitioning towards pickup area
+                        { time: 4, value: 146 },  // Arrive at pickup base orientation
+                        { time: 4.5, value: 146 },// AT PICKUP: Base 146°
+                        { time: 5.0, value: 146 },// Hold base during lift
+                        // Travel to place:
+                        { time: 7.0, value: 0 },  // Transition base to place orientation (0°)
+                        { time: 8.5, value: 0 },  // AT PLACE: Base 0°
+                        { time: 12, value: 0 }    // Return to initial
                     ],
-                    shoulder: [ // Slider: 45 default. Lower value = arm lower.
-                        { time: 0, value: 45 },
-                        { time: 2, value: 30 },   // Approach pickup height
-                        { time: 4, value: 10 },   // Lower to pickup (was 15)
-                        { time: 4.5, value: 10 }, // Hold (was 15)
-                        { time: 5.5, value: 30 }, // Lift
-                        { time: 7.5, value: 30 }, // Move at height
-                        { time: 8.5, value: 10 }, // Lower to dropoff (was 15)
-                        { time: 9, value: 10 },   // Hold (was 15)
-                        { time: 12, value: 45 }
+                    shoulder: [
+                        { time: 0, value: 45 },   // Initial
+                        { time: 2, value: 20 },   // Transitioning
+                        { time: 4, value: 47 },   // Arrive at pickup shoulder angle
+                        { time: 4.5, value: 47 }, // AT PICKUP: Shoulder 47°
+                        { time: 5.0, value: 47 }, // Hold during gripper close
+                        { time: 5.5, value: 0 },  // Lift cube (to a neutral/safe shoulder angle)
+                        { time: 7.0, value: 25 }, // Mid-travel shoulder for place
+                        { time: 8.5, value: 49 }, // AT PLACE: Shoulder 49°
+                        { time: 9.0, value: 0 },  // Lift arm after release
+                        { time: 12, value: 45 }   // Return to initial
                     ],
-                    elbow: [ // Slider: 90 default (straight). Higher = more outward reach.
-                        { time: 0, value: 90 },
-                        { time: 2, value: 110 },  // Extend
-                        { time: 4, value: 125 },  // Extend further (was 120)
-                        { time: 4.5, value: 125 },// Hold (was 120)
-                        { time: 5.5, value: 110 },// Retract slightly
-                        { time: 7.5, value: 110 },// Hold
-                        { time: 8.5, value: 125 },// Extend (was 120)
-                        { time: 9, value: 125 },  // Hold (was 120)
-                        { time: 12, value: 90 }
+                    elbow: [
+                        { time: 0, value: 90 },   // Initial
+                        { time: 2, value: 90 },   // Transitioning
+                        { time: 4, value: 116 },  // Arrive at pickup elbow angle
+                        { time: 4.5, value: 116 },// AT PICKUP: Elbow 116°
+                        { time: 5.0, value: 116 },// Hold during gripper close
+                        { time: 5.5, value: 80 }, // Retract/lift elbow
+                        { time: 7.0, value: 100}, // Mid-travel elbow for place
+                        { time: 8.5, value: 119}, // AT PLACE: Elbow 119°
+                        { time: 9.0, value: 80 }, // Retract after release
+                        { time: 12, value: 90 }   // Return to initial
                     ],
-                    wristPitch: [ // Slider: 0 default (horizontal). -90 (down).
-                        { time: 0, value: 0 },
-                        { time: 1.5, value: -90 },// Pitch down
-                        { time: 9.5, value: -90 },// Keep down
-                        { time: 12, value: 0 }
+                    wristPitch: [
+                        { time: 0, value: 0 },    // Initial
+                        { time: 1.5, value: 40},  // Start pitching
+                        { time: 4, value: 80 },   // Arrive at pickup wrist pitch
+                        { time: 4.5, value: 80 }, // AT PICKUP: Wrist Pitch 80°
+                        { time: 5.0, value: 80 }, // Hold pitch
+                        { time: 7.0, value: -12}, // Mid-travel wrist pitch for place
+                        { time: 8.5, value: 61 }, // AT PLACE: Wrist Pitch 61°
+                        { time: 9.5, value: 0 },  // Pitch back to neutral
+                        { time: 12, value: 0 }    // Return to initial
                     ],
-                    gripper: [ // Slider: 0-100. 80 (open), 20 (closed for pickup), 50 (reset default).
-                        { time: 0, value: 80 },
-                        { time: 4, value: 80 },    // Arrive open
-                        { time: 4.5, value: 20 },  // Close (pickupTime)
-                        { time: 8.0, value: 20 },  // Hold closed
-                        { time: 8.5, value: 80 },  // Open (releaseTime)
-                        { time: 12, value: 50 }    // Reset to default
+                    wristRoll: [
+                        { time: 0, value: 0 },    // Initial
+                        { time: 2, value: 0 },
+                        { time: 4, value: 73 },   // Arrive at pickup wrist roll
+                        { time: 4.5, value: 73 }, // AT PICKUP: Wrist Roll 73°
+                        { time: 5.0, value: 73 }, // Hold roll
+                        { time: 7.0, value: -88}, // Mid-travel wrist roll for place
+                        { time: 8.5, value: -95}, // AT PLACE: Wrist Roll -95°
+                        { time: 9.5, value: 0 },  // Roll back to neutral
+                        { time: 12, value: 0 }    // Return to initial
+                    ],
+                    gripper: [
+                        { time: 0, value: 80 },    // Start open
+                        { time: 4, value: 80 },    // Arrive open at pickup location
+                        { time: 4.5, value: 50 },  // AT PICKUP: Close gripper to 50%
+                        { time: 8.4, value: 50 },  // Hold 50% until just before release
+                        { time: 8.5, value: 80 },  // AT PLACE: Open gripper to 80% (releaseTime)
+                        { time: 12, value: 50 }    // Reset to default (user's pickup gripper value)
                     ]
                 }
             }
@@ -1198,25 +1236,25 @@
             // Base
             const baseGeometry = new THREE.CylinderGeometry(1.2, 1.2, 0.4, 32);
             const baseMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x6c757d, // Original: A neutral grey
-                metalness: 0.7,
-                roughness: 0.3
+                color: 0x004d00, // Dark Green
+                metalness: 0.6,
+                roughness: 0.4
             });
-            const base = new THREE.Mesh(baseGeometry, baseMaterial);
-            base.position.y = -1.5;
-            scene.add(base);
+            const baseMesh = new THREE.Mesh(baseGeometry, baseMaterial); 
+            baseMesh.position.y = -1.5;
+            scene.add(baseMesh);
+            joints.base = baseMesh; 
             
             // Shoulder
             const shoulderGroup = new THREE.Group();
-            shoulderGroup.position.y = -1.3;
-            scene.add(shoulderGroup);
-            joints.base = shoulderGroup;
+            shoulderGroup.position.y = 0.2; 
+            baseMesh.add(shoulderGroup); 
             
             const shoulderGeometry = new THREE.BoxGeometry(0.8, 1.2, 0.8);
             const shoulderMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x4a90e2, // Original: A medium blue
-                metalness: 0.6,
-                roughness: 0.2
+                color: 0x007f00, // Medium Green
+                metalness: 0.5,
+                roughness: 0.3
             });
             const shoulder = new THREE.Mesh(shoulderGeometry, shoulderMaterial);
             shoulder.position.y = 0.6;
@@ -1229,7 +1267,7 @@
             shoulderGroup.add(upperArmGroup);
             
             const upperArmGeometry = new THREE.BoxGeometry(0.6, 2, 0.6);
-            const upperArm = new THREE.Mesh(upperArmGeometry, shoulderMaterial); // Uses shoulderMaterial (blue)
+            const upperArm = new THREE.Mesh(upperArmGeometry, shoulderMaterial); // Uses shoulderMaterial (Medium Green)
             upperArm.position.y = 1;
             upperArmGroup.add(upperArm);
             joints.elbow = upperArmGroup;
@@ -1240,7 +1278,7 @@
             upperArmGroup.add(lowerArmGroup);
             
             const lowerArmGeometry = new THREE.BoxGeometry(0.5, 1.8, 0.5);
-            const lowerArm = new THREE.Mesh(lowerArmGeometry, shoulderMaterial); // Uses shoulderMaterial (blue)
+            const lowerArm = new THREE.Mesh(lowerArmGeometry, shoulderMaterial); // Uses shoulderMaterial (Medium Green)
             lowerArm.position.y = 0.9;
             lowerArmGroup.add(lowerArm);
             joints.wristPitch = lowerArmGroup;
@@ -1252,31 +1290,29 @@
             
             const wristGeometry = new THREE.BoxGeometry(0.6, 0.4, 0.6);
             const wrist = new THREE.Mesh(wristGeometry, new THREE.MeshStandardMaterial({ 
-                color: 0x50e3c2, // Original: A teal/cyan color
+                color: 0x20C20E, // Vibrant Green
                 metalness: 0.7,
-                roughness: 0.1
+                roughness: 0.2
             }));
             wristGroup.add(wrist);
             joints.wristRoll = wristGroup;
             
             // Gripper left
             const gripperLeftGeometry = new THREE.BoxGeometry(0.2, 0.8, 0.4);
-            const gripperLeft = new THREE.Mesh(gripperLeftGeometry, new THREE.MeshStandardMaterial({ 
-                color: 0xf5a623, // Original: An orange/amber color
+            const gripperMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x00FF00, // Brightest Green (like grid)
                 metalness: 0.8,
-                roughness: 0.1
-            }));
+                roughness: 0.1,
+                emissive: 0x003300 // Slight emissive quality
+            });
+            const gripperLeft = new THREE.Mesh(gripperLeftGeometry, gripperMaterial);
             gripperLeft.position.set(-0.3, -0.4, 0);
             wristGroup.add(gripperLeft);
             joints.gripperLeft = gripperLeft;
             
             // Gripper right
             const gripperRightGeometry = new THREE.BoxGeometry(0.2, 0.8, 0.4);
-            const gripperRight = new THREE.Mesh(gripperRightGeometry, new THREE.MeshStandardMaterial({ 
-                color: 0xf5a623, // Original: An orange/amber color
-                metalness: 0.8,
-                roughness: 0.1
-            }));
+            const gripperRight = new THREE.Mesh(gripperRightGeometry, gripperMaterial); // Use the same material
             gripperRight.position.set(0.3, -0.4, 0);
             wristGroup.add(gripperRight);
             joints.gripperRight = gripperRight;
@@ -1345,7 +1381,7 @@
                 gripperSlider.value = 50;
                 
                 // Update display values
-                document.getElementById('base-value').textContent = baseSlider.value + '°';
+                document.getElementById('base-rotation-value').textContent = baseSlider.value + '°';
                 document.getElementById('shoulder-value').textContent = shoulderSlider.value + '°';
                 document.getElementById('elbow-value').textContent = elbowSlider.value + '°';
                 document.getElementById('wrist-pitch-value').textContent = wristPitchSlider.value + '°';
@@ -1607,69 +1643,210 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
-                    // Optional: unobserve after animation to save resources
-                    // observer.unobserve(entry.target); 
+
+                    // Check if the intersecting section is 'about' and if animation hasn't run
+                    if (entry.target.id === 'about' && !entry.target.dataset.aboutAnimated) {
+                        entry.target.dataset.aboutAnimated = 'true'; // Set flag to true using a data attribute
+
+                        // Initialize typing effects for the about section
+                        const line1 = document.getElementById('profile-line-1');
+                        const line2 = document.getElementById('profile-line-2');
+                        const line3 = document.getElementById('profile-line-3');
+                        const line4 = document.getElementById('profile-line-4');
+                        const line5 = document.getElementById('profile-line-5');
+                        const contactPrompt = document.getElementById('contact-prompt');
+
+                        // Clear any existing animation comments that might set opacity to 0
+                        [line1, line2, line3, line4, line5, contactPrompt].forEach(el => {
+                            // el.style.opacity = '1'; // Ensure visible before typing, handled by typeWriter now
+                        });
+
+                        // Start typing with delays and proper chaining
+                        if (line1) typeWriter(line1, line1.textContent, 50, () => {
+                            if (line2) typeWriter(line2, line2.textContent, 50, () => {
+                                if (line3) typeWriter(line3, line3.textContent, 50, () => {
+                                    if (line4) typeWriter(line4, line4.textContent, 50, () => {
+                                        if (line5) typeWriter(line5, line5.textContent, 50, () => {
+                                            if (contactPrompt) typeWriter(contactPrompt, contactPrompt.textContent, 50);
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    }
                 } else {
-                    // Optional: remove class if you want animation to re-trigger on scroll up
-                    // entry.target.classList.remove('is-visible');
+                    // Remove class if you want animation to re-trigger on scroll up/out
+                    entry.target.classList.remove('is-visible');
+                    // If you want the 'about' typing to re-trigger if it scrolls out and back in,
+                    // you could remove the data attribute here:
+                    // if (entry.target.id === 'about') {
+                    //     delete entry.target.dataset.aboutAnimated;
+                    // }
                 }
             });
         };
 
-        const sectionObserver = new IntersectionObserver(observerCallback, observerOptions);
+        // Ensure this new observer is used
+        const newSectionObserver = new IntersectionObserver(observerCallback, observerOptions);
+        
         sections.forEach(section => {
-            section.classList.add('fade-in-section'); // Add base class for initial state
-            sectionObserver.observe(section);
+            if (!section.classList.contains('no-fade')) { // Check for no-fade class
+                section.classList.add('fade-in-section');
+            }
+            newSectionObserver.observe(section);
         });
 
-        // Tab functionality for about section
-        function showTab(tabId, button) {
-            const tabs = document.querySelectorAll('.matrix-tab-content');
-            const buttons = document.querySelectorAll('.matrix-tab-button');
-
-            tabs.forEach(tab => {
-                tab.classList.remove('active-content');
-            });
-
-            buttons.forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            document.getElementById(tabId).classList.add('active-content');
-            button.classList.add('active');
-        }
-
-        // Typing effect for terminal responses
-        function typeWriter(element, text, delay = 50) {
+        function typeWriter(element, text, delay = 50, callback) {
             element.innerHTML = ''; // Clear existing content
             let i = 0;
+            element.style.opacity = '1'; // Make sure it's visible before typing
+            element.style.borderRight = '.15em solid #00FF00'; // Start with caret
             function typing() {
                 if (i < text.length) {
                     element.innerHTML += text.charAt(i);
                     i++;
                     setTimeout(typing, delay);
                 } else {
-                    // Optionally, you can add a blinking cursor effect here
+                    element.style.borderRightColor = 'transparent'; // Remove caret after typing
+                    element.classList.add('finished-typing-cursor');
+                    if (callback) callback(); // Execute callback if provided
                 }
             }
             typing();
         }
 
-        // Initialize typing effects on load
-        window.addEventListener('load', () => {
-            // Type each line with a delay
-            const line1 = document.getElement
-            const line4 = document.getElementById('profile-line-4');
-            const line5 = document.getElementById('profile-line-5');
-            const contactPrompt = document.getElementById('contact-prompt');
+        function showTab(tabId, clickedButton) {
+            // Hide all tab content
+            const tabContents = document.querySelectorAll('#about .matrix-tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active-content');
+            });
 
-            typeWriter(line1, line1.textContent);
-            setTimeout(() => { typeWriter(line2, line2.textContent); }, 2000);
-            setTimeout(() => { typeWriter(line3, line3.textContent); }, 4000);
-            setTimeout(() => { typeWriter(line4, line4.textContent); }, 6000);
-            setTimeout(() => { typeWriter(line5, line5.textContent); }, 8000);
-            setTimeout(() => { typeWriter(contactPrompt, contactPrompt.textContent); }, 10000);
-        });
+            // Deactivate all tab buttons
+            const tabButtons = document.querySelectorAll('#about .matrix-tab-button');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show the selected tab content
+            const selectedTabContent = document.getElementById(tabId);
+            if (selectedTabContent) {
+                selectedTabContent.classList.add('active-content');
+
+                const elementsToAnimateDetails = [];
+
+                // Handle prompt element
+                const promptElement = selectedTabContent.querySelector('.matrix-prompt');
+                if (promptElement) {
+                    if (!promptElement.hasAttribute('data-original-text')) {
+                        promptElement.setAttribute('data-original-text', promptElement.textContent);
+                    }
+                    const textForPrompt = promptElement.getAttribute('data-original-text');
+                    if (textForPrompt && textForPrompt.trim() !== "") {
+                        elementsToAnimateDetails.push({ 
+                            el: promptElement, 
+                            text: textForPrompt.trim() 
+                        });
+                    }
+                }
+
+                // Handle list items
+                const listItems = selectedTabContent.querySelectorAll('.matrix-list li');
+                listItems.forEach(item => {
+                    const highlightSpan = item.querySelector('span.matrix-highlight');
+                    let textToType = "";
+                    let targetElementForTyping;
+
+                    if (highlightSpan) {
+                        // Logic to handle elements with a leading static span and trailing dynamic text
+                        let typeSpan = item.querySelector('span.typewriter-target');
+                        
+                        if (!item.hasAttribute('data-original-trailing-text')) {
+                            // This block runs once per item to capture and store original trailing text
+                            let originalTrailingText = "";
+                            let currentNode = highlightSpan.nextSibling;
+                            while (currentNode) {
+                                if (currentNode.nodeType === Node.TEXT_NODE) {
+                                    originalTrailingText += currentNode.textContent;
+                                } else if (currentNode.nodeType === Node.ELEMENT_NODE) {
+                                    // If there are other unexpected elements, capture their text too.
+                                    // This might need refinement if structure is very complex.
+                                    originalTrailingText += currentNode.textContent; 
+                                }
+                                currentNode = currentNode.nextSibling;
+                            }
+                            item.setAttribute('data-original-trailing-text', originalTrailingText.trim());
+                        }
+                        
+                        textToType = item.getAttribute('data-original-trailing-text');
+
+                        // Ensure the typewriter-target span exists and is clean
+                        if (!typeSpan) {
+                            typeSpan = document.createElement('span');
+                            typeSpan.className = 'typewriter-target';
+                             // Remove all nodes after highlightSpan before adding the new target span
+                            while (highlightSpan.nextSibling) {
+                                item.removeChild(highlightSpan.nextSibling);
+                            }
+                            item.appendChild(typeSpan);
+                        } else {
+                            typeSpan.innerHTML = ''; // Clear if exists
+                        }
+                        targetElementForTyping = typeSpan;
+
+                    } else {
+                        // No highlight span, type the whole LI content
+                        if (!item.hasAttribute('data-original-text')) {
+                            item.setAttribute('data-original-text', item.textContent);
+                        }
+                        textToType = item.getAttribute('data-original-text');
+                        targetElementForTyping = item; // Type directly into the LI
+                    }
+                    
+                    if (textToType && textToType.trim() !== "") {
+                        elementsToAnimateDetails.push({ 
+                            el: targetElementForTyping, 
+                            text: textToType.trim()
+                        });
+                    }
+                });
+                
+                // Prepare all target elements for animation
+                elementsToAnimateDetails.forEach(detail => {
+                    detail.el.innerHTML = ''; 
+                    detail.el.style.opacity = '0'; // typeWriter will set to 1
+                    detail.el.classList.remove('finished-typing-cursor');
+                    detail.el.style.borderRight = 'none';
+                });
+
+                // Chain the typeWriter calls
+                let currentElementIndex = 0;
+                function animateNextElement() {
+                    if (currentElementIndex < elementsToAnimateDetails.length) {
+                        const detail = elementsToAnimateDetails[currentElementIndex];
+                        currentElementIndex++;
+                        // Ensure element is part of the DOM and visible
+                        if (detail.el && detail.el.isConnected && 
+                            (detail.el.offsetParent !== null || getComputedStyle(detail.el).display !== 'none')) {
+                           typeWriter(detail.el, detail.text, 20, animateNextElement); 
+                        } else {
+                            // Element not visible or not in DOM, skip and proceed
+                            animateNextElement();
+                        }
+                    }
+                }
+                
+                if (elementsToAnimateDetails.length > 0) {
+                    animateNextElement();
+                }
+            }
+
+            // Activate the clicked button
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
+        }
+
     </script>
 </body>
 </html>
