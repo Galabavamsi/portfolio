@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Fira Code', 'SF Mono', 'Fira Mono', 'Roboto Mono', monospace; /* Matrix font */
         }
 
         html {
@@ -21,8 +21,8 @@
 
         body {
             overflow-x: hidden;
-            background: linear-gradient(135deg, #0a1929, #0d1b2a);
-            color: #e0e0e0;
+            background: #000000; /* Matrix black background */
+            color: #00FF00; /* Matrix green text */
             min-height: 100vh;
         }
 
@@ -32,7 +32,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: -1; /* Ensures it's behind the content */
         }
 
         .content {
@@ -54,7 +54,7 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #4dabf5;
+            color: #00FF00; /* Matrix green */
             display: flex;
             align-items: center;
         }
@@ -62,6 +62,7 @@
         .logo-icon {
             margin-right: 10px;
             font-size: 2rem;
+            /* color: #00FF00; Potentially make icon green too */
         }
 
         nav ul {
@@ -72,14 +73,14 @@
 
         nav a {
             text-decoration: none;
-            color: #a0b3c6;
+            color: #00C800; /* Dimmer Matrix green */
             font-weight: 500;
             transition: color 0.3s;
             position: relative;
         }
 
         nav a:hover {
-            color: #64ffda;
+            color: #33FF33; /* Brighter green on hover */
         }
 
         nav a::after {
@@ -89,7 +90,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: #64ffda;
+            background: #33FF33; /* Brighter green */
             transition: width 0.3s;
         }
 
@@ -105,7 +106,7 @@
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 1.5rem;
-            background: linear-gradient(45deg, #4dabf5, #64ffda);
+            background: linear-gradient(45deg, #00FF00, #33FF33); /* Matrix green gradient */
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -115,7 +116,7 @@
             font-size: 1.8rem;
             font-weight: 400;
             margin-bottom: 2rem;
-            color: #a0b3c6;
+            color: #00C800; /* Dimmer Matrix green */
         }
 
         .hero p {
@@ -123,37 +124,38 @@
             line-height: 1.8;
             margin-bottom: 3rem;
             max-width: 700px;
+            color: #00DF00; /* Slightly different green for readability */
         }
 
         .btn {
             display: inline-block;
             padding: 14px 32px;
-            background: rgba(77, 171, 245, 0.1);
-            color: #4dabf5;
-            border: 1px solid rgba(77, 171, 245, 0.3);
+            background: rgba(0, 255, 0, 0.1); /* Transparent green */
+            color: #00FF00; /* Matrix green */
+            border: 1px solid rgba(0, 255, 0, 0.3); /* Green border */
             border-radius: 4px;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s;
             margin-right: 1rem;
             margin-bottom: 1rem;
-            backdrop-filter: blur(10px);
+            /* backdrop-filter: blur(5px); Optional: if it looks good with green */
         }
 
         .btn:hover {
-            background: rgba(77, 171, 245, 0.3);
+            background: rgba(0, 255, 0, 0.3); /* Darker transparent green */
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 50, 0, 0.2); /* Greenish shadow */
         }
 
         .btn-primary {
-            background: linear-gradient(45deg, #4dabf5, #64ffda);
-            color: #0a1929;
+            background: linear-gradient(45deg, #00FF00, #33FF33); /* Green gradient */
+            color: #000000; /* Black text on green button */
             border: none;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(45deg, #64b5f6, #80ffdb);
+            background: linear-gradient(45deg, #33FF33, #00DD00); /* Slightly different green gradient */
         }
 
         .section-title {
@@ -161,7 +163,7 @@
             margin: 6rem 0 3rem;
             position: relative;
             padding-bottom: 1rem;
-            color: #4dabf5;
+            color: #00FF00; /* Matrix green */
         }
 
         .section-title::after {
@@ -171,7 +173,7 @@
             left: 0;
             width: 100px;
             height: 4px;
-            background: linear-gradient(45deg, #4dabf5, #64ffda);
+            background: linear-gradient(45deg, #00FF00, #33FF33); /* Green gradient */
             border-radius: 2px;
         }
 
@@ -183,23 +185,23 @@
         }
 
         .project-card {
-            background: rgba(30, 41, 59, 0.5);
+            background: rgba(0, 30, 0, 0.5); /* Dark green transparent */
             border-radius: 10px;
             overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(77, 171, 245, 0.1);
+            /* backdrop-filter: blur(5px); */
+            border: 1px solid rgba(0, 255, 0, 0.2); /* Dim green border */
         }
 
         .project-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
-            border-color: rgba(77, 171, 245, 0.3);
+            box-shadow: 0 20px 30px rgba(0, 50, 0, 0.3); /* Greenish shadow */
+            border-color: rgba(0, 255, 0, 0.4); /* Brighter green border */
         }
 
         .project-img {
             height: 220px;
-            background: linear-gradient(45deg, #1e293b, #0f172a);
+            background: linear-gradient(45deg, #001000, #002000); /* Dark green gradient */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -207,15 +209,20 @@
             overflow: hidden;
         }
 
-        .project-img::before {
+        .project-img::before { /* Overlay on project image */
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, rgba(77, 171, 245, 0.1), rgba(100, 255, 218, 0.1));
+            background: linear-gradient(45deg, rgba(0, 255, 0, 0.1), rgba(50, 255, 50, 0.1));
             opacity: 0.5;
+        }
+        
+        .project-img span { /* If using span for icons in project images */
+            font-size: 4rem;
+            color: #00FF00; /* Matrix green */
         }
 
         .project-content {
@@ -225,11 +232,11 @@
         .project-content h3 {
             font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: #e0e0e0;
+            color: #00FF00; /* Matrix green */
         }
 
         .project-content p {
-            color: #a0b3c6;
+            color: #00C800; /* Dimmer Matrix green */
             margin-bottom: 1.5rem;
             line-height: 1.6;
         }
@@ -242,17 +249,17 @@
         }
 
         .skill-category {
-            background: rgba(30, 41, 59, 0.5);
+            background: rgba(0, 30, 0, 0.5); /* Dark green transparent */
             border-radius: 10px;
             padding: 2rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(77, 171, 245, 0.1);
+            /* backdrop-filter: blur(5px); */
+            border: 1px solid rgba(0, 255, 0, 0.2); /* Dim green border */
         }
 
         .skill-category h3 {
             font-size: 1.5rem;
             margin-bottom: 1.5rem;
-            color: #64ffda;
+            color: #33FF33; /* Brighter green for skill titles */
         }
 
         .skill-list {
@@ -261,9 +268,10 @@
 
         .skill-list li {
             padding: 0.8rem 0;
-            border-bottom: 1px solid rgba(160, 179, 198, 0.1);
+            border-bottom: 1px solid rgba(0, 100, 0, 0.3); /* Dark green border */
             display: flex;
             align-items: center;
+            color: #00C800; /* Dimmer Matrix green for list items */
         }
 
         .skill-list li:last-child {
@@ -271,18 +279,18 @@
         }
 
         .skill-list li::before {
-            content: '▹';
-            color: #64ffda;
+            content: '▹'; /* Or '>>' or other Matrix-like character */
+            color: #00FF00; /* Matrix green */
             margin-right: 10px;
         }
 
         #arm-controls {
-            background: rgba(30, 41, 59, 0.7);
+            background: rgba(0, 20, 0, 0.7); /* Very dark green transparent */
             border-radius: 10px;
             padding: 2rem;
             margin-bottom: 6rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(77, 171, 245, 0.1);
+            /* backdrop-filter: blur(5px); */
+            border: 1px solid rgba(0, 255, 0, 0.2); /* Dim green border */
         }
 
         .control-group {
@@ -291,7 +299,7 @@
 
         .control-group h3 {
             margin-bottom: 1rem;
-            color: #64ffda;
+            color: #33FF33; /* Brighter green */
         }
 
         .slider-container {
@@ -303,13 +311,13 @@
 
         .slider-container label {
             min-width: 120px;
-            color: #a0b3c6;
+            color: #00C800; /* Dimmer Matrix green */
         }
 
         .slider-container input[type="range"] {
             flex-grow: 1;
             height: 6px;
-            background: rgba(160, 179, 198, 0.2);
+            background: rgba(0, 100, 0, 0.3); /* Dark green track */
             border-radius: 3px;
             outline: none;
             appearance: none;
@@ -320,15 +328,26 @@
             -webkit-appearance: none;
             width: 18px;
             height: 18px;
-            background: #4dabf5;
+            background: #00FF00; /* Matrix green thumb */
             border-radius: 50%;
             cursor: pointer;
+            box-shadow: 0 0 5px #00FF00; /* Glow effect */
         }
+         .slider-container input[type="range"]::-moz-range-thumb { /* Firefox */
+            width: 18px;
+            height: 18px;
+            background: #00FF00;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 5px #00FF00;
+        }
+
 
         .slider-value {
             min-width: 40px;
             text-align: right;
-            color: #64ffda;
+            color: #33FF33; /* Brighter green */
         }
 
         .preset-buttons {
@@ -339,24 +358,24 @@
 
         .preset-btn {
             padding: 8px 16px;
-            background: rgba(77, 171, 245, 0.1);
-            color: #4dabf5;
-            border: 1px solid rgba(77, 171, 245, 0.3);
+            background: rgba(0, 255, 0, 0.1); /* Transparent green */
+            color: #00FF00; /* Matrix green */
+            border: 1px solid rgba(0, 255, 0, 0.3); /* Green border */
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.3s;
         }
 
         .preset-btn:hover {
-            background: rgba(77, 171, 245, 0.3);
+            background: rgba(0, 255, 0, 0.3); /* Darker transparent green */
         }
 
         footer {
             text-align: center;
             padding: 3rem 0;
             margin-top: 4rem;
-            border-top: 1px solid rgba(77, 171, 245, 0.1);
-            color: #a0b3c6;
+            border-top: 1px solid rgba(0, 255, 0, 0.2); /* Dim green border */
+            color: #00C800; /* Dimmer Matrix green */
         }
 
         .social-links {
@@ -373,16 +392,17 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: rgba(77, 171, 245, 0.1);
-            color: #4dabf5;
+            background: rgba(0, 255, 0, 0.1); /* Transparent green */
+            color: #00FF00; /* Matrix green */
             font-size: 1.5rem;
             transition: all 0.3s;
             text-decoration: none;
         }
 
         .social-links a:hover {
-            background: rgba(77, 171, 245, 0.3);
+            background: rgba(0, 255, 0, 0.3); /* Darker transparent green */
             transform: translateY(-5px);
+            box-shadow: 0 0 10px #00FF00; /* Green glow */
         }
 
         @media (max-width: 768px) {
@@ -537,6 +557,134 @@
             transform: translateY(0);
             visibility: visible;
         }
+
+        /* Styles for Matrix Themed About Section */
+        #about .matrix-terminal-output p {
+            margin-bottom: 0.8em;
+            line-height: 1.6;
+        }
+
+        #about .matrix-prompt {
+            color: #00FF00; /* Bright Green */
+            font-weight: bold;
+        }
+
+        #about .matrix-prompt::before {
+            content: "> "; /* Typical prompt indicator */
+        }
+
+        #about .matrix-response {
+            color: #90EE90; /* Lighter Green for responses */
+            padding-left: 1.5em; /* Indent responses */
+        }
+
+        .typing-effect { /* General class, ensure #about specificity for delays */
+            overflow: hidden;
+            white-space: nowrap;
+            letter-spacing: .05em;
+            animation-fill-mode: forwards;
+            opacity: 0; 
+            border-right: .15em solid transparent; 
+        }
+
+        @keyframes typing {
+          from { width: 0; opacity: 1; }
+          to { width: 100%; opacity: 1; }
+        }
+
+        @keyframes blink-caret {
+          from, to { border-right-color: transparent; }
+          50% { border-right-color: #00FF00; }
+        }
+
+        /* Apply animations with delays - specific to #about section elements */
+        #about #profile-line-1 { animation: typing 1.5s steps(30, end) 0.5s forwards, blink-caret .75s step-end 0.5s infinite; }
+        #about #profile-line-2 { animation: typing 1.5s steps(30, end) 2.5s forwards, blink-caret .75s step-end 2.5s infinite; }
+        #about #profile-line-3 { animation: typing 1.5s steps(30, end) 4.5s forwards, blink-caret .75s step-end 4.5s infinite; }
+        #about #profile-line-4 { animation: typing 1.5s steps(30, end) 6.5s forwards, blink-caret .75s step-end 6.5s infinite; }
+        #about #profile-line-5 { animation: typing 1.5s steps(30, end) 8.5s forwards, blink-caret .75s step-end 8.5s infinite; }
+        #about #contact-prompt { animation: typing 1.5s steps(30, end) 10.5s forwards, blink-caret .75s step-end 10.5s infinite; }
+
+        .finished-typing-cursor { /* Class to remove caret after typing is done by JS */
+            border-right-color: transparent !important;
+            animation: none !important;
+        }
+
+        #about .matrix-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #008F00;
+            padding-bottom: 10px;
+        }
+
+        #about .matrix-tab-button {
+            background-color: transparent;
+            border: 1px solid #00FF00;
+            color: #00FF00;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+            border-radius: 4px 4px 0 0;
+        }
+
+        #about .matrix-tab-button:hover,
+        #about .matrix-tab-button.active {
+            background-color: #00FF00;
+            color: #000000;
+            box-shadow: 0 0 10px #00FF00;
+        }
+
+        #about .matrix-tab-content {
+            display: none;
+            animation: fadeInMatrixContent 0.5s ease-in-out;
+        }
+
+        #about .matrix-tab-content.active-content {
+            display: block;
+        }
+
+        @keyframes fadeInMatrixContent {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #about .matrix-list {
+            list-style: none;
+            padding-left: 1.5em;
+        }
+
+        #about .matrix-list li {
+            margin-bottom: 0.6em;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        #about .matrix-list li::before {
+            content: '*';
+            color: #00FF00;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        #about .matrix-highlight {
+            color: #39FF14;
+            font-weight: bold;
+        }
+
+        /* About section matrix background */
+        #about-matrix-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.2;
+        }
     </style>
 </head>
 <body>
@@ -576,47 +724,60 @@
             <a href="#arm-controls" class="btn">Control Arm</a>
         </section>
 
-        <section id="about" style="padding-top: 4rem; padding-bottom: 4rem;">
-            <h2 class="section-title" style="text-align: center; margin-bottom: 3rem;">Meet Galaba Vamsi: Part-Time Student, Full-Time Brainiac (Now with Extra Robotics!)</h2>
+        <section id="about" class="fade-in-section" style="padding-top: 6rem; padding-bottom: 6rem; position: relative; overflow: hidden;">
+            <canvas id="about-matrix-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.2;"></canvas>
+            <h2 class="section-title matrix-text-glow" style="text-align: center; margin-bottom: 4rem; font-size: 3rem;">INITIATE: Profile_Vamsi.exe</h2>
             
-            <div style="max-width: 800px; margin: 0 auto; text-align: left; line-height: 1.7; color: #a0b3c6;">
-                <p style="margin-bottom: 1.5rem;">
-                    Hailing from the prestigious IIT Bhilai, where they apparently forge future-shapers out of sheer brainpower and caffeine, Galaba Vamsi is a Mechatronics undergrad on a mission. Set to graduate in 2027 (mark your calendars, world!), he's not just learning to build robots; he's learning to make them polite enough to ask before taking over. Vamsi's on a relentless quest for knowledge, consuming information like a caffeinated Roomba in a library, all in the noble pursuit of making the world a slightly more awesome (and automated) place. He believes success is best served shared, preferably with a side of well-written code.
-                </p>
-        
-                <h3 style="color: #64ffda; font-size: 1.8rem; margin-top: 2.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid #4dabf5; padding-bottom: 0.5rem;">The Arsenal of Awesome (aka Skills):</h3>
-                <p style="margin-bottom: 1rem;">What's in Vamsi's utility belt? More than just pocket lint, that's for sure!</p>
-                <ul style="list-style: none; padding-left: 0; margin-bottom: 1.5rem;">
-                    <li style="margin-bottom: 0.7rem; display: flex; align-items: flex-start;"><strong style="color: #4dabf5; min-width: 150px; display: inline-block;">Code Wizardry:</strong> Fluent in Python, C, C++, JavaScript, and enough web/app frameworks (React, Node, Three.js, Flutter, and the gang) to build a digital empire. He even speaks ROS2, which is like a secret handshake for robots.</li>
-                    <li style="margin-bottom: 0.7rem; display: flex; align-items: flex-start;"><strong style="color: #4dabf5; min-width: 150px; display: inline-block;">Robot Whisperer:</strong> From drone development to complex navigation systems, he's teaching machines to do his bidding (politely, of course).</li>
-                    <li style="margin-bottom: 0.7rem; display: flex; align-items: flex-start;"><strong style="color: #4dabf5; min-width: 150px; display: inline-block;">Data Detective & ML Maestro:</strong> Armed with Numpy, Pandas, and TensorFlow, he can make data sing and algorithms dance.</li>
-                    <li style="margin-bottom: 0.7rem; display: flex; align-items: flex-start;"><strong style="color: #4dabf5; min-width: 150px; display: inline-block;">Master of Dimensions:</strong> Wields SolidWorks and AutoCAD like a digital sculptor.</li>
-                    <li style="margin-bottom: 0.7rem; display: flex; align-items: flex-start;"><strong style="color: #4dabf5; min-width: 150px; display: inline-block;">The Creative Spark:</strong> Not just a tech head! He's got UI/UX chops (Figma, Adobe XD), can make Blender and Unreal Engine do his artistic bidding, and probably edits home videos with DaVinci Resolve like a Hollywood pro.</li>
-                </ul>
-        
-                <h3 style="color: #64ffda; font-size: 1.8rem; margin-top: 2.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid #4dabf5; padding-bottom: 0.5rem;">Epic Quests (aka Projects & Experience):</h3>
-                <p style="margin-bottom: 1rem;">Vamsi doesn't just dream of the future; he builds it, one groundbreaking project at a time:</p>
-                <ul style="list-style: disc; padding-left: 20px; margin-bottom: 1.5rem;">
-                    <li style="margin-bottom: 0.5rem;"><strong>Mind-Controlled Mobility:</strong> Currently leveling up with a Brain-Controlled Wheelchair project. Yes, you read that right. He's probably trying to patent telepathy next.</li>
-                    <li style="margin-bottom: 0.5rem;"><strong>Guiding Newbies:</strong> Designed the <code>Polaris Website</code> for IIT Bhilai freshers, because even geniuses need a good map.</li>
-                    <li style="margin-bottom: 0.5rem;"><strong>Digital Zen Master:</strong> Created <code>Serenity</code>, a Flutter app for mental well-being, complete with ML-powered stress-o-meters. Because even robots get stressed sometimes.</li>
-                    <li style="margin-bottom: 0.5rem;"><strong>Martian Explorer (Almost):</strong> Lent his CAD and navigation brain cells to the Epsilon Club’s Mars Rover.</li>
-                    <li style="margin-bottom: 0.5rem;"><strong>Marketing Maverick (Intern Edition):</strong> Briefly swapped circuits for strategy as a Marketing Intern at Swiggy, proving he can sell an idea as well as build one.</li>
-                    <li style="margin-bottom: 0.5rem;"><strong>Film Festival Tycoon:</strong> As President of the Film and Photography Society, he didn't just watch movies; he made the club a star, boosting its Inter-IIT ranking. From coding scenes to cinematic scenes!</li>
-                    <li style="margin-bottom: 0.5rem;"><strong>RIS-ky Business:</strong> Currently a Research Intern conjuring up a GUI-based RIS Simulator. That's 'Reconfigurable Intelligent Surface,' for those not yet fluent in cutting-edge tech.</li>
-                </ul>
-        
-                <h3 style="color: #64ffda; font-size: 1.8rem; margin-top: 2.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid #4dabf5; padding-bottom: 0.5rem;">Off-Duty Shenanigans (When the Soldering Iron Cools Down):</h3>
-                <p style="margin-bottom: 1rem;">Believe it or not, Vamsi does unplug occasionally!</p>
-                <ul style="list-style: disc; padding-left: 20px; margin-bottom: 1.5rem;">
-                    <li style="margin-bottom: 0.5rem;"><strong>Sporty Spice (of the Engineering Variety):</strong> A badminton champ who also dabbles in basketball, football, and cricket. He's probably calculating trajectory vectors for fun.</li>
-                    <li style="margin-bottom: 0.5rem;"><strong>Bookworm Extraordinaire:</strong> Devours sci-fi novels like <em>The Martian</em>, <em>Dune</em>, and <em>The Three-Body Problem</em>. Clearly planning his escape to another planet if the robot uprising goes sideways.</li>
-                    <li style="margin-bottom: 0.5rem;"><strong>Puzzle Master:</strong> Sudoku and crosswords don't stand a chance.</li>
-                    <li style="margin-bottom: 0.5rem;"><strong>Cinephile & Storyteller:</strong> Has probably seen more movies than your Netflix account.</li>
-                    <li style="margin-bottom: 0.5rem;"><strong>Gaming Guru:</strong> If it involves a controller or a deck of cards, he's in.</li>
-                </ul>
+            <div class="matrix-terminal-output" style="max-width: 900px; margin: 0 auto; background: rgba(0, 20, 0, 0.85); border: 1px solid #00FF00; border-radius: 8px; padding: 25px; box-shadow: 0 0 15px #00FF00, inset 0 0 10px rgba(0,255,0,0.3); font-family: 'Fira Code', 'Courier New', monospace; color: #00FF00;">
+                <p class="matrix-prompt">[user@matrix ~]$ ./load_profile --vamsi</p>
+                <p class="matrix-response typing-effect" id="profile-line-1">Accessing IIT Bhilai mainframe... Connection established.</p>
+                <p class="matrix-response typing-effect" id="profile-line-2">Querying Mechatronics Undergraduate Program... Subject: Galaba Vamsi.</p>
+                <p class="matrix-response typing-effect" id="profile-line-3">Expected graduation: 2027. Status: Active, High Potential.</p>
+                <p class="matrix-response typing-effect" id="profile-line-4">Core directive: Engineer advanced robotic systems, innovate relentlessly.</p>
+                <p class="matrix-response typing-effect" id="profile-line-5">Secondary directive: Share knowledge, foster collaborative success.</p>
                 
-                <p style="margin-top: 2rem; font-style: italic;">So, if you're looking for someone who can debug your code, design your next-gen robot, direct a short film, AND school you in badminton, you've found your guy. Reach out before he accidentally invents sentient AI and becomes too busy ruling his new robot kingdom (kidding... mostly).</p>
+                <div class="matrix-tabs" style="margin-top: 30px; margin-bottom: 20px; border-bottom: 1px solid #00FF00; padding-bottom: 10px; display: flex; gap: 15px;">
+                    <button class="matrix-tab-button active" onclick="showTab('skills-tab', this)">Skills_Matrix.log</button>
+                    <button class="matrix-tab-button" onclick="showTab('projects-tab', this)">Project_Archives.dat</button>
+                    <button class="matrix-tab-button" onclick="showTab('hobbies-tab', this)">Recreation_Subroutines.ini</button>
+                </div>
+
+                <div id="skills-tab" class="matrix-tab-content active-content">
+                    <p class="matrix-prompt">[user@matrix ~]$ cat Skills_Matrix.log</p>
+                    <ul class="matrix-list">
+                        <li><span class="matrix-highlight">[CODE_SYNTHESIS]:</span> Python, C, C++, JavaScript, React, Node, Three.js, Flutter, ROS2</li>
+                        <li><span class="matrix-highlight">[ROBOT_CONTROL]:</span> Drone Dev, Advanced Navigation, Autonomous Systems</li>
+                        <li><span class="matrix-highlight">[DATA_ANALYSIS]:</span> Numpy, Pandas, TensorFlow, ML Algorithms</li>
+                        <li><span class="matrix-highlight">[DESIGN_FABRICATION]:</span> SolidWorks, AutoCAD, 3D Printing</li>
+                        <li><span class="matrix-highlight">[CREATIVE_MODULES]:</span> UI/UX (Figma, XD), Blender, Unreal Engine, DaVinci Resolve</li>
+                    </ul>
+                </div>
+
+                <div id="projects-tab" class="matrix-tab-content">
+                    <p class="matrix-prompt">[user@matrix ~]$ ls -l Project_Archives.dat</p>
+                    <ul class="matrix-list">
+                        <li><span class="matrix-highlight">[ACTIVE]:</span> Brain-Controlled Wheelchair Interface</li>
+                        <li><span class="matrix-highlight">[DEPLOYED]:</span> Polaris Website (IIT Bhilai Freshers Guide)</li>
+                        <li><span class="matrix-highlight">[DEPLOYED]:</span> Serenity (Mental Well-being App w/ ML)</li>
+                        <li><span class="matrix-highlight">[CONTRIBUTION]:</span> Epsilon Club Mars Rover (CAD & Navigation)</li>
+                        <li><span class="matrix-highlight">[ARCHIVED]:</span> Swiggy Marketing Internship Module</li>
+                        <li><span class="matrix-highlight">[LEADERSHIP]:</span> Film & Photography Society (Inter-IIT Rank Boost)</li>
+                        <li><span class="matrix-highlight">[RESEARCH]:</span> GUI-Based RIS Simulator Development</li>
+                    </ul>
+                </div>
+
+                <div id="hobbies-tab" class="matrix-tab-content">
+                    <p class="matrix-prompt">[user@matrix ~]$ run Recreation_Subroutines.ini</p>
+                    <ul class="matrix-list">
+                        <li><span class="matrix-highlight">[ATHLETICS_CORE]:</span> Badminton (Champion), Basketball, Football, Cricket</li>
+                        <li><span class="matrix-highlight">[LITDB_ACCESS]:</span> Sci-Fi (The Martian, Dune, Three-Body Problem)</li>
+                        <li><span class="matrix-highlight">[LOGIC_PUZZLES]:</span> Sudoku, Crosswords</li>
+                        <li><span class="matrix-highlight">[MEDIA_STREAM]:</span> Cinematography, Storytelling</li>
+                        <li><span class="matrix-highlight">[GAMING_MODULE]:</span> Strategy, Card Games, Console</li>
+                    </ul>
+                </div>
+                <p class="matrix-prompt" style="margin-top: 25px;">[user@matrix ~]$ echo "Contact for collaboration or system integration."</p>
+                <p class="matrix-response typing-effect" id="contact-prompt">Contact for collaboration or system integration.</p>
             </div>
         </section>
 
@@ -934,30 +1095,30 @@
         function initThree() {
             // Create scene
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0a1929);
-            scene.fog = new THREE.Fog(0x0a1929, 20, 100);
+            scene.background = new THREE.Color(0x000000); // Black background
+            scene.fog = new THREE.Fog(0x000000, 20, 100); // Darker fog for Matrix theme
             
             // Create camera
             camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(0, 2, 8);
             
             // Create renderer
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.outputEncoding = THREE.sRGBEncoding;
             document.getElementById('three-container').appendChild(renderer.domElement);
             
             // Add lighting
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            const ambientLight = new THREE.AmbientLight(0x002200, 0.8); // Dark green ambient light
             scene.add(ambientLight);
             
-            const directionalLight = new THREE.DirectionalLight(0x4dabf5, 1.2);
+            const directionalLight = new THREE.DirectionalLight(0x00FF00, 1.0); // Green directional light
             directionalLight.position.set(5, 10, 7);
             directionalLight.castShadow = true;
             scene.add(directionalLight);
             
-            const backLight = new THREE.DirectionalLight(0x64ffda, 0.8);
+            const backLight = new THREE.DirectionalLight(0x00AA00, 0.7); // Another shade of green for backlight
             backLight.position.set(-5, -5, -5);
             scene.add(backLight);
             
@@ -970,13 +1131,13 @@
             controls.enablePan = true;
             
             // Create a simple floor grid
-            const gridHelper = new THREE.GridHelper(20, 20, 0x3a506b, 0x1c2541);
+            const gridHelper = new THREE.GridHelper(20, 20, 0x00ff00, 0x005500); // Green grid lines, darker secondary lines
             gridHelper.position.y = -2;
             scene.add(gridHelper);
             
             // Create the pickup cube
             const cubeGeometry = new THREE.BoxGeometry(0.4, 0.4, 0.4); // Cube dimensions
-            const cubeMaterial = new THREE.MeshStandardMaterial({ color: 0x00ffaa }); // A nice cyan color
+            const cubeMaterial = new THREE.MeshStandardMaterial({ color: 0x00FF00, emissive: 0x003300 }); // Bright green, slight emissive green
             pickupCube = new THREE.Mesh(cubeGeometry, cubeMaterial);
             pickupCube.position.copy(initialCubePosition);
             scene.add(pickupCube);
@@ -1037,7 +1198,7 @@
             // Base
             const baseGeometry = new THREE.CylinderGeometry(1.2, 1.2, 0.4, 32);
             const baseMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x3a506b,
+                color: 0x6c757d, // Original: A neutral grey
                 metalness: 0.7,
                 roughness: 0.3
             });
@@ -1053,7 +1214,7 @@
             
             const shoulderGeometry = new THREE.BoxGeometry(0.8, 1.2, 0.8);
             const shoulderMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x4dabf5,
+                color: 0x4a90e2, // Original: A medium blue
                 metalness: 0.6,
                 roughness: 0.2
             });
@@ -1068,7 +1229,7 @@
             shoulderGroup.add(upperArmGroup);
             
             const upperArmGeometry = new THREE.BoxGeometry(0.6, 2, 0.6);
-            const upperArm = new THREE.Mesh(upperArmGeometry, shoulderMaterial);
+            const upperArm = new THREE.Mesh(upperArmGeometry, shoulderMaterial); // Uses shoulderMaterial (blue)
             upperArm.position.y = 1;
             upperArmGroup.add(upperArm);
             joints.elbow = upperArmGroup;
@@ -1079,7 +1240,7 @@
             upperArmGroup.add(lowerArmGroup);
             
             const lowerArmGeometry = new THREE.BoxGeometry(0.5, 1.8, 0.5);
-            const lowerArm = new THREE.Mesh(lowerArmGeometry, shoulderMaterial);
+            const lowerArm = new THREE.Mesh(lowerArmGeometry, shoulderMaterial); // Uses shoulderMaterial (blue)
             lowerArm.position.y = 0.9;
             lowerArmGroup.add(lowerArm);
             joints.wristPitch = lowerArmGroup;
@@ -1091,7 +1252,7 @@
             
             const wristGeometry = new THREE.BoxGeometry(0.6, 0.4, 0.6);
             const wrist = new THREE.Mesh(wristGeometry, new THREE.MeshStandardMaterial({ 
-                color: 0x64ffda,
+                color: 0x50e3c2, // Original: A teal/cyan color
                 metalness: 0.7,
                 roughness: 0.1
             }));
@@ -1101,7 +1262,7 @@
             // Gripper left
             const gripperLeftGeometry = new THREE.BoxGeometry(0.2, 0.8, 0.4);
             const gripperLeft = new THREE.Mesh(gripperLeftGeometry, new THREE.MeshStandardMaterial({ 
-                color: 0xff6b6b,
+                color: 0xf5a623, // Original: An orange/amber color
                 metalness: 0.8,
                 roughness: 0.1
             }));
@@ -1112,7 +1273,7 @@
             // Gripper right
             const gripperRightGeometry = new THREE.BoxGeometry(0.2, 0.8, 0.4);
             const gripperRight = new THREE.Mesh(gripperRightGeometry, new THREE.MeshStandardMaterial({ 
-                color: 0xff6b6b,
+                color: 0xf5a623, // Original: An orange/amber color
                 metalness: 0.8,
                 roughness: 0.1
             }));
@@ -1459,6 +1620,55 @@
         sections.forEach(section => {
             section.classList.add('fade-in-section'); // Add base class for initial state
             sectionObserver.observe(section);
+        });
+
+        // Tab functionality for about section
+        function showTab(tabId, button) {
+            const tabs = document.querySelectorAll('.matrix-tab-content');
+            const buttons = document.querySelectorAll('.matrix-tab-button');
+
+            tabs.forEach(tab => {
+                tab.classList.remove('active-content');
+            });
+
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabId).classList.add('active-content');
+            button.classList.add('active');
+        }
+
+        // Typing effect for terminal responses
+        function typeWriter(element, text, delay = 50) {
+            element.innerHTML = ''; // Clear existing content
+            let i = 0;
+            function typing() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typing, delay);
+                } else {
+                    // Optionally, you can add a blinking cursor effect here
+                }
+            }
+            typing();
+        }
+
+        // Initialize typing effects on load
+        window.addEventListener('load', () => {
+            // Type each line with a delay
+            const line1 = document.getElement
+            const line4 = document.getElementById('profile-line-4');
+            const line5 = document.getElementById('profile-line-5');
+            const contactPrompt = document.getElementById('contact-prompt');
+
+            typeWriter(line1, line1.textContent);
+            setTimeout(() => { typeWriter(line2, line2.textContent); }, 2000);
+            setTimeout(() => { typeWriter(line3, line3.textContent); }, 4000);
+            setTimeout(() => { typeWriter(line4, line4.textContent); }, 6000);
+            setTimeout(() => { typeWriter(line5, line5.textContent); }, 8000);
+            setTimeout(() => { typeWriter(contactPrompt, contactPrompt.textContent); }, 10000);
         });
     </script>
 </body>
