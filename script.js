@@ -19,9 +19,11 @@
         const percentageCounter = document.getElementById('percentage-counter');
         const animatedCommandContainer = document.getElementById('animated-command-container');
         const animatedCommandText = document.getElementById('animated-command-text');
-        const matrixCanvas = document.getElementById('matrix-canvas');
-        const matrixEntryText = document.getElementById('matrix-entry-text');
+        const matrixCanvas = document.getElementById('matrix-canvas');        const matrixEntryText = document.getElementById('matrix-entry-text');
         let matrixAnimationId;
+        
+        // Matrix audio
+        let matrixAudio = null;
 
 
         // Cube and interaction variables
@@ -595,9 +597,19 @@
                     setTimeout(() => {
                         matrixEntryText.style.opacity = '1';
                     }, 50);
-                    
-                    // Start the matrix animation
+                      // Start the matrix animation
                     initMatrixAnimation();
+                    
+                    // Start matrix audio
+                    try {
+                        matrixAudio = new Audio('resources/matrixaudio.mp3');
+                        matrixAudio.volume = 0.7; // Set volume to 70%
+                        matrixAudio.play().catch(error => {
+                            console.warn('Matrix audio playback failed:', error);
+                        });
+                    } catch (error) {
+                        console.warn('Matrix audio initialization failed:', error);
+                    }
                     
                     const matrixDisplayDuration = 3000; // How long matrix + text are shown (shortened from 5000)
                     const textFadeOutDuration = 800;    // Must match #matrix-entry-text transition
@@ -610,11 +622,17 @@
                         setTimeout(() => {
                             matrixEntryText.style.display = 'none';
                             loadingScreen.style.opacity = '0'; // Start fading out whole screen
-                            
-                            setTimeout(() => {
+                              setTimeout(() => {
                                 loadingScreen.style.display = 'none';
                                 document.body.classList.remove('loading');
                                 if (matrixAnimationId) cancelAnimationFrame(matrixAnimationId); // Stop matrix animation
+                                
+                                // Stop matrix audio
+                                if (matrixAudio) {
+                                    matrixAudio.pause();
+                                    matrixAudio.currentTime = 0;
+                                    matrixAudio = null;
+                                }
                             }, screenFadeOutDuration);
                         }, textFadeOutDuration);                    }, matrixDisplayDuration - textFadeOutDuration); // Start text fade out earlier
                     }, 800); // Pause after command typing is done

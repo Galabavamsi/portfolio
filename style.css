@@ -575,8 +575,8 @@
         }        #animated-command-container {
             display: none; /* Controlled by JS */
             width: 80%;
-            max-width: 700px; 
-            min-height: 350px; 
+            max-width: 600px; 
+            min-height: 500px; 
             padding: 25px; 
             margin: 20px auto; /* Centering the container if it's a block element in normal flow */
             text-align: left;
@@ -647,9 +647,9 @@
         
         /* Z-index hierarchy for proper layering */
         #animated-command-text { z-index: 5; } /* Text on top */
-        .vhs-scanlines { z-index: 4; } /* VHS scanlines above regular scanlines */
-        .vhs-static { z-index: 3; } /* VHS static */
-        .scanlines { z-index: 2; } /* Regular scanlines */
+        .vhs-scanlines { z-index: 2; } /* VHS scanlines above regular scanlines */
+        .vhs-static { z-index: 5; } /* VHS static */
+        .scanlines { z-index: 1; } /* Regular scanlines */
         .screen-flicker { z-index: 2; } /* Screen flicker */
         /* Specific for the ::before if it's on #animated-command-container itself */
         #animated-command-container::before {
@@ -774,7 +774,7 @@
         }
         
         #animated-command-text {
-            animation: text-glitch-enhanced 2.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite alternate;
+            animation: text-glitch-enhanced 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite alternate;
             /* Ensure other styles from inline are here or inherited if they were general */
             white-space: pre-wrap; 
             word-break: break-all; 
@@ -1106,7 +1106,7 @@
         /* Enhanced CRT container with VHS effects */
         #animated-command-container.vhs-mode {
             filter: contrast(1.1) brightness(0.95) saturate(1.2);
-            animation: vhs-screen-flicker 0.2s linear infinite;
+            animation: vhs-screen-flicker 0.1s linear infinite;
         }
         
         @keyframes vhs-screen-flicker {
