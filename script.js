@@ -1678,11 +1678,11 @@ Vamsi combines technical expertise with creative problem-solving, specializing i
 • Research in RIS technologies and hardware fabrication
 
 **Interests:**
-${this.knowledgeBase.interests.map(interest => `• ${interest}`).join('\\n')}
+${this.knowledgeBase.interests.map(interest => `• ${interest}`).join('\n')}
 
 **Education:**
 Currently pursuing ${education.current}. Key coursework includes:
-${education.relevantCourses.map(course => `• ${course}`).join('\\n')}`;
+${education.relevantCourses.map(course => `• ${course}`).join('\n')}`;
         } // Closing brace for formatPersonalResponse method
 
 } // Closing brace for VamsiBotAI class
@@ -1708,7 +1708,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h1 style="color: #ff4d4d; font-size: 24px;">A Critical Error Occurred</h1>
                         <p style="font-size: 16px; margin-bottom: 15px;">The VamsiBot chatbot could not start due to an internal script error.</p>
                         <p style="font-size: 14px; color: #b0b0b0;">Details have been logged to the browser console.</p>
-                        <pre style="background-color: #333; color: #f0f0f0; padding: 10px; border-radius: 4px; font-size: 12px; white-space: pre-wrap; word-wrap: break-word; max-width: 90%; text-align: left; max-height: 200px; overflow-y: auto;">${error.name}: ${error.message}\\n${error.stack ? error.stack.split('\\n').slice(0,5).join('\\n') : ''}</pre>
+                        <pre style="background-color: #333; color: #f0f0f0; padding: 10px; border-radius: 4px; font-size: 12px; white-space: pre-wrap; word-wrap: break-word; max-width: 90%; text-align: left; max-height: 200px; overflow-y: auto;">${error.name}: ${error.message}\n${error.stack ? error.stack.split('\n').slice(0,5).join('\n') : ''}</pre>
                         <p style="margin-top: 20px; font-size: 14px;">Please try refreshing the page.</p>
                     </div>`;
             }
