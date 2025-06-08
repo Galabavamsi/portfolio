@@ -559,15 +559,33 @@
             }
               // Show command container
             cmdContainer.style.display = 'block';
-            
-            // Command to type
-            const command = '[user@matrix ~]$ connect --construct=Portfolio \n Compiling Binaries ..... done \n Installing dependencies ..... done \n Building Workspace ..... done \n Loading ......';
-            
+              // Command to type
+            const command = '[user@matrix ~]$ connect --construct=Portfolio \n Compiling Binaries ..... done \n Installing dependencies ..... done \n Building Workspace ..... done \n Loading';
             
             // Use the existing typeWriter function to type the command
             typeWriter(cmdText, command, 50, () => {
-                // After command is typed, wait a moment
+                // After command is typed, start spinner animation
+                const spinnerChars = ['|', '/', '-', '\\'];
+                let spinnerIndex = 0;
+                let dotCount = 0;
+                const maxDots = 6;
+                  const spinnerInterval = setInterval(() => {
+                    // Update spinner character and dots with enhanced styling
+                    const spinner = `<span class="terminal-spinner">${spinnerChars[spinnerIndex]}</span>`;
+                    const dots = `<span class="terminal-dots">${'.'.repeat((dotCount % (maxDots + 1)))}</span>`;
+                    cmdText.innerHTML = command + ' ' + spinner + ' ' + dots;
+                    
+                    spinnerIndex = (spinnerIndex + 1) % spinnerChars.length;
+                    dotCount++;
+                }, 150); // Change spinner every 150ms
+                
+                // Stop spinner after 2 seconds and continue with matrix animation
                 setTimeout(() => {
+                    clearInterval(spinnerInterval);
+                    cmdText.innerHTML = command + ' <span class="terminal-success">✓ done</span>';
+                    
+                    // Wait a moment before transitioning to matrix
+                    setTimeout(() => {
                     // Hide command and show matrix animation
                     cmdContainer.style.display = 'none';
                     matrixCanvas.style.display = 'block';
@@ -598,9 +616,9 @@
                                 document.body.classList.remove('loading');
                                 if (matrixAnimationId) cancelAnimationFrame(matrixAnimationId); // Stop matrix animation
                             }, screenFadeOutDuration);
-                        }, textFadeOutDuration);
-                    }, matrixDisplayDuration - textFadeOutDuration); // Start text fade out earlier
-                }, 800); // Pause after command typing is done
+                        }, textFadeOutDuration);                    }, matrixDisplayDuration - textFadeOutDuration); // Start text fade out earlier
+                    }, 800); // Pause after command typing is done
+                }, 2000); // Stop spinner after 2 seconds
             });
         }
 

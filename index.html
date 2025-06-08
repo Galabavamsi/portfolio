@@ -12,10 +12,12 @@
 <body>
     <div class="loading-screen">
         <div class="loading-content">
-        </div>        <div id="animated-command-container" class="crt-screen" style="display: none; width: 80%; max-width: 600px; min-height: 300px; padding: 20px; margin-bottom: 20px; text-align: left; background: #001100; border: 3px solid #00FF00; border-radius: 15px; box-shadow: 0 0 20px #00FF00, inset 0 0 20px rgba(0,255,0,0.1); position: relative; overflow: hidden;">
+        </div>        <div id="animated-command-container" class="crt-screen vhs-mode">
             <div class="scanlines"></div>
+            <div class="vhs-scanlines"></div>
+            <div class="vhs-static"></div>
             <div class="screen-flicker"></div>
-            <span id="animated-command-text" style="white-space: pre-wrap; word-break: break-all; font-family: 'VT323', 'Courier New', monospace; color: #00FF00; font-size: 18px; text-shadow: 0 0 5px #00FF00; line-height: 1.4; position: relative; z-index: 3;"></span>
+            <span id="animated-command-text"></span>
         </div>
         <canvas id="matrix-canvas"></canvas>
         <div id="matrix-entry-text">Entering the Matrix...</div>

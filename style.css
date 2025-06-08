@@ -572,8 +572,90 @@
             border-radius: 15px;
             position: relative;
             overflow: hidden;
+        }        #animated-command-container {
+            display: none; /* Controlled by JS */
+            width: 80%;
+            max-width: 700px; 
+            min-height: 350px; 
+            padding: 25px; 
+            margin: 20px auto; /* Centering the container if it's a block element in normal flow */
+            text-align: left;
+            background: #000500; /* Darker background */
+            border: 3px solid #00FF00;
+            border-radius: 25px; /* More pronounced curve */
+            box-shadow:
+                0 0 15px rgba(0, 255, 0, 0.5), /* Inner glow */
+                0 0 30px rgba(0, 255, 0, 0.7), /* Main glow - increased */
+                0 0 50px rgba(0, 255, 0, 0.5), /* Outer glow - increased */
+                inset 0 0 25px rgba(0, 255, 0, 0.2); /* Inner screen glow - increased */
+            position: relative; 
+            overflow: hidden; 
+            transform: scale(1.1); /* Removed perspective effect, keeping only scale */
+            transition: transform 0.5s ease-out, box-shadow 0.5s ease-out;
         }
         
+        #animated-command-container::after { /* Enhanced fisheye/depth effect */
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 25px; /* Match parent */
+            /* More pronounced fisheye distortion - darker edges, stronger vignette */
+            background: radial-gradient(ellipse 70% 60% at 50% 45%, transparent 30%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.4) 75%, rgba(0,0,0,0.7) 95%);
+            box-shadow: 
+                inset 0 0 30px rgba(0,0,0,0.4), 
+                inset 0 0 60px rgba(0,0,0,0.5),
+                inset 0 0 100px rgba(0,0,0,0.3);
+            pointer-events: none;
+            z-index: 1; /* Below text and other screen effects */
+        }
+          /* Enhanced horizontal scanlines for more pronounced CRT effect */
+        #animated-command-container .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg, /* Horizontal scanlines */
+                transparent 0px,
+                rgba(0, 255, 0, 0.12) 1px,
+                transparent 2px,
+                rgba(0, 255, 0, 0.06) 3px,
+                transparent 4px,
+                rgba(0, 255, 0, 0.03) 5px,
+                transparent 6px
+            );
+            pointer-events: none;
+            z-index: 2;
+            animation: scanline-flicker 0.15s linear infinite alternate, scanline-drift 3s ease-in-out infinite;
+        }
+
+        @keyframes scanline-flicker {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.9; }
+        }
+          /* Ensure child elements are stacked correctly above the new ::after pseudo-element */
+        #animated-command-container > #animated-command-text,
+        #animated-command-container > .scanlines,
+        #animated-command-container > .vhs-scanlines,
+        #animated-command-container > .vhs-static,
+        #animated-command-container > .screen-flicker,
+        #animated-command-container > .crt-screen::before { /* If .crt-screen::before is on this element */
+            position: relative; 
+        }
+        
+        /* Z-index hierarchy for proper layering */
+        #animated-command-text { z-index: 5; } /* Text on top */
+        .vhs-scanlines { z-index: 4; } /* VHS scanlines above regular scanlines */
+        .vhs-static { z-index: 3; } /* VHS static */
+        .scanlines { z-index: 2; } /* Regular scanlines */
+        .screen-flicker { z-index: 2; } /* Screen flicker */
+        /* Specific for the ::before if it's on #animated-command-container itself */
+        #animated-command-container::before {
+             z-index: 2; /* Ensure it's above ::after but below text/scanlines */
+        }
+
         .crt-screen::before {
             content: '';
             position: absolute;
@@ -589,36 +671,41 @@
             );
             animation: screen-flicker 1.5s linear infinite;
             pointer-events: none;
-            z-index: 2;
-        }
-        
-        .scanlines {
+            z-index: 2; /* Above ::after, potentially below .screen-flicker div if that's more active */
+        }          .scanlines {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
             background: repeating-linear-gradient(
-                0deg,
+                90deg, /* Horizontal scanlines */
                 transparent 0px,
-                rgba(0, 255, 0, 0.03) 1px,
+                rgba(0, 255, 0, 0.08) 1px,
                 transparent 2px,
+                rgba(0, 255, 0, 0.04) 3px,
                 transparent 4px
             );
             pointer-events: none;
-            z-index: 2;
+            z-index: 2; /* Consistent with ::before */
+            animation: scanline-drift 3s linear infinite;
+        }
+
+        @keyframes scanline-drift {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(4px); }
         }
         
-        .screen-flicker {
+        .screen-flicker { /* This is the div inside animated-command-container */
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 255, 0, 0.02);
-            animation: screen-flicker 0.15s linear infinite;
+            background: rgba(0, 255, 0, 0.03); /* Base for flicker */
+            animation: screen-flicker-enhanced 0.1s linear infinite alternate; /* New animation */
             pointer-events: none;
-            z-index: 1;
+            z-index: 2; /* Above ::after, on par with other screen effects */
         }
         
         @keyframes screen-flicker {
@@ -628,6 +715,14 @@
             100% { opacity: 1; }
         }
         
+        @keyframes screen-flicker-enhanced {
+            0% { opacity: 0.7; transform: scale(1.005) translate(-1px, -1px); background-color: rgba(0,255,0,0.02);}
+            25% { opacity: 0.9; }
+            50% { opacity: 0.6; background-color: rgba(0,255,0,0.06); transform: scale(1.00) translate(1px, 0px);}
+            75% { opacity: 1; }
+            100% { opacity: 0.75; transform: scale(1.01) translate(0px, 1px); background-color: rgba(0,255,0,0.03);}
+        }
+        
         @keyframes text-glitch {
             0% { text-shadow: 0 0 5px #00FF00; }
             10% { text-shadow: 2px 0 5px #FF0000, -2px 0 5px #00FFFF; }
@@ -635,8 +730,60 @@
             100% { text-shadow: 0 0 5px #00FF00; }
         }
         
+        @keyframes text-glitch-enhanced {
+            0%, 100% {
+                text-shadow: 0 0 7px #00FF00, 0 0 12px #00FF00;
+                transform: translate(0,0) skew(0deg, 0deg);
+                opacity: 1;
+            }
+            10% {
+                text-shadow: 3px 1px 7px #FF00FF, -3px -1px 7px #00FFFF, 0 0 12px #00FF00;
+                transform: translate(-0.5px, 0.5px) skew(-1deg, 0.5deg);
+                opacity: 0.92;
+            }
+            12% {
+                text-shadow: -2px 0px 7px #FF00FF, 1px 1px 7px #00FFFF, 0 0 12px #00FF00;
+                transform: translate(0.5px, -0.5px) skew(0.5deg, -1deg);
+                opacity: 0.95;
+            }
+            14% {
+                text-shadow: 0 0 7px #00FF00, 0 0 12px #00FF00;
+                transform: translate(0,0) skew(0deg, 0deg);
+                opacity: 1;
+            }
+            40% {
+                text-shadow: 0 0 9px #00FF00, 0 0 18px #33FF33, 1px 1px 2px #FF0000, -1px -1px 2px #00FFFF;
+                opacity: 0.88;
+                transform: translate(0.25px, -0.25px) skewX(-2deg);
+            }
+            42% {
+                text-shadow: 0 0 7px #00FF00, 0 0 12px #00FF00;
+                opacity: 1;
+                transform: translate(0,0) skewX(0deg);
+            }
+            70% {
+                text-shadow: -1px -0.5px 9px #FF00FF, 1px 0.5px 9px #00FFFF, 0 0 20px #00FF00;
+                transform: translate(0.5px, 0.5px) skewY(1.5deg);
+                opacity: 0.9;
+            }
+            72% {
+                text-shadow: 0 0 7px #00FF00, 0 0 12px #00FF00;
+                transform: translate(0,0) skewY(0deg);
+                opacity: 1;
+            }
+        }
+        
         #animated-command-text {
-            animation: text-glitch 3s ease-in-out infinite;
+            animation: text-glitch-enhanced 2.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite alternate;
+            /* Ensure other styles from inline are here or inherited if they were general */
+            white-space: pre-wrap; 
+            word-break: break-all; 
+            font-family: 'VT323', 'Courier New', monospace; 
+            color: #00FF00; 
+            font-size: 18px; /* Or adjust as needed */
+            line-height: 1.4; 
+            position: relative; /* Already set this above for z-index context */
+            z-index: 3; /* Ensure it's on top */
         }
 
         /* Animation for sections */
@@ -779,4 +926,196 @@
             height: 100%;
             z-index: -1;
             opacity: 0.2;
+        }
+
+        /* Terminal Spinner Animation Styles */
+        .terminal-spinner {
+            color: #00FFFF; /* Cyan color for spinner */
+            font-weight: bold;
+            text-shadow: 
+                0 0 5px #00FFFF,
+                0 0 10px #00FFFF,
+                0 0 15px #00FFFF;
+            animation: spinner-glow 0.6s ease-in-out infinite alternate;
+        }
+        
+        .terminal-dots {
+            color: #00FF00;
+            opacity: 0.8;
+            animation: dots-pulse 1s ease-in-out infinite;
+        }
+        
+        .terminal-success {
+            color: #00FF00;
+            font-weight: bold;
+            text-shadow: 
+                0 0 5px #00FF00,
+                0 0 10px #00FF00;
+            animation: success-flash 0.5s ease-out;
+        }
+        
+        @keyframes spinner-glow {
+            0% { 
+                text-shadow: 
+                    0 0 5px #00FFFF,
+                    0 0 10px #00FFFF,
+                    0 0 15px #00FFFF;
+                transform: scale(1);
+            }
+            100% { 
+                text-shadow: 
+                    0 0 8px #00FFFF,
+                    0 0 16px #00FFFF,
+                    0 0 24px #00FFFF;
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes dots-pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes success-flash {
+            0% { 
+                color: #FFFF00;
+                text-shadow: 
+                    0 0 10px #FFFF00,
+                    0 0 20px #FFFF00;
+                transform: scale(1.1);
+            }
+            100% { 
+                color: #00FF00;
+                text-shadow: 
+                    0 0 5px #00FF00,
+                    0 0 10px #00FF00;
+                transform: scale(1);
+            }
+        }
+
+        /* VHS Scanlines and Interference Effects */
+        .vhs-scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                /* Vertical noise lines */
+                repeating-linear-gradient(
+                    0deg,
+                    transparent 0px,
+                    rgba(255, 255, 255, 0.03) 1px,
+                    transparent 2px
+                ),
+                /* Horizontal scanlines */
+                repeating-linear-gradient(
+                    90deg,
+                    transparent 0px,
+                    rgba(0, 255, 0, 0.05) 1px,
+                    transparent 2px,
+                    rgba(0, 255, 0, 0.02) 3px,
+                    transparent 4px
+                ),
+                /* Diagonal interference */
+                repeating-linear-gradient(
+                    45deg,
+                    transparent 0px,
+                    rgba(255, 0, 255, 0.01) 1px,
+                    transparent 3px
+                );
+            pointer-events: none;
+            z-index: 4;
+            animation: vhs-interference 0.1s linear infinite, vhs-drift 8s ease-in-out infinite;
+            opacity: 0.8;
+        }
+        
+        .vhs-static {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.02) 1px, transparent 2px),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.02) 1px, transparent 2px),
+                radial-gradient(circle at 40% 90%, rgba(255,255,255,0.02) 1px, transparent 2px);
+            background-size: 50px 50px, 80px 80px, 30px 30px;
+            pointer-events: none;
+            z-index: 3;
+            animation: vhs-static-noise 0.05s linear infinite;
+        }
+        
+        @keyframes vhs-interference {
+            0%, 100% { 
+                opacity: 0.8;
+                filter: contrast(1) brightness(1);
+            }
+            25% { 
+                opacity: 0.9;
+                filter: contrast(1.1) brightness(0.95);
+            }
+            50% { 
+                opacity: 0.7;
+                filter: contrast(0.9) brightness(1.05);
+            }
+            75% { 
+                opacity: 0.85;
+                filter: contrast(1.05) brightness(0.98);
+            }
+        }
+        
+        @keyframes vhs-drift {
+            0%, 100% { 
+                transform: translateX(0px) skew(0deg);
+            }
+            25% { 
+                transform: translateX(1px) skew(0.1deg);
+            }
+            50% { 
+                transform: translateX(-1px) skew(-0.1deg);
+            }
+            75% { 
+                transform: translateX(0.5px) skew(0.05deg);
+            }
+        }
+        
+        @keyframes vhs-static-noise {
+            0% { 
+                background-position: 0px 0px, 10px 10px, 20px 20px;
+                opacity: 0.03;
+            }
+            25% { 
+                background-position: 5px 2px, 15px 8px, 25px 18px;
+                opacity: 0.02;
+            }
+            50% { 
+                background-position: 2px 5px, 8px 15px, 18px 25px;
+                opacity: 0.04;
+            }
+            75% { 
+                background-position: 8px 3px, 18px 12px, 28px 22px;
+                opacity: 0.02;
+            }
+            100% { 
+                background-position: 0px 0px, 10px 10px, 20px 20px;
+                opacity: 0.03;
+            }
+        }
+        
+        /* Enhanced CRT container with VHS effects */
+        #animated-command-container.vhs-mode {
+            filter: contrast(1.1) brightness(0.95) saturate(1.2);
+            animation: vhs-screen-flicker 0.2s linear infinite;
+        }
+        
+        @keyframes vhs-screen-flicker {
+            0%, 100% { 
+                transform: scale(1.1) translateY(0px);
+                filter: contrast(1.1) brightness(0.95) saturate(1.2) hue-rotate(0deg);
+            }
+            50% { 
+                transform: scale(1.1) translateY(0.5px);
+                filter: contrast(1.05) brightness(1) saturate(1.1) hue-rotate(1deg);
+            }
         }
