@@ -238,12 +238,41 @@
             <h2 class="section-title">> ./Get In Touch</h2>
             <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto 3rem; text-align: center; line-height: 1.7;">
                 I'm currently seeking internship opportunities and collaborative projects in robotics and automation. Feel free to reach out if you'd like to discuss potential opportunities or just chat about mechatronics!
-            </p>
-            <div style="text-align: center; margin-bottom: 6rem;">
+            </p>            <div style="text-align: center; margin-bottom: 6rem;">
                 <a href="mailto:galabavamsi12@gmail.com,galabav@iitbhilai.ac.in" class="btn btn-primary">Send Email</a>
             </div>
+        </section>        <!-- Download Resume Section -->
+        <section id="resume-download" class="download-section">
+            <div class="download-terminal">
+                <div class="terminal-header">
+                    <div class="terminal-buttons">
+                        <span class="terminal-button close"></span>
+                        <span class="terminal-button minimize"></span>
+                        <span class="terminal-button maximize"></span>
+                    </div>
+                    <span class="terminal-title">resume_downloader.sh</span>
+                </div>
+                <div class="terminal-content">
+                    <div class="download-prompt">
+                        <span class="prompt-symbol">$</span> ./fetch_resume --target=galaba_vamsi --format=pdf<br>
+                        <span>Connecting to resume server...</span><br>
+                        <span>Authentication successful.</span><br>
+                        <span>Locating file: Galaba_Vamsi_Resume.pdf</span><br>
+                        <span>File size: 2.3 MB</span><br>
+                        <span>Last modified: June 2025</span><br>
+                        <span>Status: READY_FOR_DOWNLOAD</span><br>
+                        <span class="prompt-symbol">$</span> <span class="download-ready">Download ready. Execute command below:</span>
+                    </div>
+                    <a href="resources/resume.pdf" download="Galaba_Vamsi_Resume.pdf" class="download-button">
+                        wget Galaba_Vamsi_Resume.pdf
+                    </a>
+                    <div style="margin-top: 15px; color: #008800; font-size: 0.8rem;">
+                        <span class="prompt-symbol">$</span> # Complete resume with technical skills, projects & experience
+                    </div>
+                </div>
+            </div>
         </section>
-
+        
         <footer>
             <div class="social-links">
                 <a href="https://www.linkedin.com/in/galaba-vamsi-334758211/" target="_blank" rel="noopener noreferrer"><span>in</span></a>
@@ -256,6 +285,41 @@
             <p style="margin-top: 1rem; font-size: 0.9rem;">Engineered with passion for robotics and automation</p>
         </footer>
     </div>
+
+    <!-- AI Chatbot Interface -->
+    <div id="chatbot-container" class="chatbot-hidden">
+        <div class="chatbot-header">
+            <div class="chatbot-title">
+                <span>> ./VamsiBot.exe</span>
+            </div>
+            <button id="chatbot-close" class="chatbot-close">×</button>
+        </div>
+        <div class="chatbot-status">
+            <span id="chatbot-status-text">Status: Online | Knowledge Base: Loaded</span>
+        </div>
+        <div id="chatbot-messages" class="chatbot-messages">
+            <div class="message bot-message">
+                <span class="message-prefix">[VamsiBot]:</span>
+                <span class="message-text">Hello! I'm VamsiBot, your AI assistant. I can answer questions about Galaba Vamsi's projects, skills, education, and experience. What would you like to know?</span>
+            </div>
+        </div>
+        <div class="chatbot-input-container">
+            <input type="text" id="chatbot-input" placeholder="Ask me about Vamsi's projects, skills, education..." maxlength="200">
+            <button id="chatbot-send">Send</button>
+        </div>        <div class="chatbot-suggestions">
+            <button class="suggestion-btn" data-question="Should I hire Vamsi?">Why Hire Vamsi?</button>
+            <button class="suggestion-btn" data-question="What projects has Vamsi worked on?">Projects</button>
+            <button class="suggestion-btn" data-question="What are Vamsi's technical skills?">Skills</button>
+            <button class="suggestion-btn" data-question="Tell me about Vamsi's education">Education</button>
+            <button class="suggestion-btn" data-question="What programming languages does Vamsi know?">Languages</button>
+        </div>
+    </div>
+
+    <!-- Chatbot Toggle Button -->
+    <button id="chatbot-toggle" class="chatbot-toggle">
+        <span class="chatbot-toggle-icon">💬</span>
+        <span class="chatbot-toggle-text">Ask VamsiBot</span>
+    </button>
 
     <script src="script.js"></script>
         
