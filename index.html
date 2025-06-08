@@ -1602,10 +1602,10 @@
             cmdContainer.style.display = 'block';
             
             // Command to type
-            const command = '[user@matrix ~]$ connect --construct=Portfolio';
+            const command = '[user@matrix ~]$ connect --construct=Portfolio \n Compiling Binaries ..... done \n Installing dependencies ..... done \n Building Workspace ..... done \n Loading ......';
             
             // Use the existing typeWriter function to type the command
-            typeWriter(cmdText, command, 50, () => {
+            typeWriter(cmdText, command, 30, () => {
                 // After command is typed, wait a moment
                 setTimeout(() => {
                     // Hide command and show matrix animation
