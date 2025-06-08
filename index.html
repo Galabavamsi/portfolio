@@ -795,7 +795,7 @@
 <body>
     <div class="loading-screen">
         <div class="loading-content">
-        </div>        <div id="animated-command-container" class="crt-screen" style="display: none; width: 80%; max-width: 600px; min-height: 600px; padding: 20px; margin-bottom: 20px; text-align: left; background: #001100; border: 3px solid #00FF00; border-radius: 15px; box-shadow: 0 0 20px #00FF00, inset 0 0 20px rgba(0,255,0,0.1); position: relative; overflow: hidden;">
+        </div>        <div id="animated-command-container" class="crt-screen" style="display: none; width: 80%; max-width: 600px; min-height: 300px; padding: 20px; margin-bottom: 20px; text-align: left; background: #001100; border: 3px solid #00FF00; border-radius: 15px; box-shadow: 0 0 20px #00FF00, inset 0 0 20px rgba(0,255,0,0.1); position: relative; overflow: hidden;">
             <div class="scanlines"></div>
             <div class="screen-flicker"></div>
             <span id="animated-command-text" style="white-space: pre-wrap; word-break: break-all; font-family: 'VT323', 'Courier New', monospace; color: #00FF00; font-size: 18px; text-shadow: 0 0 5px #00FF00; line-height: 1.4; position: relative; z-index: 3;"></span>
@@ -893,7 +893,7 @@
             <div class="projects-grid">
                 <div class="project-card">
                     <div class="project-img">
-                        <span style="font-size: 4rem; color: #4dabf5;">🤖</span>
+                        <img src="resources/amr.png" alt="Autonomous Mobile Robot" style="width:100%; height:100%; object-fit: cover;">
                     </div>
                     <div class="project-content">
                         <h3>Autonomous Mobile Robot</h3>
@@ -904,18 +904,18 @@
 
                 <div class="project-card">
                     <div class="project-img">
-                        <span style="font-size: 4rem; color: #64ffda;">🦾</span>
+                        <img src="resources/roboticarm.png" alt="Robotic arm" style="width:100%; height:100%; object-fit: cover;">
                     </div>
                     <div class="project-content">
                         <h3>Robotic Arm Control System</h3>
-                        <p>Developed a 6-DOF robotic arm with inverse kinematics control. Implemented real-time trajectory planning and haptic feedback.</p>
+                        <p>Developed a 6-DOF robotic arm with inverse kinematics control. Implemented real-time trajectory planning and haptic feedback using Arduino and Raspberry Pi.</p>
                         <a href="#" class="btn">View Details</a>
                     </div>
                 </div>
 
                 <div class="project-card">
                     <div class="project-img">
-                        <span style="font-size: 4rem; color: #ff6b6b;">📊</span>
+                        <img src="resources/smartfactory.png" alt="Smart Factory" style="width:100%; height:100%; object-fit: cover;">
                     </div>
                     <div class="project-content">
                         <h3>Smart Factory Monitoring</h3>
@@ -982,10 +982,6 @@
                     <input type="range" id="shoulder" min="-90" max="90" value="45">
                     <span class="slider-value" id="shoulder-value">45°</span>
                 </div>
-                <div class="slider-container">
-                    <label>Elbow:</label>
-                    <input type="range" id="elbow" min="0" max="180" value="90">
-                    <span class="slider-value" id="elbow-value">90°</span>
                 </div>
                 <div class="slider-container">
                     <label>Wrist Pitch:</label>
@@ -1604,8 +1600,9 @@
             // Command to type
             const command = '[user@matrix ~]$ connect --construct=Portfolio \n Compiling Binaries ..... done \n Installing dependencies ..... done \n Building Workspace ..... done \n Loading ......';
             
+            
             // Use the existing typeWriter function to type the command
-            typeWriter(cmdText, command, 30, () => {
+            typeWriter(cmdText, command, 50, () => {
                 // After command is typed, wait a moment
                 setTimeout(() => {
                     // Hide command and show matrix animation
@@ -1637,7 +1634,6 @@
                                 loadingScreen.style.display = 'none';
                                 document.body.classList.remove('loading');
                                 if (matrixAnimationId) cancelAnimationFrame(matrixAnimationId); // Stop matrix animation
-
                             }, screenFadeOutDuration);
                         }, textFadeOutDuration);
                     }, matrixDisplayDuration - textFadeOutDuration); // Start text fade out earlier
