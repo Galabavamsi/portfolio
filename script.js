@@ -21,10 +21,12 @@
         const animatedCommandText = document.getElementById('animated-command-text');
         const matrixCanvas = document.getElementById('matrix-canvas');        const matrixEntryText = document.getElementById('matrix-entry-text');
         let matrixAnimationId;
-        
-        // Matrix audio
+          // Matrix audio
         let matrixAudio = null;
-
+        
+        // Main theme audio
+        let mainThemeAudio = null;
+        let isMuted = false;
 
         // Cube and interaction variables
         let pickupCube = null;
@@ -618,11 +620,11 @@
                     // After matrixDisplayDuration, start fading out the text
                     setTimeout(() => {
                         matrixEntryText.style.opacity = '0'; // Start fading out text
-                        
-                        setTimeout(() => {
+                          setTimeout(() => {
                             matrixEntryText.style.display = 'none';
                             loadingScreen.style.opacity = '0'; // Start fading out whole screen
-                              setTimeout(() => {
+                            
+                            setTimeout(() => {
                                 loadingScreen.style.display = 'none';
                                 document.body.classList.remove('loading');
                                 if (matrixAnimationId) cancelAnimationFrame(matrixAnimationId); // Stop matrix animation
@@ -633,8 +635,12 @@
                                     matrixAudio.currentTime = 0;
                                     matrixAudio = null;
                                 }
+                                
+                                // Start main theme audio
+                                startMainThemeAudio();
                             }, screenFadeOutDuration);
-                        }, textFadeOutDuration);                    }, matrixDisplayDuration - textFadeOutDuration); // Start text fade out earlier
+                        }, textFadeOutDuration);
+                    }, matrixDisplayDuration - textFadeOutDuration); // Start text fade out earlier
                     }, 800); // Pause after command typing is done
                 }, 2000); // Stop spinner after 2 seconds
             });
@@ -678,13 +684,67 @@
             drawMatrix();
             
             window.addEventListener('resize', () => { // Adjust canvas on resize during matrix
-                if (matrixCanvas.style.display === 'block') {
-                    matrixCanvas.width = window.innerWidth;
+                if (matrixCanvas.style.display === 'block') {                    matrixCanvas.width = window.innerWidth;
                     matrixCanvas.height = window.innerHeight;
                     // Recalculate columns if needed, or simply let it adjust
                     // For simplicity, not re-initializing drops here, might cause visual jump on resize
                 }
             });
+        }
+
+        // Main theme audio functions
+        function startMainThemeAudio() {
+            try {
+                mainThemeAudio = new Audio('resources/maintheme.mp3');
+                mainThemeAudio.loop = true; // Loop the background music
+                mainThemeAudio.volume = 0.3; // Set volume to 30% for background music
+                
+                if (!isMuted) {
+                    mainThemeAudio.play().catch(error => {
+                        console.warn('Main theme audio playback failed:', error);
+                    });
+                }
+                
+                // Create and show the mute button
+                createMuteButton();
+            } catch (error) {
+                console.warn('Main theme audio initialization failed:', error);
+            }
+        }
+
+        function createMuteButton() {
+            // Check if button already exists
+            if (document.getElementById('mute-button')) return;
+            
+            const muteButton = document.createElement('button');
+            muteButton.id = 'mute-button';
+            muteButton.className = 'retro-mute-button';
+            muteButton.innerHTML = isMuted ? '🔇' : '🔊';
+            muteButton.setAttribute('aria-label', isMuted ? 'Unmute audio' : 'Mute audio');
+            
+            muteButton.addEventListener('click', toggleMute);
+            
+            // Add button to page
+            document.body.appendChild(muteButton);
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            const muteButton = document.getElementById('mute-button');
+            
+            if (mainThemeAudio) {
+                if (isMuted) {
+                    mainThemeAudio.pause();
+                    muteButton.innerHTML = '🔇';
+                    muteButton.setAttribute('aria-label', 'Unmute audio');
+                } else {
+                    mainThemeAudio.play().catch(error => {
+                        console.warn('Main theme audio playback failed:', error);
+                    });
+                    muteButton.innerHTML = '🔊';
+                    muteButton.setAttribute('aria-label', 'Mute audio');
+                }
+            }
         }
 
 
@@ -757,20 +817,18 @@
                         // Clear any existing animation comments that might set opacity to 0
                         [line1, line2, line3, line4, line5, contactPrompt].forEach(el => {
                             // el.style.opacity = '1'; // Ensure visible before typing, handled by typeWriter now
-                        });
-
-                        // Start typing with delays and proper chaining
+                        });                        // Start typing with delays and proper chaining (disable audio for About section)
                         if (line1) typeWriter(line1, line1.textContent, 50, () => {
                             if (line2) typeWriter(line2, line2.textContent, 50, () => {
                                 if (line3) typeWriter(line3, line3.textContent, 50, () => {
                                     if (line4) typeWriter(line4, line4.textContent, 50, () => {
                                         if (line5) typeWriter(line5, line5.textContent, 50, () => {
-                                            if (contactPrompt) typeWriter(contactPrompt, contactPrompt.textContent, 50);
-                                        });
-                                    });
-                                });
-                            });
-                        });
+                                            if (contactPrompt) typeWriter(contactPrompt, contactPrompt.textContent, 50, null, false);
+                                        }, false);
+                                    }, false);
+                                }, false);
+                            }, false);
+                        }, false);
                     }
                 } else {
                     // Remove class if you want animation to re-trigger on scroll up/out
@@ -792,7 +850,7 @@
                 section.classList.add('fade-in-section');
             }
             newSectionObserver.observe(section);
-        });        function typeWriter(element, text, delay = 50, callback) {
+        });        function typeWriter(element, text, delay = 50, callback, enableAudio = true) {
             element.innerHTML = ''; // Clear existing content
             let i = 0;
             element.style.opacity = '1'; // Make sure it's visible before typing
@@ -827,14 +885,15 @@
                     // Audio might not be supported, continue silently
                 }
             }
-            
-            function typing() {
+              function typing() {
                 if (i < text.length) {
                     const char = text.charAt(i);
                     element.innerHTML += char;
                     
-                    // Create typing sound for each character
-                    createTypingSound();
+                    // Create typing sound for each character (only if audio is enabled)
+                    if (enableAudio) {
+                        createTypingSound();
+                    }
                     
                     // Variable delay for realistic typing
                     let currentDelay = delay;
@@ -974,11 +1033,10 @@
                 function animateNextElement() {
                     if (currentElementIndex < elementsToAnimateDetails.length) {
                         const detail = elementsToAnimateDetails[currentElementIndex];
-                        currentElementIndex++;
-                        // Ensure element is part of the DOM and visible
+                        currentElementIndex++;                        // Ensure element is part of the DOM and visible
                         if (detail.el && detail.el.isConnected && 
                             (detail.el.offsetParent !== null || getComputedStyle(detail.el).display !== 'none')) {
-                           typeWriter(detail.el, detail.text, 20, animateNextElement); 
+                           typeWriter(detail.el, detail.text, 20, animateNextElement, false); // Disable audio for About section tab content
                         } else {
                             // Element not visible or not in DOM, skip and proceed
                             animateNextElement();

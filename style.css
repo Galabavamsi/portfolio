@@ -1119,3 +1119,72 @@
                 filter: contrast(1.05) brightness(1) saturate(1.1) hue-rotate(1deg);
             }
         }
+
+        /* Retro Mute Button */
+        .retro-mute-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 60px;
+            height: 60px;
+            border: 2px solid #00FF00;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00FF00;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 0 10px #00FF00,
+                inset 0 0 10px rgba(0, 255, 0, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-family: monospace;
+        }
+
+        .retro-mute-button:hover {
+            background: rgba(0, 255, 0, 0.1);
+            box-shadow: 
+                0 0 20px #00FF00,
+                0 0 30px #00FF00,
+                inset 0 0 20px rgba(0, 255, 0, 0.2);
+            transform: scale(1.1);
+            animation: retro-pulse 1s infinite;
+        }
+
+        .retro-mute-button:active {
+            transform: scale(0.95);
+            box-shadow: 
+                0 0 5px #00FF00,
+                inset 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+
+        @keyframes retro-pulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 20px #00FF00,
+                    0 0 30px #00FF00,
+                    inset 0 0 20px rgba(0, 255, 0, 0.2);
+            }
+            50% {
+                box-shadow: 
+                    0 0 30px #00FF00,
+                    0 0 40px #00FF00,
+                    0 0 50px #00FF00,
+                    inset 0 0 25px rgba(0, 255, 0, 0.3);
+            }
+        }
+
+        /* Mobile responsiveness for mute button */
+        @media (max-width: 768px) {
+            .retro-mute-button {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+                top: 15px;
+                right: 15px;
+            }
+        }
