@@ -982,6 +982,10 @@
                     <input type="range" id="shoulder" min="-90" max="90" value="45">
                     <span class="slider-value" id="shoulder-value">45°</span>
                 </div>
+                <div class="slider-container">
+                    <label>Elbow:</label>
+                    <input type="range" id="elbow" min="0" max="180" value="90">
+                    <span class="slider-value" id="elbow-value">90°</span>
                 </div>
                 <div class="slider-container">
                     <label>Wrist Pitch:</label>
@@ -1708,10 +1712,12 @@
                     animationTime = 0;
 
                     const valueDisplay = document.getElementById(slider.id + '-value');
-                    if (slider.id === 'gripper') {
-                        valueDisplay.textContent = slider.value + '%';
-                    } else {
-                        valueDisplay.textContent = slider.value + '°';
+                    if (valueDisplay) { // Check if valueDisplay exists
+                        if (slider.id === 'gripper') {
+                            valueDisplay.textContent = slider.value + '%';
+                        } else {
+                            valueDisplay.textContent = slider.value + '°';
+                        }
                     }
                     updateArmJoints();
                 });
