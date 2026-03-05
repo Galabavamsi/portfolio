@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,10 +10,12 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
+
 <body>
     <div class="loading-screen">
         <div class="loading-content">
-        </div>        <div id="animated-command-container" class="crt-screen vhs-mode">
+        </div>
+        <div id="animated-command-container" class="crt-screen vhs-mode">
             <div class="scanlines"></div>
             <div class="vhs-scanlines"></div>
             <div class="vhs-static"></div>
@@ -22,14 +25,15 @@
         <canvas id="matrix-canvas"></canvas>
         <div id="matrix-entry-text">Entering the Matrix...</div>
     </div>
-    
+
     <div id="three-container"></div>
 
     <div class="content">
         <header>
             <div class="logo">
                 <span class="logo-icon"></span>
-                <span id="animated-logo-text">>./Galaba Vamsi</span> <!-- Restored '>' and ensured text matches animation -->
+                <span id="animated-logo-text">>./Galaba Vamsi</span>
+                <!-- Restored '>' and ensured text matches animation -->
             </div>
             <nav>
                 <ul>
@@ -44,65 +48,97 @@
 
         <section class="hero">
             <h1>AI/ML Research · Robotics · Software Engineering</h1>
-            <h2>Mechatronics Undergrad @ IIT Bhilai &nbsp;|&nbsp; IEEE Published Researcher &nbsp;|&nbsp; Inter IIT 5th Rank</h2>
-            <p>Results-driven engineer bridging <strong>Machine Learning, Robotics (ROS2/Isaac Sim), and Software Engineering</strong>. Published IEEE researcher in 6G RIS systems. Top 3.5% at Amazon ML Challenge (700/20,000+ teams). Building GNN architectures for protein modelling and open-source 6G simulators.</p>
+            <h2>Mechatronics Undergrad @ IIT Bhilai &nbsp;|&nbsp; IEEE Published Researcher &nbsp;|&nbsp; Inter IIT 5th
+                Rank</h2>
+            <p>Results-driven engineer bridging <strong>Machine Learning, Robotics (ROS2/Isaac Sim), and Software
+                    Engineering</strong>. Published IEEE researcher in 6G RIS systems. Top 3.5% at Amazon ML Challenge
+                (700/20,000+ teams). Building GNN architectures for protein modelling and open-source 6G simulators.</p>
             <a href="#projects" class="btn btn-primary">View Projects</a>
             <a href="#arm-controls" class="btn">Control Arm</a>
         </section>
 
-        <section id="about" class="fade-in-section" style="padding-top: 6rem; padding-bottom: 6rem; position: relative; overflow: hidden;">
-            <canvas id="about-matrix-bg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.2;"></canvas>
-            <h2 class="section-title matrix-text-glow" style="text-align: center; margin-bottom: 4rem; font-size: 3rem;">> ./INITIATE: Profile_Vamsi.exe</h2>
-            
-            <div class="matrix-terminal-output" style="max-width: 900px; margin: 0 auto; background: rgba(0, 20, 0, 0.85); border: 1px solid #00FF00; border-radius: 8px; padding: 25px; box-shadow: 0 0 15px #00FF00, inset 0 0 10px rgba(0,255,0,0.3); font-family: 'Fira Code', 'Courier New', monospace; color: #00FF00;">
+        <section id="about" class="fade-in-section"
+            style="padding-top: 6rem; padding-bottom: 6rem; position: relative; overflow: hidden;">
+            <canvas id="about-matrix-bg"
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.2;"></canvas>
+            <h2 class="section-title matrix-text-glow"
+                style="text-align: center; margin-bottom: 4rem; font-size: 3rem;">> ./INITIATE: Profile_Vamsi.exe</h2>
+
+            <div class="matrix-terminal-output"
+                style="max-width: 900px; margin: 0 auto; background: rgba(0, 20, 0, 0.85); border: 1px solid #00FF00; border-radius: 8px; padding: 25px; box-shadow: 0 0 15px #00FF00, inset 0 0 10px rgba(0,255,0,0.3); font-family: 'Fira Code', 'Courier New', monospace; color: #00FF00;">
                 <p class="matrix-prompt">[user@matrix ~]$ ./load_profile --vamsi</p>
-                <p class="matrix-response typing-effect" id="profile-line-1">Accessing IIT Bhilai mainframe... Connection established.</p>
-                <p class="matrix-response typing-effect" id="profile-line-2">Querying Mechatronics Undergraduate Program... Subject: Galaba Vamsi.</p>
-                <p class="matrix-response typing-effect" id="profile-line-3">Expected graduation: 2027. Status: Active, High Potential.</p>
-                <p class="matrix-response typing-effect" id="profile-line-4">Core directive: Engineer advanced robotic systems, innovate relentlessly.</p>
-                <p class="matrix-response typing-effect" id="profile-line-5">Secondary directive: Share knowledge, foster collaborative success.</p>
-                
-                <div class="matrix-tabs" style="margin-top: 30px; margin-bottom: 20px; border-bottom: 1px solid #00FF00; padding-bottom: 10px; display: flex; gap: 15px;">
-                    <button class="matrix-tab-button active" onclick="showTab('skills-tab', this)">Skills_Matrix.log</button>
-                    <button class="matrix-tab-button" onclick="showTab('projects-tab', this)">Project_Archives.dat</button>
-                    <button class="matrix-tab-button" onclick="showTab('hobbies-tab', this)">Recreation_Subroutines.ini</button>
+                <p class="matrix-response typing-effect" id="profile-line-1">Accessing IIT Bhilai mainframe...
+                    Connection established.</p>
+                <p class="matrix-response typing-effect" id="profile-line-2">Querying Mechatronics Undergraduate
+                    Program... Subject: Galaba Vamsi.</p>
+                <p class="matrix-response typing-effect" id="profile-line-3">Expected graduation: 2027. Status: Active,
+                    High Potential.</p>
+                <p class="matrix-response typing-effect" id="profile-line-4">Core directive: Engineer advanced robotic
+                    systems, innovate relentlessly.</p>
+                <p class="matrix-response typing-effect" id="profile-line-5">Secondary directive: Share knowledge,
+                    foster collaborative success.</p>
+
+                <div class="matrix-tabs"
+                    style="margin-top: 30px; margin-bottom: 20px; border-bottom: 1px solid #00FF00; padding-bottom: 10px; display: flex; gap: 15px;">
+                    <button class="matrix-tab-button active"
+                        onclick="showTab('skills-tab', this)">Skills_Matrix.log</button>
+                    <button class="matrix-tab-button"
+                        onclick="showTab('projects-tab', this)">Project_Archives.dat</button>
+                    <button class="matrix-tab-button"
+                        onclick="showTab('hobbies-tab', this)">Recreation_Subroutines.ini</button>
                 </div>
 
                 <div id="skills-tab" class="matrix-tab-content active-content">
                     <p class="matrix-prompt">[user@matrix ~]$ cat Skills_Matrix.log</p>
                     <ul class="matrix-list">
-                        <li><span class="matrix-highlight">[AI/ML]:</span> PyTorch, Graph Neural Networks, Safe RL, Transformers (Qwen-VL, ViT, RoBERTa), OpenCV</li>
-                        <li><span class="matrix-highlight">[ROBOTICS]:</span> ROS2, NVIDIA Isaac Sim, MuJoCo, Custom Python Simulators, PLC, Drone Dev</li>
-                        <li><span class="matrix-highlight">[6G/NETWORKS]:</span> Wi-Fi PHY/MAC Modelling, IEEE 802.11k/v, SDR/USRP, RIS Simulation, Linux</li>
-                        <li><span class="matrix-highlight">[WEB/APP]:</span> React.js, Node.js, Three.js, WebGL, Flutter, Flask</li>
+                        <li><span class="matrix-highlight">[AI/ML]:</span> PyTorch, Graph Neural Networks, Safe RL,
+                            Transformers (Qwen-VL, ViT, RoBERTa), OpenCV</li>
+                        <li><span class="matrix-highlight">[ROBOTICS]:</span> ROS2, NVIDIA Isaac Sim, MuJoCo, Custom
+                            Python Simulators, PLC, Drone Dev</li>
+                        <li><span class="matrix-highlight">[6G/NETWORKS]:</span> Wi-Fi PHY/MAC Modelling, IEEE
+                            802.11k/v, SDR/USRP, RIS Simulation, Linux</li>
+                        <li><span class="matrix-highlight">[WEB/APP]:</span> React.js, Node.js, Three.js, WebGL,
+                            Flutter, Flask</li>
                         <li><span class="matrix-highlight">[LANGUAGES]:</span> Python, C/C++, JavaScript, Dart, Go</li>
-                        <li><span class="matrix-highlight">[HW/DESIGN]:</span> DipTrace, SolidWorks, CST Microwave Studio, PCB Design</li>
+                        <li><span class="matrix-highlight">[HW/DESIGN]:</span> DipTrace, SolidWorks, CST Microwave
+                            Studio, PCB Design</li>
                     </ul>
                 </div>
 
                 <div id="projects-tab" class="matrix-tab-content">
                     <p class="matrix-prompt">[user@matrix ~]$ ls -l Project_Archives.dat</p>
                     <ul class="matrix-list">
-                        <li><span class="matrix-highlight">[ACTIVE — 2025]:</span> GNN for Electron Interactions in Protein Structures (Quantum Chemistry)</li>
-                        <li><span class="matrix-highlight">[IEEE PUB — 2025]:</span> Open-Source 6G RIS Simulator &amp; Testbed — IEEE INDICON 2025 (First Author)</li>
-                        <li><span class="matrix-highlight">[TOP 3.5% — 2025]:</span> Amazon ML Challenge — Qwen 2-VL + RoBERTa, SMAPE 49.0 (700/20,000+ teams)</li>
-                        <li><span class="matrix-highlight">[RESEARCH — 2025]:</span> Shared-Action Autonomous Smart Wheelchair (Isaac Sim + MuJoCo)</li>
-                        <li><span class="matrix-highlight">[DEPLOYED — 2024]:</span> Serenity Mental Health App — Flutter + CV emotion detection</li>
+                        <li><span class="matrix-highlight">[ACTIVE — 2025]:</span> GNN for Electron Interactions in
+                            Protein Structures (Quantum Chemistry)</li>
+                        <li><span class="matrix-highlight">[IEEE PUB — 2025]:</span> Open-Source 6G RIS Simulator &amp;
+                            Testbed — IEEE INDICON 2025 (First Author)</li>
+                        <li><span class="matrix-highlight">[TOP 3.5% — 2025]:</span> Amazon ML Challenge — Qwen 2-VL +
+                            RoBERTa, SMAPE 49.0 (700/20,000+ teams)</li>
+                        <li><span class="matrix-highlight">[RESEARCH — 2025]:</span> Shared-Action Autonomous Smart
+                            Wheelchair (Isaac Sim + MuJoCo)</li>
+                        <li><span class="matrix-highlight">[DEPLOYED — 2024]:</span> Serenity Mental Health App —
+                            Flutter + CV emotion detection</li>
                     </ul>
                 </div>
 
                 <div id="hobbies-tab" class="matrix-tab-content">
                     <p class="matrix-prompt">[user@matrix ~]$ run Recreation_Subroutines.ini</p>
                     <ul class="matrix-list">
-                        <li><span class="matrix-highlight">[ATHLETICS_CORE]:</span> Badminton (Champion), Basketball, Football, Cricket</li>
-                        <li><span class="matrix-highlight">[LITDB_ACCESS]:</span> Sci-Fi (The Martian, Dune, Three-Body Problem)</li>
+                        <li><span class="matrix-highlight">[ATHLETICS_CORE]:</span> Badminton (Champion), Basketball,
+                            Football, Cricket</li>
+                        <li><span class="matrix-highlight">[LITDB_ACCESS]:</span> Sci-Fi (The Martian, Dune, Three-Body
+                            Problem)</li>
                         <li><span class="matrix-highlight">[LOGIC_PUZZLES]:</span> Sudoku, Crosswords</li>
-                        <li><span class="matrix-highlight">[MEDIA_STREAM]:</span> Cinematography, Storytelling, Film &amp; Photography Society</li>
-                        <li><span class="matrix-highlight">[GAMING_MODULE]:</span> Strategy, Card Games, Console, Game Design</li>
+                        <li><span class="matrix-highlight">[MEDIA_STREAM]:</span> Cinematography, Storytelling, Film
+                            &amp; Photography Society</li>
+                        <li><span class="matrix-highlight">[GAMING_MODULE]:</span> Strategy, Card Games, Console, Game
+                            Design</li>
                     </ul>
                 </div>
-                <p class="matrix-prompt" style="margin-top: 25px;">[user@matrix ~]$ echo "Contact for collaboration or system integration."</p>
-                <p class="matrix-response typing-effect" id="contact-prompt">Contact for collaboration or system integration.</p>
+                <p class="matrix-prompt" style="margin-top: 25px;">[user@matrix ~]$ echo "Contact for collaboration or
+                    system integration."</p>
+                <p class="matrix-response typing-effect" id="contact-prompt">Contact for collaboration or system
+                    integration.</p>
             </div>
         </section>
 
@@ -110,55 +146,78 @@
             <h2 class="section-title">> ./Key Projects &amp; Research</h2>
             <div class="projects-grid">
                 <div class="project-card">
-                    <div class="project-img" style="background: linear-gradient(135deg,#001a00,#003300); display:flex; align-items:center; justify-content:center; font-size:3rem;">🧬</div>
+                    <div class="project-img">
+                        <img src="resources/gnn_protein.png" alt="GNN Protein Structure"
+                            style="width:100%; height:100%; object-fit: cover;">
+                    </div>
                     <div class="project-content">
                         <h3>AI-Powered Electron Interaction in Protein Structures</h3>
                         <span style="color:#00aa00; font-size:0.85rem; font-family:monospace;">2025 – Present</span>
-                        <p>Designing Graph Neural Network (GNN) architectures to model complex electron interactions within protein structures, bridging deep learning and computational quantum chemistry.</p>
+                        <p>Designing Graph Neural Network (GNN) architectures to model complex electron interactions
+                            within protein structures, bridging deep learning and computational quantum chemistry.</p>
                         <span style="color:#006600; font-size:0.8rem;">PyTorch · GNN · Quantum Chemistry</span>
                     </div>
                 </div>
 
                 <div class="project-card">
-                    <div class="project-img" style="background: linear-gradient(135deg,#001a00,#003300); display:flex; align-items:center; justify-content:center; font-size:3rem;">📡</div>
+                    <div class="project-img">
+                        <img src="resources/6g_ris.png" alt="6G RIS Simulator"
+                            style="width:100%; height:100%; object-fit: cover;">
+                    </div>
                     <div class="project-content">
                         <h3>Open-Source 6G RIS Simulator &amp; Testbed</h3>
-                        <span style="color:#00aa00; font-size:0.85rem; font-family:monospace;">2025 · IEEE INDICON — First Author</span>
-                        <p>Engineered a zero-budget, open-source RIS simulator emulating USRPs in LoS/NLoS environments, saving lakhs in hardware costs. Designed custom two-layer RIS PCB for RF energy harvesting.</p>
+                        <span style="color:#00aa00; font-size:0.85rem; font-family:monospace;">2025 · IEEE INDICON —
+                            First Author</span>
+                        <p>Engineered a zero-budget, open-source RIS simulator emulating USRPs in LoS/NLoS environments,
+                            saving lakhs in hardware costs. Designed custom two-layer RIS PCB for RF energy harvesting.
+                        </p>
                         <span style="color:#006600; font-size:0.8rem;">SDR/USRP · IEEE 802.11 · DipTrace · CST</span>
                     </div>
                 </div>
 
                 <div class="project-card">
-                    <div class="project-img" style="background: linear-gradient(135deg,#001a00,#003300); display:flex; align-items:center; justify-content:center; font-size:3rem;">🏆</div>
+                    <div class="project-img">
+                        <img src="resources/amazon_ml.png" alt="Amazon ML Challenge"
+                            style="width:100%; height:100%; object-fit: cover;">
+                    </div>
                     <div class="project-content">
                         <h3>Amazon ML Challenge — Top 3.5%</h3>
-                        <span style="color:#00aa00; font-size:0.85rem; font-family:monospace;">2025 · 700 / 20,000+ Teams</span>
-                        <p>Led multimodal price prediction using <strong>Qwen 2-VL 7B</strong> and a two-tower (ViT + RoBERTa) architecture over 75,000 data pairs, achieving an <strong>SMAPE score of 49.0</strong>.</p>
+                        <span style="color:#00aa00; font-size:0.85rem; font-family:monospace;">2025 · 700 / 20,000+
+                            Teams</span>
+                        <p>Led multimodal price prediction using <strong>Qwen 2-VL 7B</strong> and a two-tower (ViT +
+                            RoBERTa) architecture over 75,000 data pairs, achieving an <strong>SMAPE score of
+                                49.0</strong>.</p>
                         <span style="color:#006600; font-size:0.8rem;">Qwen VL · RoBERTa · ViT · Transformers</span>
                     </div>
                 </div>
 
                 <div class="project-card">
                     <div class="project-img">
-                        <img src="resources/amr.png" alt="Smart Wheelchair" style="width:100%; height:100%; object-fit: cover;">
+                        <img src="resources/amr.png" alt="Smart Wheelchair"
+                            style="width:100%; height:100%; object-fit: cover;">
                     </div>
                     <div class="project-content">
                         <h3>Shared-Action Autonomous Smart Wheelchair</h3>
-                        <span style="color:#00aa00; font-size:0.85rem; font-family:monospace;">2025 · IIT Bhilai Research</span>
-                        <p>Developed a shared-control system integrating multiple stimulus inputs and joystick navigation with deep learning-based real-time signal processing; validated dynamics in Isaac Sim and MuJoCo.</p>
+                        <span style="color:#00aa00; font-size:0.85rem; font-family:monospace;">2025 · IIT Bhilai
+                            Research</span>
+                        <p>Developed a shared-control system integrating multiple stimulus inputs and joystick
+                            navigation with deep learning-based real-time signal processing; validated dynamics in Isaac
+                            Sim and MuJoCo.</p>
                         <span style="color:#006600; font-size:0.8rem;">ROS2 · Isaac Sim · MuJoCo · Deep Learning</span>
                     </div>
                 </div>
 
                 <div class="project-card">
                     <div class="project-img">
-                        <img src="resources/smartfactory.png" alt="Serenity App" style="width:100%; height:100%; object-fit: cover;">
+                        <img src="resources/smartfactory.png" alt="Serenity App"
+                            style="width:100%; height:100%; object-fit: cover;">
                     </div>
                     <div class="project-content">
                         <h3>Serenity — Mental Health App</h3>
                         <span style="color:#00aa00; font-size:0.85rem; font-family:monospace;">2024 · Open Source</span>
-                        <p>Open-source Flutter app integrating CV-based real-time emotion detection, stress-revealing games, guided exercises, research-backed assessment quizzes, and a doctor appointment booking system.</p>
+                        <p>Open-source Flutter app integrating CV-based real-time emotion detection, stress-revealing
+                            games, guided exercises, research-backed assessment quizzes, and a doctor appointment
+                            booking system.</p>
                         <span style="color:#006600; font-size:0.8rem;">Flutter · OpenCV · Flask · ML</span>
                     </div>
                 </div>
@@ -230,14 +289,17 @@
                 <div class="skill-category">
                     <h3>📜 Publications</h3>
                     <ul class="skill-list">
-                        <li><strong>First Author</strong> — "An Open Emulator for Smart Radio Environments" · IEEE INDICON 2025</li>
-                        <li><strong>Co-Author</strong> — "Experience with RF Energy Harvesting-Driven Self-Powered RIS" · IEEE INDICON 2025</li>
+                        <li><strong>First Author</strong> — "An Open Emulator for Smart Radio Environments" · IEEE
+                            INDICON 2025</li>
+                        <li><strong>Co-Author</strong> — "Experience with RF Energy Harvesting-Driven Self-Powered RIS"
+                            · IEEE INDICON 2025</li>
                     </ul>
                 </div>
                 <div class="skill-category">
                     <h3>🏅 Achievements</h3>
                     <ul class="skill-list">
-                        <li>🥇 <strong>5th Rank</strong> — Arista Networks Wi-Fi Optimization Challenge, Inter IIT Tech Meet 14.0</li>
+                        <li>🥇 <strong>5th Rank</strong> — Arista Networks Wi-Fi Optimization Challenge, Inter IIT Tech
+                            Meet 14.0</li>
                         <li>🎖️ <strong>Top 3.5%</strong> — Amazon ML Challenge 2025 (700 / 20,000+ teams)</li>
                         <li>🏆 <strong>Top 10 Finalist</strong> — Toyota Hackathon</li>
                         <li>📡 Team Lead for Inter IIT problem statement (5th Rank, Dec 2025)</li>
@@ -249,9 +311,10 @@
         <section id="arm-controls">
             <h2 class="section-title">Robotic Arm Controls</h2>
             <p style="font-size: 1.1rem; margin-bottom: 2rem; max-width: 800px; color: #a0b3c6;">
-                Interact with the 6-DOF robotic arm in real-time. Adjust the sliders to control each joint or select a preset movement pattern.
+                Interact with the 6-DOF robotic arm in real-time. Adjust the sliders to control each joint or select a
+                preset movement pattern.
             </p>
-            
+
             <div class="control-group">
                 <h3>Joint Controls</h3>
                 <div class="slider-container">
@@ -285,7 +348,7 @@
                     <span class="slider-value" id="gripper-value">50%</span>
                 </div>
             </div>
-            
+
             <div class="control-group">
                 <h3>> ./Movement_Presets</h3>
                 <div class="preset-buttons">
@@ -300,11 +363,13 @@
         <section id="contact">
             <h2 class="section-title">> ./Get In Touch</h2>
             <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto 3rem; text-align: center; line-height: 1.7;">
-                Open to research collaborations in <strong>AI/ML, Robotics, and 6G Networks</strong>. Also seeking internship and research opportunities. Feel free to reach out!
-            </p>            <div style="text-align: center; margin-bottom: 6rem;">
+                Open to research collaborations in <strong>AI/ML, Robotics, and 6G Networks</strong>. Also seeking
+                internship and research opportunities. Feel free to reach out!
+            </p>
+            <div style="text-align: center; margin-bottom: 6rem;">
                 <a href="mailto:galabavamsi@iitbhilai.ac.in" class="btn btn-primary">Send Email</a>
             </div>
-        </section>        <!-- Download Resume Section -->
+        </section> <!-- Download Resume Section -->
         <section id="resume-download" class="download-section">
             <div class="download-terminal">
                 <div class="terminal-header">
@@ -324,25 +389,29 @@
                         <span>File size: 2.3 MB</span><br>
                         <span>Last modified: March 2026</span><br>
                         <span>Status: READY_FOR_DOWNLOAD</span><br>
-                        <span class="prompt-symbol">$</span> <span class="download-ready">Download ready. Execute command below:</span>
+                        <span class="prompt-symbol">$</span> <span class="download-ready">Download ready. Execute
+                            command below:</span>
                     </div>
                     <a href="resources/resume.pdf" download="Galaba_Vamsi_Resume.pdf" class="download-button">
                         wget Galaba_Vamsi_Resume.pdf
                     </a>
                     <div style="margin-top: 15px; color: #008800; font-size: 0.8rem;">
-                        <span class="prompt-symbol">$</span> # Complete resume with technical skills, projects & experience
+                        <span class="prompt-symbol">$</span> # Complete resume with technical skills, projects &
+                        experience
                     </div>
                 </div>
             </div>
         </section>
-        
+
         <footer>
             <div class="social-links">
-                <a href="https://www.linkedin.com/in/galaba-vamsi-334758211/" target="_blank" rel="noopener noreferrer"><span>in</span></a>
+                <a href="https://www.linkedin.com/in/galaba-vamsi-334758211/" target="_blank"
+                    rel="noopener noreferrer"><span>in</span></a>
                 <a href="https://github.com/Galabavamsi" target="_blank" rel="noopener noreferrer"><span>gh</span></a>
                 <a href="https://x.com/Galaba_Vamsi" target="_blank" rel="noopener noreferrer"><span>X</span></a>
-                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><span>ig</span></a> 
-                <a href="https://www.youtube.com/@galabavamsi12" target="_blank" rel="noopener noreferrer"><span>yt</span></a>
+                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><span>ig</span></a>
+                <a href="https://www.youtube.com/@galabavamsi12" target="_blank"
+                    rel="noopener noreferrer"><span>yt</span></a>
             </div>
             <p>© 2025 Galaba Vamsi Portfolio. All rights reserved.</p>
             <p style="margin-top: 1rem; font-size: 0.9rem;">Engineered with passion for robotics and automation</p>
@@ -363,18 +432,22 @@
         <div id="chatbot-messages" class="chatbot-messages">
             <div class="message bot-message">
                 <span class="message-prefix">[VamsiBot]:</span>
-                <span class="message-text">Hello! I'm VamsiBot, your AI assistant. I can answer questions about Galaba Vamsi's projects, skills, education, and experience. What would you like to know?</span>
+                <span class="message-text">Hello! I'm VamsiBot, your AI assistant. I can answer questions about Galaba
+                    Vamsi's projects, skills, education, and experience. What would you like to know?</span>
             </div>
         </div>
         <div class="chatbot-input-container">
-            <input type="text" id="chatbot-input" placeholder="Ask me about Vamsi's projects, skills, education..." maxlength="200">
+            <input type="text" id="chatbot-input" placeholder="Ask me about Vamsi's projects, skills, education..."
+                maxlength="200">
             <button id="chatbot-send">Send</button>
-        </div>        <div class="chatbot-suggestions">
+        </div>
+        <div class="chatbot-suggestions">
             <button class="suggestion-btn" data-question="Should I hire Vamsi?">Why Hire Vamsi?</button>
             <button class="suggestion-btn" data-question="What projects has Vamsi worked on?">Projects</button>
             <button class="suggestion-btn" data-question="What are Vamsi's technical skills?">Skills</button>
             <button class="suggestion-btn" data-question="Tell me about Vamsi's education">Education</button>
-            <button class="suggestion-btn" data-question="What programming languages does Vamsi know?">Languages</button>
+            <button class="suggestion-btn"
+                data-question="What programming languages does Vamsi know?">Languages</button>
         </div>
     </div>
 
@@ -385,7 +458,8 @@
     </button>
 
     <script src="script.js"></script>
-        
+
     </script>
 </body>
+
 </html>
