@@ -1055,10 +1055,214 @@
             }
         }
     // ================================
-    // AI CHATBOT IMPLEMENTATION
+    // AI CHATBOT — Powered by Bytez API (openai/gpt-oss-20b)
     // ================================
 
+    const BYTEZ_API_KEY = "a2b2438a59047e659c9a278c1b9fa1c5";
+    const BYTEZ_MODEL   = "openai/gpt-oss-20b";
+    const BYTEZ_API_URL = `https://api.bytez.com/models/v1/${BYTEZ_MODEL}/chat/completions`;
+
+    const SYSTEM_PROMPT = `You are VamsiBot, the AI assistant embedded in Galaba Vamsi's personal portfolio website.
+Your job is to answer questions about Vamsi accurately, enthusiastically, and concisely.
+Always respond in the first-person-about-Vamsi style (e.g. "Vamsi is..." or "He has...").
+Keep responses under 200 words unless a detailed breakdown is explicitly requested.
+Use bullet points and bold text (**like this**) for readability.
+
+=== GALABA VAMSI — FULL PROFILE ===
+
+**Name:** Galaba Vamsi
+**Role:** Mechatronics Undergraduate, IIT Bhilai (2023–2027)
+**Contact:** galabavamsi@iitbhilai.ac.in | +91 7483047846
+**LinkedIn:** galaba-vamsi-334758211 | **GitHub:** Galabavamsi
+**Blog:** galabavamsi.github.io/blog
+
+**SUMMARY:**
+Results-driven Mechatronics undergraduate bridging Machine Learning, Robotics (ROS2/Isaac Sim), and Software Engineering. IEEE INDICON 2025 published researcher (First Author) in 6G RIS systems. Top 3.5% at Amazon ML Challenge (700/20,000+ teams). Building GNN architectures for protein modelling and open-source 6G simulators.
+
+**EDUCATION:**
+- B.Tech Mechatronics, IIT Bhilai (2023–2027)
+- Coursework: DLCV, AI & ML, DIP, Optimal Control, Control Systems, DSA, Robotics Systems
+
+**EXPERIENCE:**
+- Research Intern – 6G RIS Simulator & Testbed, IIT Bhilai (May–Aug 2025)
+  → Zero-budget open-source RIS simulator emulating USRPs, saving lakhs in hardware costs
+  → Published First Author & Co-Author IEEE INDICON 2025
+  → Custom two-layer RIS PCB with DipTrace/CST for RF energy harvesting
+- Team Lead – Arista Wi-Fi Optimization (Inter IIT Tech Meet 14.0) → 5th Rank
+
+**PROJECTS:**
+1. **AI-Powered Electron Interaction in Protein Structures** (2025–Present) — GNN architectures for quantum chemistry / protein modelling
+2. **Open-Source 6G RIS Simulator & Testbed** (2025) — IEEE INDICON, SDR/USRP, custom PCB
+3. **Amazon ML Challenge – Top 3.5%** (2025) — Qwen 2-VL 7B + RoBERTa, SMAPE 49.0, 75k data pairs
+4. **Shared-Action Autonomous Smart Wheelchair** (2025) — ROS2, Isaac Sim, MuJoCo, deep learning signal processing
+5. **Serenity Mental Health App** (2024) — Open-source Flutter app, CV emotion detection, doctor booking
+
+**SKILLS:**
+- AI/ML: PyTorch, GNN, Safe RL, Transformers (Qwen VL, ViT, RoBERTa), Bayesian Optimization, OpenCV
+- Robotics: ROS2, NVIDIA Isaac Sim, MuJoCo, PLC, Drone Dev, DipTrace, CST, PCB Design, SolidWorks
+- 6G/Networks: Wi-Fi PHY/MAC, IEEE 802.11k/v, SDR/USRP, OBSS-PD, RIS, Linux, Signal Processing
+- Web/App: React.js, Node.js, Three.js, WebGL, Flutter, Flask, REST APIs
+- Languages: Python, C/C++, JavaScript, Dart, Go, MATLAB, Bash
+
+**PUBLICATIONS:**
+- First Author: "An Open Emulator for Smart Radio Environments" — IEEE INDICON 2025
+- Co-Author: "Experience with RF Energy Harvesting-Driven Self-Powered RIS" — IEEE INDICON 2025
+
+**ACHIEVEMENTS:**
+- 🥇 5th Rank — Arista Networks Wi-Fi Optimization, Inter IIT Tech Meet 14.0
+- 🎖️ Top 3.5% — Amazon ML Challenge 2025 (700/20,000+ teams)
+- 🏆 Top 10 Finalist — Toyota Hackathon
+
+**INTERESTS:** Badminton (champion), Sci-Fi reading (Dune, The Martian), Film & Photography, Game Design, Blender/Unreal Engine
+=== END PROFILE ===`;
+
     class VamsiBotAI {
+        constructor() {
+            this.chatHistory = []; // stores {role, content} for the API
+            this.isTyping    = false;
+            this.initializeChatbot();
+        }
+
+        initializeChatbot() {
+            this.chatbotContainer   = document.getElementById('chatbot-container');
+            this.chatbotToggle      = document.getElementById('chatbot-toggle');
+            this.chatbotClose       = document.getElementById('chatbot-close');
+            this.chatbotMessages    = document.getElementById('chatbot-messages');
+            this.chatbotInput       = document.getElementById('chatbot-input');
+            this.chatbotSend        = document.getElementById('chatbot-send');
+            this.suggestionButtons  = document.querySelectorAll('.suggestion-btn');
+            this.bindEvents();
+        }
+
+        bindEvents() {
+            this.chatbotToggle.addEventListener('click', () => this.toggleChatbot());
+            this.chatbotClose.addEventListener('click',  () => this.closeChatbot());
+            this.chatbotSend.addEventListener('click',   () => this.handleUserMessage());
+            this.chatbotInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.handleUserMessage(); }
+            });
+            this.suggestionButtons.forEach(btn => {
+                btn.addEventListener('click', () => this.simulateUserMessage(btn.getAttribute('data-question')));
+            });
+        }
+
+        toggleChatbot() {
+            this.chatbotContainer.classList.contains('chatbot-hidden') ? this.openChatbot() : this.closeChatbot();
+        }
+        openChatbot()  { this.chatbotContainer.classList.remove('chatbot-hidden'); this.chatbotToggle.style.display = 'none';  this.chatbotInput.focus(); }
+        closeChatbot() { this.chatbotContainer.classList.add('chatbot-hidden');    this.chatbotToggle.style.display = 'flex'; }
+
+        handleUserMessage() {
+            const message = this.chatbotInput.value.trim();
+            if (!message || this.isTyping) return;
+            this.chatbotInput.value = '';
+            this.sendMessage(message);
+        }
+
+        simulateUserMessage(message) { this.sendMessage(message); }
+
+        async sendMessage(userText) {
+            this.addMessage(userText, 'user');
+            this.showTypingIndicator();
+
+            // Append to history for multi-turn context
+            this.chatHistory.push({ role: 'user', content: userText });
+
+            try {
+                const messages = [
+                    { role: 'system', content: SYSTEM_PROMPT },
+                    ...this.chatHistory
+                ];
+
+                const response = await fetch(BYTEZ_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Key ${BYTEZ_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ messages })
+                });
+
+                if (!response.ok) {
+                    const err = await response.text();
+                    throw new Error(`Bytez API error ${response.status}: ${err}`);
+                }
+
+                const data = await response.json();
+                // Support both streaming and non-streaming response shapes
+                const assistantText =
+                    data?.choices?.[0]?.message?.content ||
+                    data?.output ||
+                    "I couldn't fetch a response right now. Please try again!";
+
+                this.chatHistory.push({ role: 'assistant', content: assistantText });
+                this.hideTypingIndicator();
+                this.addMessage(assistantText, 'bot');
+
+            } catch (error) {
+                console.error('VamsiBot API error:', error);
+                this.hideTypingIndicator();
+                this.addMessage("⚠️ Connection error. Please check your network and try again.", 'bot');
+                // Remove the failed user message from history so it can be retried
+                this.chatHistory.pop();
+            }
+        }
+
+        addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+
+            const prefix = document.createElement('span');
+            prefix.className = 'message-prefix';
+            prefix.textContent = sender === 'user' ? '[User]:' : '[VamsiBot]:';
+
+            const messageText = document.createElement('span');
+            messageText.className = 'message-text';
+
+            if (sender === 'bot') {
+                messageText.innerHTML = text
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\n/g, '<br>');
+            } else {
+                messageText.textContent = text;
+            }
+
+            messageDiv.appendChild(prefix);
+            messageDiv.appendChild(messageText);
+            this.chatbotMessages.appendChild(messageDiv);
+            this.scrollToBottom();
+        }
+
+        showTypingIndicator() {
+            this.isTyping = true;
+            const div = document.createElement('div');
+            div.className = 'message bot-message typing-indicator';
+            div.id = 'typing-indicator';
+            div.innerHTML = '<span class="message-prefix">[VamsiBot]:</span><span class="loading-content"><span class="spinner">⟳</span> Thinking...</span>';
+            this.chatbotMessages.appendChild(div);
+            this.scrollToBottom();
+        }
+
+        hideTypingIndicator() {
+            this.isTyping = false;
+            const el = document.getElementById('typing-indicator');
+            if (el) el.remove();
+        }
+
+        scrollToBottom() { this.chatbotMessages.scrollTop = this.chatbotMessages.scrollHeight; }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            try {
+                window.vamsiBotAI = new VamsiBotAI();
+                console.log('VamsiBotAI (Bytez-powered) initialized successfully');
+            } catch (error) {
+                console.error('Error initializing VamsiBotAI:', error);
+            }
+        }, 3000);
+    });
+
         constructor() {            this.knowledgeBase = {
                 personal: {
                     name: "Galaba Vamsi",
