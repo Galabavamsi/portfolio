@@ -1060,13 +1060,8 @@ function showTab(tabId, clickedButton) {
 // ================================
 
 const BYTEZ_API_KEY = "a2b2438a59047e659c9a278c1b9fa1c5";
-const BYTEZ_MODEL = "openai/gpt-oss-20b";
-
-// 🔧 After deploying worker.js to Cloudflare Workers, replace this URL:
-// const BYTEZ_API_URL = "https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev";
-// For now, routing through corsproxy.io to bypass CORS:
-const BYTEZ_DIRECT = `https://api.bytez.com/models/v1/${BYTEZ_MODEL}/chat/completions`;
-const BYTEZ_API_URL = `https://corsproxy.io/?url=${encodeURIComponent(BYTEZ_DIRECT)}`;
+const BYTEZ_MODEL = "Qwen/Qwen3-4B-Instruct-2507";
+const BYTEZ_API_URL = `https://api.bytez.com/models/v2/${BYTEZ_MODEL}`;
 
 const SYSTEM_PROMPT = `You are VamsiBot, the AI assistant embedded in Galaba Vamsi's personal portfolio website.
 Your job is to answer questions about Vamsi accurately, enthusiastically, and concisely.
@@ -1175,18 +1170,19 @@ class VamsiBotAI {
         this.chatHistory.push({ role: 'user', content: userText });
 
         try {
-            const messages = [
-                { role: 'system', content: SYSTEM_PROMPT },
-                ...this.chatHistory
-            ];
-
             const response = await fetch(BYTEZ_API_URL, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Key ${BYTEZ_API_KEY}`,
-                    'Content-Type': 'application/json'
+                    'content-type': 'application/json',
+                    'lang': 'javascript'
                 },
-                body: JSON.stringify({ messages })
+                body: JSON.stringify({
+                    input: [
+                        { role: 'system', content: SYSTEM_PROMPT },
+                        ...this.chatHistory
+                    ]
+                })
             });
 
             if (!response.ok) {
@@ -1195,10 +1191,9 @@ class VamsiBotAI {
             }
 
             const data = await response.json();
-            // Support both streaming and non-streaming response shapes
             const assistantText =
-                data?.choices?.[0]?.message?.content ||
                 data?.output ||
+                data?.choices?.[0]?.message?.content ||
                 "I couldn't fetch a response right now. Please try again!";
 
             this.chatHistory.push({ role: 'assistant', content: assistantText });
