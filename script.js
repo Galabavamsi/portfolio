@@ -1191,10 +1191,21 @@ class VamsiBotAI {
             }
 
             const data = await response.json();
-            const assistantText =
-                data?.output ||
-                data?.choices?.[0]?.message?.content ||
-                "I couldn't fetch a response right now. Please try again!";
+            // Bytez v2 output can be a string, object, or choices array — extract safely
+            let assistantText;
+            if (typeof data?.output === 'string') {
+                assistantText = data.output;
+            } else if (typeof data?.output?.content === 'string') {
+                assistantText = data.output.content;
+            } else if (Array.isArray(data?.output)) {
+                assistantText = data.output.map(o => o?.content ?? o?.text ?? JSON.stringify(o)).join(' ');
+            } else if (data?.choices?.[0]?.message?.content) {
+                assistantText = data.choices[0].message.content;
+            } else if (data?.error) {
+                throw new Error(data.error);
+            } else {
+                assistantText = "I couldn't fetch a response right now. Please try again!";
+            }
 
             this.chatHistory.push({ role: 'assistant', content: assistantText });
             this.hideTypingIndicator();
@@ -1221,7 +1232,7 @@ class VamsiBotAI {
         messageText.className = 'message-text';
 
         if (sender === 'bot') {
-            messageText.innerHTML = text
+            messageText.innerHTML = String(text)
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\n/g, '<br>');
         } else {
