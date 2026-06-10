@@ -11,11 +11,11 @@
    ============================================================ */
 window.GV_CONFIG = {
   /* Supabase project (Settings → API) */
-  SUPABASE_URL: 'https://YOUR-PROJECT-REF.supabase.co',
-  SUPABASE_ANON_KEY: 'YOUR-ANON-PUBLIC-KEY',
+  SUPABASE_URL: 'https://grszzwsmlxbjlghskbcc.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdyc3p6d3NtbHhiamxnaHNrYmNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMjU5NzUsImV4cCI6MjA5NjcwMTk3NX0.t-7H1-Oz2qSF119QUG8skFIWr-ha7sDg4T3JtJUVSxs',
 
   /* Chat proxy — the deployed edge function URL */
-  CHAT_ENDPOINT: 'https://YOUR-PROJECT-REF.supabase.co/functions/v1/chat',
+  CHAT_ENDPOINT: 'https://grszzwsmlxbjlghskbcc.supabase.co/functions/v1/chat',
 
   /* LOCAL TESTING ONLY. Leave '' when committing/deploying. */
   DEV_DEEPSEEK_KEY: '',
