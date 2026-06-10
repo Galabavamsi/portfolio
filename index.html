@@ -1,473 +1,377 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galaba Vamsi | AI/ML · Robotics · Software Engineering</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GALABA VAMSI — PORTFOLIO.ROM</title>
+  <meta name="description" content="Galaba Vamsi — Software Engineering, Full-Stack Development & AI/ML. IIT Bhilai. An interactive 8-bit portfolio.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230a0e0b'/%3E%3Crect x='3' y='3' width='2' height='2' fill='%235af78e'/%3E%3Crect x='11' y='3' width='2' height='2' fill='%235af78e'/%3E%3Crect x='5' y='5' width='6' height='2' fill='%235af78e'/%3E%3Crect x='3' y='7' width='10' height='4' fill='%235af78e'/%3E%3Crect x='3' y='11' width='2' height='2' fill='%235af78e'/%3E%3Crect x='11' y='11' width='2' height='2' fill='%235af78e'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://api.deepseek.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <div class="loading-screen">
-        <div class="loading-content">
-        </div>
-        <div id="animated-command-container" class="crt-screen vhs-mode">
-            <div class="scanlines"></div>
-            <div class="vhs-scanlines"></div>
-            <div class="vhs-static"></div>
-            <div class="screen-flicker"></div>
-            <span id="animated-command-text"></span>
-        </div>
-        <canvas id="matrix-canvas"></canvas>
-        <div id="matrix-entry-text">Entering the Matrix...</div>
+  <!-- you found the source. achievement not included. try the konami code instead. -->
+
+  <!-- ============ BOOT SCREEN ============ -->
+  <div id="boot" aria-hidden="true">
+    <div class="boot-inner">
+      <pre id="boot-log"></pre>
+      <div id="boot-start" class="hidden">
+        <span class="blink">▶ PRESS START</span>
+        <small>( click anywhere / any key )</small>
+      </div>
     </div>
+  </div>
 
-    <div id="three-container"></div>
-
-    <div class="content">
-        <header>
-            <div class="logo">
-                <span class="logo-icon"></span>
-                <span id="animated-logo-text">>./Galaba Vamsi</span>
-                <!-- Restored '>' and ensured text matches animation -->
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#about">$ About</a></li>
-                    <li><a href="#projects">$ Projects</a></li>
-                    <li><a href="#skills">$ Skills</a></li>
-                    <li><a href="#arm-controls">$ Arm Controls</a></li>
-                    <li><a href="#contact">$ Contact</a></li>
-                </ul>
-            </nav>
-        </header>
-
-        <section class="hero">
-            <h1>AI/ML Research · Robotics · Software Engineering</h1>
-            <h2>Mechatronics Undergrad @ IIT Bhilai &nbsp;|&nbsp; IEEE Published Researcher &nbsp;|&nbsp; Inter IIT 5th
-                Rank</h2>
-            <p>Results-driven engineer bridging <strong>Machine Learning, Robotics (ROS2/Isaac Sim), and Software
-                    Engineering</strong>. Published IEEE researcher in 6G RIS systems. Top 3.5% at Amazon ML Challenge
-                (700/20,000+ teams). Building GNN architectures for protein modelling and open-source 6G simulators.</p>
-            <a href="#projects" class="btn btn-primary">View Projects</a>
-            <a href="#arm-controls" class="btn">Control Arm</a>
-        </section>
-
-        <section id="about" class="fade-in-section"
-            style="padding-top: 6rem; padding-bottom: 6rem; position: relative; overflow: hidden;">
-            <canvas id="about-matrix-bg"
-                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.2;"></canvas>
-            <h2 class="section-title matrix-text-glow"
-                style="text-align: center; margin-bottom: 4rem; font-size: 3rem;">> ./INITIATE: Profile_Vamsi.exe</h2>
-
-            <div class="matrix-terminal-output"
-                style="max-width: 900px; margin: 0 auto; background: rgba(0, 20, 0, 0.85); border: 1px solid #00FF00; border-radius: 8px; padding: 25px; box-shadow: 0 0 15px #00FF00, inset 0 0 10px rgba(0,255,0,0.3); font-family: 'Fira Code', 'Courier New', monospace; color: #00FF00;">
-                <p class="matrix-prompt">[user@matrix ~]$ ./load_profile --vamsi</p>
-                <p class="matrix-response typing-effect" id="profile-line-1">Accessing IIT Bhilai mainframe...
-                    Connection established.</p>
-                <p class="matrix-response typing-effect" id="profile-line-2">Querying Mechatronics Undergraduate
-                    Program... Subject: Galaba Vamsi.</p>
-                <p class="matrix-response typing-effect" id="profile-line-3">Expected graduation: 2027. Status: Active,
-                    High Potential.</p>
-                <p class="matrix-response typing-effect" id="profile-line-4">Core directive: Engineer advanced robotic
-                    systems, innovate relentlessly.</p>
-                <p class="matrix-response typing-effect" id="profile-line-5">Secondary directive: Share knowledge,
-                    foster collaborative success.</p>
-
-                <div class="matrix-tabs"
-                    style="margin-top: 30px; margin-bottom: 20px; border-bottom: 1px solid #00FF00; padding-bottom: 10px; display: flex; gap: 15px;">
-                    <button class="matrix-tab-button active"
-                        onclick="showTab('skills-tab', this)">Skills_Matrix.log</button>
-                    <button class="matrix-tab-button"
-                        onclick="showTab('projects-tab', this)">Project_Archives.dat</button>
-                    <button class="matrix-tab-button"
-                        onclick="showTab('hobbies-tab', this)">Recreation_Subroutines.ini</button>
-                </div>
-
-                <div id="skills-tab" class="matrix-tab-content active-content">
-                    <p class="matrix-prompt">[user@matrix ~]$ cat Skills_Matrix.log</p>
-                    <ul class="matrix-list">
-                        <li><span class="matrix-highlight">[AI/ML]:</span> PyTorch, Graph Neural Networks, Safe RL,
-                            Transformers (Qwen-VL, ViT, RoBERTa), OpenCV</li>
-                        <li><span class="matrix-highlight">[ROBOTICS]:</span> ROS2, NVIDIA Isaac Sim, MuJoCo, Custom
-                            Python Simulators, PLC, Drone Dev</li>
-                        <li><span class="matrix-highlight">[6G/NETWORKS]:</span> Wi-Fi PHY/MAC Modelling, IEEE
-                            802.11k/v, SDR/USRP, RIS Simulation, Linux</li>
-                        <li><span class="matrix-highlight">[WEB/APP]:</span> React.js, Node.js, Three.js, WebGL,
-                            Flutter, Flask</li>
-                        <li><span class="matrix-highlight">[LANGUAGES]:</span> Python, C/C++, JavaScript, Dart, Go</li>
-                        <li><span class="matrix-highlight">[HW/DESIGN]:</span> DipTrace, SolidWorks, CST Microwave
-                            Studio, PCB Design</li>
-                    </ul>
-                </div>
-
-                <div id="projects-tab" class="matrix-tab-content">
-                    <p class="matrix-prompt">[user@matrix ~]$ ls -l Project_Archives.dat</p>
-                    <ul class="matrix-list">
-                        <li><span class="matrix-highlight">[ACTIVE — 2025]:</span> GNN for Electron Interactions in
-                            Protein Structures (Quantum Chemistry)</li>
-                        <li><span class="matrix-highlight">[IEEE PUB — 2025]:</span> Open-Source 6G RIS Simulator &amp;
-                            Testbed — IEEE INDICON 2025 (First Author)</li>
-                        <li><span class="matrix-highlight">[TOP 3.5% — 2025]:</span> Amazon ML Challenge — Qwen 2-VL +
-                            RoBERTa, SMAPE 49.0 (700/20,000+ teams)</li>
-                        <li><span class="matrix-highlight">[RESEARCH — 2025]:</span> Shared-Action Autonomous Smart
-                            Wheelchair (Isaac Sim + MuJoCo)</li>
-                        <li><span class="matrix-highlight">[DEPLOYED — 2024]:</span> Serenity Mental Health App —
-                            Flutter + CV emotion detection</li>
-                    </ul>
-                </div>
-
-                <div id="hobbies-tab" class="matrix-tab-content">
-                    <p class="matrix-prompt">[user@matrix ~]$ run Recreation_Subroutines.ini</p>
-                    <ul class="matrix-list">
-                        <li><span class="matrix-highlight">[ATHLETICS_CORE]:</span> Badminton (Champion), Basketball,
-                            Football, Cricket</li>
-                        <li><span class="matrix-highlight">[LITDB_ACCESS]:</span> Sci-Fi (The Martian, Dune, Three-Body
-                            Problem)</li>
-                        <li><span class="matrix-highlight">[LOGIC_PUZZLES]:</span> Sudoku, Crosswords</li>
-                        <li><span class="matrix-highlight">[MEDIA_STREAM]:</span> Cinematography, Storytelling, Film
-                            &amp; Photography Society</li>
-                        <li><span class="matrix-highlight">[GAMING_MODULE]:</span> Strategy, Card Games, Console, Game
-                            Design</li>
-                    </ul>
-                </div>
-                <p class="matrix-prompt" style="margin-top: 25px;">[user@matrix ~]$ echo "Contact for collaboration or
-                    system integration."</p>
-                <p class="matrix-response typing-effect" id="contact-prompt">Contact for collaboration or system
-                    integration.</p>
-            </div>
-        </section>
-
-        <section id="projects">
-            <h2 class="section-title">> ./Key Projects &amp; Research</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-img">
-                        <img src="resources/gnn_protein.png" alt="GNN Protein Structure"
-                            style="width:100%; height:100%; object-fit: cover;">
-                    </div>
-                    <div class="project-content">
-                        <h3>AI-Powered Electron Interaction in Protein Structures</h3>
-                        <span style="color:#00aa00; font-size:0.85rem; font-family:monospace;">2025 – Present</span>
-                        <p>Designing Graph Neural Network (GNN) architectures to model complex electron interactions
-                            within protein structures, bridging deep learning and computational quantum chemistry.</p>
-                        <span style="color:#006600; font-size:0.8rem;">PyTorch · GNN · Quantum Chemistry</span>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-img">
-                        <img src="resources/6g_ris.png" alt="6G RIS Simulator"
-                            style="width:100%; height:100%; object-fit: cover;">
-                    </div>
-                    <div class="project-content">
-                        <h3>Open-Source 6G RIS Simulator &amp; Testbed</h3>
-                        <span style="color:#00aa00; font-size:0.85rem; font-family:monospace;">2025 · IEEE INDICON —
-                            First Author</span>
-                        <p>Engineered a zero-budget, open-source RIS simulator emulating USRPs in LoS/NLoS environments,
-                            saving lakhs in hardware costs. Designed custom two-layer RIS PCB for RF energy harvesting.
-                        </p>
-                        <span style="color:#006600; font-size:0.8rem;">SDR/USRP · IEEE 802.11 · DipTrace · CST</span>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-img">
-                        <img src="resources/amazon_ml.png" alt="Amazon ML Challenge"
-                            style="width:100%; height:100%; object-fit: cover;">
-                    </div>
-                    <div class="project-content">
-                        <h3>Amazon ML Challenge — Top 3.5%</h3>
-                        <span style="color:#00aa00; font-size:0.85rem; font-family:monospace;">2025 · 700 / 20,000+
-                            Teams</span>
-                        <p>Led multimodal price prediction using <strong>Qwen 2-VL 7B</strong> and a two-tower (ViT +
-                            RoBERTa) architecture over 75,000 data pairs, achieving an <strong>SMAPE score of
-                                49.0</strong>.</p>
-                        <span style="color:#006600; font-size:0.8rem;">Qwen VL · RoBERTa · ViT · Transformers</span>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-img">
-                        <img src="resources/wheelchair.png" alt="Smart Wheelchair"
-                            style="width:100%; height:100%; object-fit: cover;">
-                    </div>
-                    <div class="project-content">
-                        <h3>Shared-Action Autonomous Smart Wheelchair</h3>
-                        <span style="color:#00aa00; font-size:0.85rem; font-family:monospace;">2025 · IIT Bhilai
-                            Research</span>
-                        <p>Developed a shared-control system integrating multiple stimulus inputs and joystick
-                            navigation with deep learning-based real-time signal processing; validated dynamics in Isaac
-                            Sim and MuJoCo.</p>
-                        <span style="color:#006600; font-size:0.8rem;">ROS2 · Isaac Sim · MuJoCo · Deep Learning</span>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-img">
-                        <img src="resources/serenity.png" alt="Serenity App"
-                            style="width:100%; height:100%; object-fit: cover;">
-                    </div>
-                    <div class="project-content">
-                        <h3>Serenity — Mental Health App</h3>
-                        <span style="color:#00aa00; font-size:0.85rem; font-family:monospace;">2024 · Open Source</span>
-                        <p>Open-source Flutter app integrating CV-based real-time emotion detection, stress-revealing
-                            games, guided exercises, research-backed assessment quizzes, and a doctor appointment
-                            booking system.</p>
-                        <span style="color:#006600; font-size:0.8rem;">Flutter · OpenCV · Flask · ML</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="skills">
-            <h2 class="section-title">> ./Technical Expertise</h2>
-            <div class="skills-container">
-                <div class="skill-category">
-                    <h3 style="display:flex; align-items:center; gap:10px;">
-                        <span>AI &amp; Machine Learning</span>
-                    </h3>
-                    <ul class="skill-list">
-                        <li>PyTorch · Graph Neural Networks (GNN)</li>
-                        <li>Safe RL · Transformers</li>
-                        <li>Qwen 2-VL · ViT · RoBERTa</li>
-                        <li>Computer Vision (OpenCV, DIP)</li>
-                        <li>Bayesian Optimization</li>
-                    </ul>
-                </div>
-
-                <div class="skill-category">
-                    <h3 style="display:flex; align-items:center; gap:10px;">
-                        <span>Robotics &amp; Simulation</span>
-                    </h3>
-                    <ul class="skill-list">
-                        <li>ROS2 · NVIDIA Isaac Sim</li>
-                        <li>MuJoCo · Custom Python Simulators</li>
-                        <li>PLC · Drone Development</li>
-                        <li>DipTrace · CST Microwave Studio</li>
-                        <li>PCB Design · SolidWorks</li>
-                    </ul>
-                </div>
-
-                <div class="skill-category">
-                    <h3 style="display:flex; align-items:center; gap:10px;">
-                        <span>Systems &amp; Networks</span>
-                    </h3>
-                    <ul class="skill-list">
-                        <li>Wi-Fi PHY/MAC · IEEE 802.11k/v</li>
-                        <li>SDR/USRP · 6G / RIS Technology</li>
-                        <li>Linux · Git</li>
-                        <li>OBSS-PD · Beamforming</li>
-                        <li>Signal Processing</li>
-                    </ul>
-                </div>
-
-                <div class="skill-category">
-                    <h3 style="display:flex; align-items:center; gap:10px;">
-                        <span>Web &amp; App Dev</span>
-                    </h3>
-                    <ul class="skill-list">
-                        <li>React.js · Node.js · Three.js</li>
-                        <li>WebGL · Flask · REST APIs</li>
-                        <li>Flutter (Mobile)</li>
-                        <li>HTML · CSS · Tailwind</li>
-                    </ul>
-                </div>
-
-                <div class="skill-category">
-                    <h3>💻 Languages</h3>
-                    <ul class="skill-list">
-                        <li>Python · C / C++</li>
-                        <li>JavaScript · Dart</li>
-                        <li>Go</li>
-                        <li>MATLAB · Bash</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Publications & Achievements -->
-        <section id="achievements" style="padding: 4rem 2rem;">
-            <h2 class="section-title">> ./Publications &amp; Achievements</h2>
-            <div class="skills-container">
-                <div class="skill-category">
-                    <h3>Publications</h3>
-                    <ul class="skill-list">
-                        <li><strong>First Author</strong> — "An Open Emulator for Smart Radio Environments" · IEEE
-                            INDICON 2025</li>
-                        <li><strong>Co-Author</strong> — "Experience with RF Energy Harvesting-Driven Self-Powered RIS"
-                            · IEEE INDICON 2025</li>
-                    </ul>
-                </div>
-                <div class="skill-category">
-                    <h3>Achievements</h3>
-                    <ul class="skill-list">
-                        <li><strong>5th Rank</strong> — Arista Networks Wi-Fi Optimization Challenge, Inter IIT Tech
-                            Meet 14.0</li>
-                        <li><strong>Top 3.5%</strong> — Amazon ML Challenge 2025 (700 / 20,000+ teams)</li>
-                        <li><strong>Top 10 Finalist</strong> — Toyota Hackathon</li>
-                        <li>Team Lead for Inter IIT problem statement (5th Rank, Dec 2025)</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section id="arm-controls">
-            <h2 class="section-title">Robotic Arm Controls</h2>
-            <p style="font-size: 1.1rem; margin-bottom: 2rem; max-width: 800px; color: #a0b3c6;">
-                Interact with the 6-DOF robotic arm in real-time. Adjust the sliders to control each joint or select a
-                preset movement pattern.
-            </p>
-
-            <div class="control-group">
-                <h3>Joint Controls</h3>
-                <div class="slider-container">
-                    <label>Base Rotation:</label>
-                    <input type="range" id="base-rotation" min="-180" max="180" value="0">
-                    <span class="slider-value" id="base-rotation-value">0°</span>
-                </div>
-                <div class="slider-container">
-                    <label>Shoulder:</label>
-                    <input type="range" id="shoulder" min="-90" max="90" value="45">
-                    <span class="slider-value" id="shoulder-value">45°</span>
-                </div>
-                <div class="slider-container">
-                    <label>Elbow:</label>
-                    <input type="range" id="elbow" min="0" max="180" value="90">
-                    <span class="slider-value" id="elbow-value">90°</span>
-                </div>
-                <div class="slider-container">
-                    <label>Wrist Pitch:</label>
-                    <input type="range" id="wrist-pitch" min="-90" max="90" value="0">
-                    <span class="slider-value" id="wrist-pitch-value">0°</span>
-                </div>
-                <div class="slider-container">
-                    <label>Wrist Roll:</label>
-                    <input type="range" id="wrist-roll" min="-180" max="180" value="0">
-                    <span class="slider-value" id="wrist-roll-value">0°</span>
-                </div>
-                <div class="slider-container">
-                    <label>Gripper:</label>
-                    <input type="range" id="gripper" min="0" max="100" value="50">
-                    <span class="slider-value" id="gripper-value">50%</span>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <h3>> ./Movement_Presets</h3>
-                <div class="preset-buttons">
-                    <button class="preset-btn" data-preset="reset">Reset_Position.exe</button>
-                    <button class="preset-btn" data-preset="wave">Wave_Motion.exe</button>
-                    <button class="preset-btn" data-preset="inspect">Inspection_Mode.exe</button>
-                    <button class="preset-btn" data-preset="pickupAndPlace">Pick_Up_and_Place_Cube.exe</button>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact">
-            <h2 class="section-title">> ./Get In Touch</h2>
-            <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto 3rem; text-align: center; line-height: 1.7;">
-                Open to research collaborations in <strong>AI/ML, Robotics, and 6G Networks</strong>. Also seeking
-                internship and research opportunities. Feel free to reach out!
-            </p>
-            <div style="text-align: center; margin-bottom: 6rem;">
-                <a href="mailto:galabavamsi@iitbhilai.ac.in" class="btn btn-primary">Send Email</a>
-            </div>
-        </section> <!-- Download Resume Section -->
-        <section id="resume-download" class="download-section">
-            <div class="download-terminal">
-                <div class="terminal-header">
-                    <div class="terminal-buttons">
-                        <span class="terminal-button close"></span>
-                        <span class="terminal-button minimize"></span>
-                        <span class="terminal-button maximize"></span>
-                    </div>
-                    <span class="terminal-title">resume_downloader.sh</span>
-                </div>
-                <div class="terminal-content">
-                    <div class="download-prompt">
-                        <span class="prompt-symbol">$</span> ./fetch_resume --target=galaba_vamsi --format=pdf<br>
-                        <span>Connecting to resume server...</span><br>
-                        <span>Authentication successful.</span><br>
-                        <span>Locating file: Galaba_Vamsi_Resume.pdf</span><br>
-                        <span>File size: 2.3 MB</span><br>
-                        <span>Last modified: March 2026</span><br>
-                        <span>Status: READY_FOR_DOWNLOAD</span><br>
-                        <span class="prompt-symbol">$</span> <span class="download-ready">Download ready. Execute
-                            command below:</span>
-                    </div>
-                    <a href="resources/resume.pdf" download="Galaba_Vamsi_Resume.pdf" class="download-button">
-                        wget Galaba_Vamsi_Resume.pdf
-                    </a>
-                    <div style="margin-top: 15px; color: #008800; font-size: 0.8rem;">
-                        <span class="prompt-symbol">$</span> # Complete resume with technical skills, projects &
-                        experience
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <div class="social-links">
-                <a href="https://www.linkedin.com/in/galaba-vamsi-334758211/" target="_blank"
-                    rel="noopener noreferrer"><span>in</span></a>
-                <a href="https://github.com/Galabavamsi" target="_blank" rel="noopener noreferrer"><span>gh</span></a>
-                <a href="https://x.com/Galaba_Vamsi" target="_blank" rel="noopener noreferrer"><span>X</span></a>
-                <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"><span>ig</span></a>
-                <a href="https://www.youtube.com/@galabavamsi12" target="_blank"
-                    rel="noopener noreferrer"><span>yt</span></a>
-            </div>
-            <p>© 2025 Galaba Vamsi Portfolio. All rights reserved.</p>
-            <p style="margin-top: 1rem; font-size: 0.9rem;">Engineered with passion for robotics and automation</p>
-        </footer>
+  <!-- ============ HUD ============ -->
+  <header id="hud">
+    <button id="logo" class="logo" title="GV" aria-label="GV logo">GV<span class="logo-dot">_</span></button>
+    <nav id="nav" aria-label="Sections">
+      <a href="#about">ABOUT</a>
+      <a href="#experience">EXP</a>
+      <a href="#projects">PROJ</a>
+      <a href="#skills">SKILLS</a>
+      <a href="#trophies">WINS</a>
+      <a href="#contact">CONTACT</a>
+    </nav>
+    <div class="hud-right">
+      <span class="hud-stat" title="Score">SCORE <b id="score">000000</b></span>
+      <span class="hud-stat hud-lv" title="Current level">LV <b id="level">0</b></span>
+      <button id="term-btn" class="hud-btn" title="Open terminal" aria-label="Open terminal">&gt;_</button>
+      <button id="sound-btn" class="hud-btn" title="Toggle sound" aria-label="Toggle sound">♪</button>
     </div>
+    <div id="xp-bar" aria-hidden="true"><div id="xp-fill"></div></div>
+  </header>
 
-    <!-- AI Chatbot Interface -->
-    <div id="chatbot-container" class="chatbot-hidden">
-        <div class="chatbot-header">
-            <div class="chatbot-title">
-                <span>> ./VamsiBot.exe</span>
-            </div>
-            <button id="chatbot-close" class="chatbot-close">×</button>
+  <main>
+    <!-- ============ HERO ============ -->
+    <section id="hero">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <p class="hero-pre reveal">PLAYER 1 HAS ENTERED THE GAME</p>
+          <h1 class="reveal" style="--i:1">GALABA<br>VAMSI</h1>
+          <p class="hero-role reveal" style="--i:2">&gt; <span id="typewriter"></span><span class="cursor">█</span></p>
+          <p class="hero-bio reveal" style="--i:3">
+            Software engineer & AI/ML researcher at <b>IIT Bhilai</b>.
+            I build things that shouldn't be possible on a zero budget —
+            wireless simulators, GPU pipelines, neural nets, and one
+            anti-AI social network.
+          </p>
+          <div class="hero-cta reveal" style="--i:4">
+            <a href="#about" class="btn btn-primary">▶ START</a>
+            <a href="vamsi%20resume.pdf" target="_blank" rel="noopener" class="btn">RESUME.PDF</a>
+            <a href="https://github.com/Galabavamsi" target="_blank" rel="noopener" class="btn">GITHUB</a>
+          </div>
+          <p class="hero-hint reveal" style="--i:5">HINT: secrets are hidden on this cartridge. score: find them all.</p>
         </div>
-        <div class="chatbot-status">
-            <span id="chatbot-status-text">Status: Online | Knowledge Base: Loaded</span>
+        <div class="hero-avatar reveal" style="--i:2">
+          <canvas id="avatar" width="16" height="16" aria-label="Pixel art avatar of Vamsi"></canvas>
+          <div class="avatar-caption blink-slow">LV.21 ENGINEER</div>
         </div>
-        <div id="chatbot-messages" class="chatbot-messages">
-            <div class="message bot-message">
-                <span class="message-prefix">[VamsiBot]:</span>
-                <span class="message-text">Hello! I'm VamsiBot, your AI assistant. I can answer questions about Galaba
-                    Vamsi's projects, skills, education, and experience. What would you like to know?</span>
-            </div>
+      </div>
+      <a href="#about" class="scroll-cue" aria-label="Scroll down">▼</a>
+    </section>
+
+    <!-- ============ LEVEL 1 : ABOUT ============ -->
+    <section id="about" class="level" data-level="1">
+      <div class="level-head reveal">
+        <span class="level-tag">LEVEL 1</span>
+        <h2>CHARACTER SHEET</h2>
+      </div>
+      <div class="about-grid">
+        <div class="panel reveal" style="--i:1">
+          <h3 class="panel-title">// BIO</h3>
+          <p>
+            B.Tech Mechatronics @ <b>IIT Bhilai</b> ('23–'27). I work across the
+            full stack — from <b>GLSL shaders</b> and <b>CUDA kernels</b> to
+            <b>React apps</b> and <b>distributed cloud infra</b> — with a research
+            streak in AI/ML and wireless systems.
+          </p>
+          <p>
+            First-author <b>IEEE publication</b> at 20. Co-founder of a
+            <b>YC Startup School</b> startup. 5th rank at <b>Inter IIT Tech Meet</b>.
+            I like hard problems and zero budgets.
+          </p>
         </div>
-        <div class="chatbot-input-container">
-            <input type="text" id="chatbot-input" placeholder="Ask me about Vamsi's projects, skills, education..."
-                maxlength="200">
-            <button id="chatbot-send">Send</button>
+        <div class="panel reveal" style="--i:2">
+          <h3 class="panel-title">// SPAWN POINT</h3>
+          <dl class="stat-list">
+            <div><dt>CLASS</dt><dd>SOFTWARE ENGINEER / ML RESEARCHER</dd></div>
+            <div><dt>GUILD</dt><dd>IIT BHILAI — MECHATRONICS</dd></div>
+            <div><dt>TIMELINE</dt><dd>AUG 2023 → MAY 2027</dd></div>
+            <div><dt>TRAINING</dt><dd>DSA · OOP · DLCV · AI/ML · DIP · OPTIMAL CONTROL</dd></div>
+            <div><dt>ALIGNMENT</dt><dd>CHAOTIC BUILDER</dd></div>
+          </dl>
         </div>
-        <div class="chatbot-suggestions">
-            <button class="suggestion-btn" data-question="Should I hire Vamsi?">Why Hire Vamsi?</button>
-            <button class="suggestion-btn" data-question="What projects has Vamsi worked on?">Projects</button>
-            <button class="suggestion-btn" data-question="What are Vamsi's technical skills?">Skills</button>
-            <button class="suggestion-btn" data-question="Tell me about Vamsi's education">Education</button>
-            <button class="suggestion-btn"
-                data-question="What programming languages does Vamsi know?">Languages</button>
+      </div>
+    </section>
+
+    <!-- ============ LEVEL 2 : EXPERIENCE ============ -->
+    <section id="experience" class="level" data-level="2">
+      <div class="level-head reveal">
+        <span class="level-tag">LEVEL 2</span>
+        <h2>QUEST LOG</h2>
+      </div>
+
+      <article class="quest panel reveal">
+        <div class="quest-top">
+          <span class="quest-type main">MAIN QUEST</span>
+          <span class="quest-status done">★ COMPLETE</span>
         </div>
+        <h3>RESEARCH INTERN — 6G RIS SIMULATOR & TESTBED</h3>
+        <p class="quest-meta">IIT BHILAI · ADVISOR: DR. ARZAD ALAM · MAY–AUG 2025</p>
+        <ul>
+          <li>Engineered a <b>zero-budget, open-source RIS simulator</b> emulating USRPs in LoS/NLoS environments — saving lakhs of rupees in physical hardware and pre-deployment testbed costs.</li>
+          <li>Published as <b>First-Author and Co-Author (IEEE INDICON 2025)</b> for novel Smart Radio Environments.</li>
+          <li>Designed and validated a custom two-layer <b>RIS PCB</b> (DipTrace/CST) for self-powered RF energy harvesting.</li>
+        </ul>
+      </article>
+
+      <article class="quest panel reveal" style="--i:1">
+        <div class="quest-top">
+          <span class="quest-type side">SIDE QUEST → MAIN</span>
+          <span class="quest-status active">◆ IN PROGRESS</span>
+        </div>
+        <h3>CO-FOUNDER — HUMAN SLOP</h3>
+        <p class="quest-meta">ANTI-AI SOCIAL PLATFORM · Y COMBINATOR STARTUP SCHOOL · 2026</p>
+        <ul>
+          <li>Co-founded a fully deployed social platform using <b>React, PostgreSQL & AWS</b> that blocks <b>100% of synthetic content</b>.</li>
+          <li>Architected hardware-bound <b>biometric auth</b> and real-time <b>typing forensics</b> — humans only, no bots, no slop.</li>
+        </ul>
+      </article>
+
+      <article class="quest panel lore reveal" style="--i:2">
+        <div class="quest-top">
+          <span class="quest-type lore-tag">LORE UNLOCKED</span>
+        </div>
+        <h3>PUBLICATIONS</h3>
+        <ul>
+          <li><b>First-Author</b> — "An Open Emulator for Smart Radio Environments"</li>
+          <li><b>Co-Author</b> — "Experience with RF Energy Harvesting-Driven Self-Powered RIS", IEEE INDICON 2025</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- ============ LEVEL 3 : PROJECTS ============ -->
+    <section id="projects" class="level" data-level="3">
+      <div class="level-head reveal">
+        <span class="level-tag">LEVEL 3</span>
+        <h2>CARTRIDGE LIBRARY</h2>
+      </div>
+      <div class="cart-grid">
+
+        <article class="cart panel reveal">
+          <div class="cart-label"><span class="cart-rank">★ INTER IIT — 5TH RANK</span></div>
+          <h3>ARISTA WI-FI OPTIMIZER</h3>
+          <p>Zero-budget Python simulator + AI-assisted RRM framework with Dual-CNNs, GNNs & Safe RL. <b>+15% throughput</b>, &lt;2% false positives, 100% DFS compliance.</p>
+          <div class="cart-tags"><span>PYTHON</span><span>SAFE RL</span><span>GNN</span></div>
+          <a class="cart-link" href="https://github.com/Galabavamsi" target="_blank" rel="noopener">▶ VIEW</a>
+        </article>
+
+        <article class="cart panel reveal" style="--i:1">
+          <div class="cart-label"><span class="cart-rank gold">★ YC STARTUP SCHOOL</span></div>
+          <h3>HUMAN SLOP</h3>
+          <p>Anti-AI social platform. Hardware-bound biometric auth + real-time typing forensics. <b>100% synthetic content blocked.</b> Humans only.</p>
+          <div class="cart-tags"><span>REACT</span><span>POSTGRESQL</span><span>AWS</span></div>
+          <a class="cart-link" href="https://github.com/Galabavamsi" target="_blank" rel="noopener">▶ VIEW</a>
+        </article>
+
+        <article class="cart panel reveal" style="--i:2">
+          <div class="cart-label"><span class="cart-rank">RESEARCH · ONGOING</span></div>
+          <h3>ELECTRON-GNN</h3>
+          <p>Two-tower hybrid GNN (GATv2) predicting quantum absorption spectra from molecular geometry — replacing expensive RT-TDDFT simulations.</p>
+          <div class="cart-tags"><span>PYTORCH</span><span>GATV2</span><span>QUANTUM</span></div>
+          <a class="cart-link" href="https://github.com/Galabavamsi" target="_blank" rel="noopener">▶ VIEW</a>
+        </article>
+
+        <article class="cart panel reveal" style="--i:3">
+          <div class="cart-label"><span class="cart-rank">GPU · OPEN SOURCE</span></div>
+          <h3>OPEN-PYFX</h3>
+          <p>GPU-accelerated video FX suite in Python + GLSL. Custom render pipelines for <b>CRT emulation</b>, ASCII edge detection & retro graphics. (Yes — like this site.)</p>
+          <div class="cart-tags"><span>GLSL</span><span>PYTHON</span><span>SHADERS</span></div>
+          <a class="cart-link" href="https://github.com/Galabavamsi" target="_blank" rel="noopener">▶ VIEW</a>
+        </article>
+
+        <article class="cart panel reveal" style="--i:4">
+          <div class="cart-label"><span class="cart-rank">COMPUTER VISION</span></div>
+          <h3>LUNAR CRATER DETECTION</h3>
+          <p>CV pipeline extracting craters directly from Digital Elevation Models. <b>F1: 0.839</b> with a CuPy/CUDA morphology backend — <b>4.07× speedup</b>.</p>
+          <div class="cart-tags"><span>CUDA</span><span>CUPY</span><span>OPENCV</span></div>
+          <a class="cart-link" href="https://github.com/Galabavamsi" target="_blank" rel="noopener">▶ VIEW</a>
+        </article>
+
+        <article class="cart panel reveal" style="--i:5">
+          <div class="cart-label"><span class="cart-rank">DEEP LEARNING · EM</span></div>
+          <h3>ANTENNANET</h3>
+          <p>KD-Tree Nearest-Neighbour Anchoring to constrain inverse EM design gradients — automating <b>144-D search spaces</b> via Python-MEEP on OpenMPI clusters.</p>
+          <div class="cart-tags"><span>MEEP</span><span>OPENMPI</span><span>DL</span></div>
+          <a class="cart-link" href="https://github.com/Galabavamsi" target="_blank" rel="noopener">▶ VIEW</a>
+        </article>
+
+        <article class="cart panel reveal" style="--i:6">
+          <div class="cart-label"><span class="cart-rank">ON-DEVICE · MOBILE</span></div>
+          <h3>RUMIKAI</h3>
+          <p>Zero-backend intelligence engine in TypeScript with native Kotlin/Swift bridges — context-aware Android Jetpack & iOS home-screen widgets.</p>
+          <div class="cart-tags"><span>TYPESCRIPT</span><span>KOTLIN</span><span>SWIFT</span></div>
+          <a class="cart-link" href="https://github.com/Galabavamsi" target="_blank" rel="noopener">▶ VIEW</a>
+        </article>
+
+        <article class="cart panel reveal" style="--i:7">
+          <div class="cart-label"><span class="cart-rank">FLUTTER · HEALTH</span></div>
+          <h3>SERENITY</h3>
+          <p>Open-source mental wellness app with CV-based real-time emotion detection, stress-revealing games & doctor appointment booking.</p>
+          <div class="cart-tags"><span>FLUTTER</span><span>OPENCV</span><span>DART</span></div>
+          <a class="cart-link" href="https://github.com/Galabavamsi" target="_blank" rel="noopener">▶ VIEW</a>
+        </article>
+
+        <article class="cart panel cart-secret reveal" style="--i:8">
+          <button id="secret-cart" aria-label="Insert mystery cartridge">
+            <div class="cart-label"><span class="cart-rank">??? · DUSTY SLOT</span></div>
+            <h3>UNTITLED.ROM</h3>
+            <p class="blink-slow">AN UNLABELED CARTRIDGE. IT HISSES SOFTLY.<br>INSERT? [Y/N]</p>
+          </button>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ LEVEL 4 : SKILLS ============ -->
+    <section id="skills" class="level" data-level="4">
+      <div class="level-head reveal">
+        <span class="level-tag">LEVEL 4</span>
+        <h2>STAT SHEET</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="panel reveal">
+          <h3 class="panel-title">// LANGUAGES</h3>
+          <div class="statbar" data-fill="10"><span>PYTHON</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="9"><span>TYPESCRIPT / JS</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="8"><span>C / C++</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="8"><span>GLSL / CUDA</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="7"><span>KOTLIN / SWIFT / DART</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="6"><span>GO</span><div class="bar"></div></div>
+        </div>
+        <div class="panel reveal" style="--i:1">
+          <h3 class="panel-title">// WEB · APP · CLOUD</h3>
+          <div class="statbar" data-fill="9"><span>REACT / REACT NATIVE</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="8"><span>NODE.JS</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="8"><span>FLUTTER</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="8"><span>POSTGRESQL / AWS</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="7"><span>OPENMPI</span><div class="bar"></div></div>
+        </div>
+        <div class="panel reveal" style="--i:2">
+          <h3 class="panel-title">// AI · ML</h3>
+          <div class="statbar" data-fill="9"><span>PYTORCH</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="9"><span>GNNs (GATV2)</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="8"><span>TRANSFORMERS (QWEN/VIT)</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="8"><span>OPENCV / CUPY</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="7"><span>SAFE RL</span><div class="bar"></div></div>
+        </div>
+        <div class="panel reveal" style="--i:3">
+          <h3 class="panel-title">// SYSTEMS · HARDWARE</h3>
+          <div class="statbar" data-fill="8"><span>WI-FI PHY/MAC MODELING</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="8"><span>SDR / USRP</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="7"><span>IEEE 802.11K/V</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="7"><span>PCB DESIGN</span><div class="bar"></div></div>
+          <div class="statbar" data-fill="9"><span>LINUX / GIT</span><div class="bar"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LEVEL 5 : ACHIEVEMENTS ============ -->
+    <section id="trophies" class="level" data-level="5">
+      <div class="level-head reveal">
+        <span class="level-tag">LEVEL 5</span>
+        <h2>TROPHY ROOM</h2>
+      </div>
+      <ul class="trophy-list">
+        <li class="panel reveal"><span class="trophy-icon">🏆</span><div><b>1ST PLACE</b> — IIT Bhilai Web Development Competition</div></li>
+        <li class="panel reveal" style="--i:1"><span class="trophy-icon">🚀</span><div><b>Y COMBINATOR</b> — Accepted into YC Startup School (Human Slop)</div></li>
+        <li class="panel reveal" style="--i:2"><span class="trophy-icon">🥇</span><div><b>5TH RANK</b> — Arista Networks Wi-Fi Challenge, Inter IIT Tech Meet 14.0</div></li>
+        <li class="panel reveal" style="--i:3"><span class="trophy-icon">📜</span><div><b>FIRST-AUTHOR</b> — IEEE INDICON 2025 publication</div></li>
+        <li class="panel reveal" style="--i:4"><span class="trophy-icon">⚡</span><div><b>TOP 1%</b> — JEE Advanced</div></li>
+        <li class="panel reveal" style="--i:5"><span class="trophy-icon">📦</span><div><b>TOP 3.5%</b> — Amazon ML Challenge 2025 (700 / 20,000+ · SMAPE 49.0)</div></li>
+        <li class="panel reveal" style="--i:6"><span class="trophy-icon">🚗</span><div><b>TOP 10 FINALIST</b> — Toyota Hackathon</div></li>
+      </ul>
+    </section>
+
+    <!-- ============ BOSS LEVEL : CONTACT ============ -->
+    <section id="contact" class="level" data-level="6">
+      <div class="level-head reveal">
+        <span class="level-tag boss">BOSS LEVEL</span>
+        <h2>RECRUIT THE PLAYER</h2>
+      </div>
+      <div class="panel contact-panel reveal" style="--i:1">
+        <p class="contact-line">A WILD ENGINEER APPEARED!</p>
+        <p>Open to Software Engineering & AI/ML research roles. Zero-budget magic included free of charge.</p>
+        <div class="contact-actions">
+          <a class="btn btn-primary" href="mailto:galabavamsi12@gmail.com">✉ SEND MESSAGE</a>
+          <a class="btn" href="https://www.linkedin.com/in/galabavamsi" target="_blank" rel="noopener">LINKEDIN</a>
+          <a class="btn" href="https://github.com/Galabavamsi" target="_blank" rel="noopener">GITHUB</a>
+          <a class="btn" href="vamsi%20resume.pdf" target="_blank" rel="noopener">RESUME.PDF</a>
+        </div>
+        <p class="contact-mail">galabavamsi12@gmail.com · +91 7483047846</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="footer-row">
+      <button id="coin-slot" class="coin-slot" aria-label="Insert coin">◉ INSERT COIN</button>
+      <span id="secret-count" title="Achievements found">ACHIEVEMENTS 0/9</span>
     </div>
+    <p>© 2026 GALABA VAMSI — HANDCRAFTED, HUMAN-MADE, NO SLOP.</p>
+    <p class="footer-hint">psst — try ↑↑↓↓←→←→BA · or open the terminal ( &gt;_ )</p>
+  </footer>
 
-    <!-- Chatbot Toggle Button -->
-    <button id="chatbot-toggle" class="chatbot-toggle">
-        <span class="chatbot-toggle-icon">💬</span>
-        <span class="chatbot-toggle-text">Ask VamsiBot</span>
-    </button>
+  <!-- ============ SNAKE MODAL ============ -->
+  <div id="game-modal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Snake game">
+    <div class="modal-box">
+      <div class="modal-head">
+        <span>UNTITLED.ROM — SNAKE</span>
+        <button class="modal-close" data-close="game-modal" aria-label="Close game">✕</button>
+      </div>
+      <div class="game-hud">
+        <span>SCORE <b id="snake-score">0</b></span>
+        <span>BEST <b id="snake-best">0</b></span>
+      </div>
+      <canvas id="snake" width="320" height="320"></canvas>
+      <p id="game-msg" class="blink">PRESS ANY KEY / TAP TO START</p>
+      <div class="dpad" aria-hidden="false">
+        <button data-dir="up" aria-label="Up">▲</button>
+        <div class="dpad-mid">
+          <button data-dir="left" aria-label="Left">◀</button>
+          <button data-dir="down" aria-label="Down">▼</button>
+          <button data-dir="right" aria-label="Right">▶</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <script src="script.js"></script>
+  <!-- ============ TERMINAL MODAL ============ -->
+  <div id="terminal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Terminal">
+    <div class="modal-box term-box">
+      <div class="modal-head">
+        <span>GV-SHELL v2.6</span>
+        <button class="modal-close" data-close="terminal" aria-label="Close terminal">✕</button>
+      </div>
+      <div id="term-out" aria-live="polite"></div>
+      <div class="term-line">
+        <span class="term-prompt">guest@gv:~$</span>
+        <input id="term-in" type="text" autocomplete="off" spellcheck="false" aria-label="Terminal input">
+      </div>
+    </div>
+  </div>
 
-    </script>
+  <!-- ============ TOASTS ============ -->
+  <div id="toasts" aria-live="polite"></div>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+  <script src="leaderboard.js"></script>
+  <script src="pet.js"></script>
 </body>
-
 </html>

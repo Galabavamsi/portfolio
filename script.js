@@ -1,1277 +1,672 @@
-// Three.js Scene Setup
-let scene, camera, renderer, controls;
-let armModel, mixer;
-let clock = new THREE.Clock();
+/* ============================================================
+   PORTFOLIO.ROM — game systems
+   audio · boot · typewriter · reveals · score · achievements
+   konami · snake · terminal · coins · idle wanderer
+   ============================================================ */
+(() => {
+  'use strict';
 
-// Joints for the robotic arm
-const joints = {
-    base: null,
-    shoulder: null,
-    elbow: null,
-    wristPitch: null,
-    wristRoll: null,
-    gripperLeft: null,
-    gripperRight: null
-};
-// Loading screen
-const loadingScreen = document.querySelector('.loading-screen');
-const loadingContent = document.querySelector('.loading-content');
-const percentageCounter = document.getElementById('percentage-counter');
-const animatedCommandContainer = document.getElementById('animated-command-container');
-const animatedCommandText = document.getElementById('animated-command-text');
-const matrixCanvas = document.getElementById('matrix-canvas'); const matrixEntryText = document.getElementById('matrix-entry-text');
-let matrixAnimationId;
-// Matrix audio
-let matrixAudio = null;
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Main theme audio
-let mainThemeAudio = null;
-let isMuted = false;
-
-// Cube and interaction variables
-let pickupCube = null;
-let isCubePickedUp = false;
-const initialCubePosition = new THREE.Vector3(3, -1.8, 2); // Y so it sits on grid (y=-2) + half cube height (0.2)
-const dropOffPosition = new THREE.Vector3(-3, -1.8, 2);
-
-// Animation variables
-let currentAnimation = null;
-let animationTime = 0;
-
-const animations = {
-    wave: {
-        duration: 2, // seconds
-        loop: true,
-        joints: {
-            shoulder: [{ time: 0, value: 45 }, { time: 1, value: 75 }, { time: 2, value: 45 }],
-            elbow: [{ time: 0, value: 90 }, { time: 0.5, value: 60 }, { time: 1.5, value: 120 }, { time: 2, value: 90 }],
-            wristRoll: [{ time: 0, value: 0 }, { time: 0.5, value: -30 }, { time: 1.5, value: 30 }, { time: 2, value: 0 }]
-        }
+  /* ================= AUDIO — square-wave chiptune blips ================= */
+  const audio = {
+    ctx: null,
+    enabled: localStorage.getItem('gv_sound') !== 'off',
+    ensure() {
+      if (!this.ctx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) this.ctx = new AC();
+      }
+      if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
     },
-    inspect: {
-        duration: 8,
-        loop: true,
-        joints: {
-            base: [{ time: 0, value: 0 }, { time: 2, value: -60 }, { time: 4, value: 0 }, { time: 6, value: 60 }, { time: 8, value: 0 }],
-            shoulder: [{ time: 0, value: 45 }, { time: 4, value: 30 }, { time: 8, value: 45 }],
-            wristPitch: [{ time: 0, value: 0 }, { time: 2, value: 45 }, { time: 4, value: 0 }, { time: 6, value: -45 }, { time: 8, value: 0 }],
-            wristRoll: [{ time: 0, value: 0 }, { time: 1, value: 30 }, { time: 3, value: -30 }, { time: 5, value: 30 }, { time: 7, value: -30 }, { time: 8, value: 0 }]
-        }
+    tone(freq, dur = 0.06, delay = 0, vol = 0.04, type = 'square') {
+      if (!this.enabled || !this.ctx) return;
+      const t = this.ctx.currentTime + delay;
+      const osc = this.ctx.createOscillator();
+      const g = this.ctx.createGain();
+      osc.type = type;
+      osc.frequency.value = freq;
+      g.gain.setValueAtTime(vol, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      osc.connect(g).connect(this.ctx.destination);
+      osc.start(t);
+      osc.stop(t + dur + 0.02);
     },
-    pickupAndPlace: {
-        name: 'pickupAndPlace',
-        duration: 12, // seconds
-        loop: false,
-        pickupTime: 4.5, // Time when gripper is closed and cube should be attached
-        releaseTime: 8.5, // Time when gripper is open and cube should be detached
-        joints: {
-            base: [
-                { time: 0, value: 0 },    // Initial
-                { time: 2, value: 0 },    // Transitioning towards pickup area
-                { time: 4, value: 146 },  // Arrive at pickup base orientation
-                { time: 4.5, value: 146 },// AT PICKUP: Base 146°
-                { time: 5.0, value: 146 },// Hold base during lift
-                // Travel to place:
-                { time: 7.0, value: 0 },  // Transition base to place orientation (0°)
-                { time: 8.5, value: 0 },  // AT PLACE: Base 0°
-                { time: 12, value: 0 }    // Return to initial
-            ],
-            shoulder: [
-                { time: 0, value: 45 },   // Initial
-                { time: 2, value: 20 },   // Transitioning
-                { time: 4, value: 47 },   // Arrive at pickup shoulder angle
-                { time: 4.5, value: 47 }, // AT PICKUP: Shoulder 47°
-                { time: 5.0, value: 47 }, // Hold during gripper close
-                { time: 5.5, value: 0 },  // Lift cube (to a neutral/safe shoulder angle)
-                { time: 7.0, value: 25 }, // Mid-travel shoulder for place
-                { time: 8.5, value: 49 }, // AT PLACE: Shoulder 49°
-                { time: 9.0, value: 0 },  // Lift arm after release
-                { time: 12, value: 45 }   // Return to initial
-            ],
-            elbow: [
-                { time: 0, value: 90 },   // Initial
-                { time: 2, value: 90 },   // Transitioning
-                { time: 4, value: 116 },  // Arrive at pickup elbow angle
-                { time: 4.5, value: 116 },// AT PICKUP: Elbow 116°
-                { time: 5.0, value: 116 },// Hold during gripper close
-                { time: 5.5, value: 80 }, // Retract/lift elbow
-                { time: 7.0, value: 100 }, // Mid-travel elbow for place
-                { time: 8.5, value: 119 }, // AT PLACE: Elbow 119°
-                { time: 9.0, value: 80 }, // Retract after release
-                { time: 12, value: 90 }   // Return to initial
-            ],
-            wristPitch: [
-                { time: 0, value: 0 },    // Initial
-                { time: 1.5, value: 40 },  // Start pitching
-                { time: 4, value: 80 },   // Arrive at pickup wrist pitch
-                { time: 4.5, value: 80 }, // AT PICKUP: Wrist Pitch 80°
-                { time: 5.0, value: 80 }, // Hold pitch
-                { time: 7.0, value: -12 }, // Mid-travel wrist pitch for place
-                { time: 8.5, value: 61 }, // AT PLACE: Wrist Pitch 61°
-                { time: 9.5, value: 0 },  // Pitch back to neutral
-                { time: 12, value: 0 }    // Return to initial
-            ],
-            wristRoll: [
-                { time: 0, value: 0 },    // Initial
-                { time: 2, value: 0 },
-                { time: 4, value: 73 },   // Arrive at pickup wrist roll
-                { time: 4.5, value: 73 }, // AT PICKUP: Wrist Roll 73°
-                { time: 5.0, value: 73 }, // Hold roll
-                { time: 7.0, value: -88 }, // Mid-travel wrist roll for place
-                { time: 8.5, value: -95 }, // AT PLACE: Wrist Roll -95°
-                { time: 9.5, value: 0 },  // Roll back to neutral
-                { time: 12, value: 0 }    // Return to initial
-            ],
-            gripper: [
-                { time: 0, value: 80 },    // Start open
-                { time: 4, value: 80 },    // Arrive open at pickup location
-                { time: 4.5, value: 50 },  // AT PICKUP: Close gripper to 50%
-                { time: 8.4, value: 50 },  // Hold 50% until just before release
-                { time: 8.5, value: 80 },  // AT PLACE: Open gripper to 80% (releaseTime)
-                { time: 12, value: 50 }    // Reset to default (user's pickup gripper value)
-            ]
-        }
-    }
-};
-
-function mapJointToSliderId(jointName) {
-    const mapping = {
-        base: 'base-rotation',
-        shoulder: 'shoulder',
-        elbow: 'elbow',
-        wristPitch: 'wrist-pitch',
-        wristRoll: 'wrist-roll',
-        gripper: 'gripper'
-    };
-    return mapping[jointName];
-}
-
-function interpolateKeyframes(keyframes, currentTime) {
-    if (!keyframes || keyframes.length === 0) return 0;
-    if (keyframes.length === 1) return keyframes[0].value;
-
-    if (currentTime <= keyframes[0].time) {
-        return keyframes[0].value;
-    }
-    if (currentTime >= keyframes[keyframes.length - 1].time) {
-        return keyframes[keyframes.length - 1].value;
-    }
-
-    let p0, p1;
-    for (let i = 0; i < keyframes.length - 1; i++) {
-        if (currentTime >= keyframes[i].time && currentTime <= keyframes[i + 1].time) {
-            p0 = keyframes[i];
-            p1 = keyframes[i + 1];
-            break;
-        }
-    }
-
-    if (!p0 || !p1) return keyframes[keyframes.length - 1].value;
-
-    const t = (currentTime - p0.time) / (p1.time - p0.time);
-    if (isNaN(t) || !isFinite(t) || (p1.time - p0.time === 0)) return p0.value;
-
-    return p0.value + (p1.value - p0.value) * t;
-}
-
-function initThree() {
-    // Create scene
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000); // Black background
-    scene.fog = new THREE.Fog(0x000000, 20, 100); // Darker fog for Matrix theme
-
-    // Create camera
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 2, 8);
-
-    // Create renderer
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    document.getElementById('three-container').appendChild(renderer.domElement);
-
-    // Add lighting
-    const ambientLight = new THREE.AmbientLight(0x002200, 0.8); // Dark green ambient light
-    scene.add(ambientLight);
-
-    const directionalLight = new THREE.DirectionalLight(0x00FF00, 1.0); // Green directional light
-    directionalLight.position.set(5, 10, 7);
-    directionalLight.castShadow = true;
-    scene.add(directionalLight);
-
-    const backLight = new THREE.DirectionalLight(0x00AA00, 0.7); // Another shade of green for backlight
-    backLight.position.set(-5, -5, -5);
-    scene.add(backLight);
-
-    // Add orbit controls
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-    controls.minDistance = 3;
-    controls.maxDistance = 15;
-    controls.enablePan = true;
-
-    // Create a simple floor grid
-    const gridHelper = new THREE.GridHelper(20, 20, 0x00ff00, 0x005500); // Green grid lines, darker secondary lines
-    gridHelper.position.y = -2;
-    scene.add(gridHelper);
-
-    // Create the pickup cube
-    const cubeGeometry = new THREE.BoxGeometry(0.4, 0.4, 0.4); // Cube dimensions
-    const cubeMaterial = new THREE.MeshStandardMaterial({ color: 0x00FF00, emissive: 0x003300 }); // Bright green, slight emissive green
-    pickupCube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-    pickupCube.position.copy(initialCubePosition);
-    scene.add(pickupCube);
-
-    // Load the robotic arm model
-    const loader = new THREE.GLTFLoader();
-
-    // For demo purposes, we'll create a placeholder arm since we don't have an actual GLB file
-    createPlaceholderArm();
-
-    // In a real scenario, you would load your GLB model:
-    /*
-    loader.load('/models/robotic-arm.glb', (gltf) => {
-        armModel = gltf.scene;
-        armModel.scale.set(0.8, 0.8, 0.8);
-        armModel.position.y = -1.5;
-        
-        // Traverse the model to find joints
-        armModel.traverse((child) => {
-            if (child.isBone) {
-                if (child.name.includes('base')) joints.base = child;
-                if (child.name.includes('shoulder')) joints.shoulder = child;
-                if (child.name.includes('elbow')) joints.elbow = child;
-                if (child.name.includes('wrist_pitch')) joints.wristPitch = child;
-                if (child.name.includes('wrist_roll')) joints.wristRoll = child;
-                if (child.name.includes('gripper_left')) joints.gripperLeft = child;
-                if (child.name.includes('gripper_right')) joints.gripperRight = child;
-            }
-        });
-        
-        scene.add(armModel);
-        
-        // Animation mixer
-        mixer = new THREE.AnimationMixer(armModel);
-        
-        // Hide loading screen
-        setTimeout(() => {
-            loadingScreen.style.opacity = '0';
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-            }, 500);
-        }, 1500);
-    }, undefined, (error) => {
-        console.error('Error loading model:', error);
-        // Hide loading screen even if error occurs
-        loadingScreen.style.display = 'none';
-    });
-    */
-
-    // Handle window resize
-    window.addEventListener('resize', onWindowResize);
-
-    // Start animation loop
-    animate();
-}
-
-function createPlaceholderArm() {
-    // Base
-    const baseGeometry = new THREE.CylinderGeometry(1.2, 1.2, 0.4, 32);
-    const baseMaterial = new THREE.MeshStandardMaterial({
-        color: 0x004d00, // Dark Green
-        metalness: 0.6,
-        roughness: 0.4
-    });
-    const baseMesh = new THREE.Mesh(baseGeometry, baseMaterial);
-    baseMesh.position.y = -1.5;
-    scene.add(baseMesh);
-    joints.base = baseMesh;
-
-    // Shoulder
-    const shoulderGroup = new THREE.Group();
-    shoulderGroup.position.y = 0.2;
-    baseMesh.add(shoulderGroup);
-
-    const shoulderGeometry = new THREE.BoxGeometry(0.8, 1.2, 0.8);
-    const shoulderMaterial = new THREE.MeshStandardMaterial({
-        color: 0x007f00, // Medium Green
-        metalness: 0.5,
-        roughness: 0.3
-    });
-    const shoulder = new THREE.Mesh(shoulderGeometry, shoulderMaterial);
-    shoulder.position.y = 0.6;
-    shoulderGroup.add(shoulder);
-    joints.shoulder = shoulderGroup;
-
-    // Upper arm
-    const upperArmGroup = new THREE.Group();
-    upperArmGroup.position.y = 1.2;
-    shoulderGroup.add(upperArmGroup);
-
-    const upperArmGeometry = new THREE.BoxGeometry(0.6, 2, 0.6);
-    const upperArm = new THREE.Mesh(upperArmGeometry, shoulderMaterial); // Uses shoulderMaterial (Medium Green)
-    upperArm.position.y = 1;
-    upperArmGroup.add(upperArm);
-    joints.elbow = upperArmGroup;
-
-    // Lower arm
-    const lowerArmGroup = new THREE.Group();
-    lowerArmGroup.position.y = 2;
-    upperArmGroup.add(lowerArmGroup);
-
-    const lowerArmGeometry = new THREE.BoxGeometry(0.5, 1.8, 0.5);
-    const lowerArm = new THREE.Mesh(lowerArmGeometry, shoulderMaterial); // Uses shoulderMaterial (Medium Green)
-    lowerArm.position.y = 0.9;
-    lowerArmGroup.add(lowerArm);
-    joints.wristPitch = lowerArmGroup;
-
-    // Wrist
-    const wristGroup = new THREE.Group();
-    wristGroup.position.y = 1.8;
-    lowerArmGroup.add(wristGroup);
-
-    const wristGeometry = new THREE.BoxGeometry(0.6, 0.4, 0.6);
-    const wrist = new THREE.Mesh(wristGeometry, new THREE.MeshStandardMaterial({
-        color: 0x20C20E, // Vibrant Green
-        metalness: 0.7,
-        roughness: 0.2
-    }));
-    wristGroup.add(wrist);
-    joints.wristRoll = wristGroup;
-
-    // Gripper left
-    const gripperLeftGeometry = new THREE.BoxGeometry(0.2, 0.8, 0.4);
-    const gripperMaterial = new THREE.MeshStandardMaterial({
-        color: 0x00FF00, // Brightest Green (like grid)
-        metalness: 0.8,
-        roughness: 0.1,
-        emissive: 0x003300 // Slight emissive quality
-    });
-    const gripperLeft = new THREE.Mesh(gripperLeftGeometry, gripperMaterial);
-    gripperLeft.position.set(-0.3, -0.4, 0);
-    wristGroup.add(gripperLeft);
-    joints.gripperLeft = gripperLeft;
-
-    // Gripper right
-    const gripperRightGeometry = new THREE.BoxGeometry(0.2, 0.8, 0.4);
-    const gripperRight = new THREE.Mesh(gripperRightGeometry, gripperMaterial); // Use the same material
-    gripperRight.position.set(0.3, -0.4, 0);
-    wristGroup.add(gripperRight);
-    joints.gripperRight = gripperRight;
-}
-
-function updateArmJoints() {
-    // Update base rotation
-    if (joints.base) {
-        joints.base.rotation.y = THREE.MathUtils.degToRad(document.getElementById('base-rotation').value);
-    }
-
-    // Update shoulder
-    if (joints.shoulder) {
-        joints.shoulder.rotation.z = THREE.MathUtils.degToRad(document.getElementById('shoulder').value);
-    }
-
-    // Update elbow
-    if (joints.elbow) {
-        joints.elbow.rotation.z = THREE.MathUtils.degToRad(document.getElementById('elbow').value - 90);
-    }
-
-    // Update wrist pitch
-    if (joints.wristPitch) {
-        joints.wristPitch.rotation.z = THREE.MathUtils.degToRad(document.getElementById('wrist-pitch').value);
-    }
-
-    // Update wrist roll
-    if (joints.wristRoll) {
-        joints.wristRoll.rotation.y = THREE.MathUtils.degToRad(document.getElementById('wrist-roll').value);
-    }
-
-    // Update gripper
-    if (joints.gripperLeft && joints.gripperRight) {
-        const gripperValue = document.getElementById('gripper').value / 100;
-        const gripperOffset = 0.3 * (1 - gripperValue);
-        joints.gripperLeft.position.x = -0.3 - gripperOffset;
-        joints.gripperRight.position.x = 0.3 + gripperOffset;
-    }
-}
-
-function applyPreset(preset) {
-    const baseSlider = document.getElementById('base-rotation');
-    const shoulderSlider = document.getElementById('shoulder');
-    const elbowSlider = document.getElementById('elbow');
-    const wristPitchSlider = document.getElementById('wrist-pitch');
-    const wristRollSlider = document.getElementById('wrist-roll');
-    const gripperSlider = document.getElementById('gripper');
-
-    // Always reset cube to its initial position when a preset is applied or arm is reset
-    if (pickupCube) {
-        if (isCubePickedUp) {
-            scene.attach(pickupCube); // Ensure it's parented to scene before moving
-            isCubePickedUp = false;
-        }
-        pickupCube.position.copy(initialCubePosition);
-    }
-
-    if (preset === 'reset') {
-        currentAnimation = null; // Stop any ongoing animation
-        animationTime = 0;
-        baseSlider.value = 0;
-        shoulderSlider.value = 45;
-        elbowSlider.value = 90;
-        wristPitchSlider.value = 0;
-        wristRollSlider.value = 0;
-        gripperSlider.value = 50;
-
-        // Update display values
-        document.getElementById('base-rotation-value').textContent = baseSlider.value + '°';
-        document.getElementById('shoulder-value').textContent = shoulderSlider.value + '°';
-        document.getElementById('elbow-value').textContent = elbowSlider.value + '°';
-        document.getElementById('wrist-pitch-value').textContent = wristPitchSlider.value + '°';
-        document.getElementById('wrist-roll-value').textContent = wristRollSlider.value + '°';
-        document.getElementById('gripper-value').textContent = gripperSlider.value + '%';
-
-        updateArmJoints(); // Apply static reset pose
-        return;
-    }
-
-    const animationData = animations[preset];
-    if (animationData) {
-        currentAnimation = animationData;
-        animationTime = 0;
-        // Sliders and joints will be updated by the animate() function
-    } else {
-        console.warn(`Animation for preset "${preset}" not found.`);
-        // Optionally, stop current animation if a preset button without animation is clicked
-        // currentAnimation = null; 
-    }
-}
-
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-function animate() {
-    requestAnimationFrame(animate);
-
-    const delta = clock.getDelta();
-
-    if (currentAnimation) {
-        animationTime += delta;
-        const duration = currentAnimation.duration;
-        let animationEnded = false;
-
-        if (animationTime >= duration) {
-            if (currentAnimation.loop) {
-                animationTime %= duration; // Loop animation
-            } else {
-                animationTime = duration; // Clamp to end
-                animationEnded = true;
-            }
-        }
-
-        for (const jointName in currentAnimation.joints) {
-            const keyframes = currentAnimation.joints[jointName];
-            const currentValue = interpolateKeyframes(keyframes, animationTime);
-            const jointObject = joints[jointName];
-
-            if (jointObject) {
-                if (jointName === 'base') {
-                    jointObject.rotation.y = THREE.MathUtils.degToRad(currentValue);
-                } else if (jointName === 'shoulder') {
-                    jointObject.rotation.z = THREE.MathUtils.degToRad(currentValue);
-                } else if (jointName === 'elbow') {
-                    jointObject.rotation.z = THREE.MathUtils.degToRad(currentValue - 90);
-                } else if (jointName === 'wristPitch') {
-                    jointObject.rotation.z = THREE.MathUtils.degToRad(currentValue);
-                } else if (jointName === 'wristRoll') {
-                    jointObject.rotation.y = THREE.MathUtils.degToRad(currentValue);
-                } else if (jointName === 'gripper') {
-                    const gripperOffset = 0.3 * (1 - (currentValue / 100));
-                    if (joints.gripperLeft && joints.gripperRight) {
-                        joints.gripperLeft.position.x = -0.3 - gripperOffset;
-                        joints.gripperRight.position.x = 0.3 + gripperOffset;
-                    }
-                }
-            }
-
-            const sliderId = mapJointToSliderId(jointName);
-            const slider = document.getElementById(sliderId);
-            if (slider) {
-                slider.value = currentValue;
-                const valueDisplay = document.getElementById(slider.id + '-value');
-                if (valueDisplay) {
-                    valueDisplay.textContent = slider.id === 'gripper' ? currentValue.toFixed(0) + '%' : currentValue.toFixed(0) + '°';
-                }
-            }
-        }
-
-        // Cube interaction logic specifically for pickupAndPlace
-        if (currentAnimation.name === 'pickupAndPlace' && pickupCube) {
-            const time = animationTime;
-            const pickupEventTime = currentAnimation.pickupTime;
-            const releaseEventTime = currentAnimation.releaseTime;
-
-            // Check if it's time to pick up
-            if (time >= pickupEventTime && time < releaseEventTime && !isCubePickedUp) {
-                joints.wristRoll.attach(pickupCube); // Attach to gripper (wristRoll group)
-                pickupCube.position.set(0, -0.45, 0.15); // Position relative to wristRoll center
-                isCubePickedUp = true;
-            }
-            // Check if it's time to release
-            else if (time >= releaseEventTime && isCubePickedUp) {
-                scene.attach(pickupCube); // Detach from gripper, attach to scene
-                pickupCube.position.copy(dropOffPosition);
-                isCubePickedUp = false;
-            }
-        }
-
-
-        if (animationEnded && !currentAnimation.loop) {
-            currentAnimation = null; // Stop animation
-        }
-    }
-
-    // Update animation mixer if we have one
-    if (mixer) mixer.update(delta);
-
-    controls.update();
-    renderer.render(scene, camera);
-}
-
-// Loading screen sequence
-function startLoadingSequence() {
-    document.body.classList.add('loading');
-
-    // Hide percentage counter elements
-    if (percentageCounter) percentageCounter.style.display = 'none';
-    if (loadingContent) loadingContent.style.display = 'none';
-
-    // Get command container elements without creating additional global variables
-    const cmdContainer = document.getElementById('animated-command-container');
-    const cmdText = document.getElementById('animated-command-text');
-
-    if (!cmdContainer || !cmdText) {
-        console.error('Command animation elements not found');
-        // Fallback to immediately show main content
-        if (loadingScreen) loadingScreen.style.display = 'none';
-        document.body.classList.remove('loading');
-        return;
-    }
-    // Show command container
-    cmdContainer.style.display = 'block';
-    // Command to type
-    const command = '[user@matrix ~]$ connect --construct=Portfolio \n Compiling Binaries ..... done \n Installing dependencies ..... done \n Building Workspace ..... done \n Loading';
-
-    // Use the existing typeWriter function to type the command
-    typeWriter(cmdText, command, 50, () => {
-        // After command is typed, start spinner animation
-        const spinnerChars = ['|', '/', '-', '\\'];
-        let spinnerIndex = 0;
-        let dotCount = 0;
-        const maxDots = 6;
-        const spinnerInterval = setInterval(() => {
-            // Update spinner character and dots with enhanced styling
-            const spinner = `<span class="terminal-spinner">${spinnerChars[spinnerIndex]}</span>`;
-            const dots = `<span class="terminal-dots">${'.'.repeat((dotCount % (maxDots + 1)))}</span>`;
-            cmdText.innerHTML = command + ' ' + spinner + ' ' + dots;
-
-            spinnerIndex = (spinnerIndex + 1) % spinnerChars.length;
-            dotCount++;
-        }, 150); // Change spinner every 150ms
-
-        // Stop spinner after 2 seconds and continue with matrix animation
-        setTimeout(() => {
-            clearInterval(spinnerInterval);
-            cmdText.innerHTML = command + ' <span class="terminal-success">✓ done</span>';
-
-            // Wait a moment before transitioning to matrix
-            setTimeout(() => {
-                // Hide command and show matrix animation
-                cmdContainer.style.display = 'none';
-                matrixCanvas.style.display = 'block';
-                matrixEntryText.style.display = 'block';
-
-                // Timeout to ensure display:block is applied before opacity transition
-                setTimeout(() => {
-                    matrixEntryText.style.opacity = '1';
-                }, 50);
-                // Start the matrix animation
-                initMatrixAnimation();
-
-                // Start matrix audio
-                try {
-                    matrixAudio = new Audio('resources/matrixaudio.mp3');
-                    matrixAudio.volume = 0.7; // Set volume to 70%
-                    matrixAudio.play().catch(error => {
-                        console.warn('Matrix audio playback failed:', error);
-                    });
-                } catch (error) {
-                    console.warn('Matrix audio initialization failed:', error);
-                }
-
-                const matrixDisplayDuration = 3000; // How long matrix + text are shown (shortened from 5000)
-                const textFadeOutDuration = 800;    // Must match #matrix-entry-text transition
-                const screenFadeOutDuration = 2000; // Must match .loading-screen transition (shortened from 1500)
-
-                // After matrixDisplayDuration, start fading out the text
-                setTimeout(() => {
-                    matrixEntryText.style.opacity = '0'; // Start fading out text
-                    setTimeout(() => {
-                        matrixEntryText.style.display = 'none';
-                        loadingScreen.style.opacity = '0'; // Start fading out whole screen
-
-                        setTimeout(() => {
-                            loadingScreen.style.display = 'none';
-                            document.body.classList.remove('loading');
-                            if (matrixAnimationId) cancelAnimationFrame(matrixAnimationId); // Stop matrix animation
-
-                            // Stop matrix audio
-                            if (matrixAudio) {
-                                matrixAudio.pause();
-                                matrixAudio.currentTime = 0;
-                                matrixAudio = null;
-                            }
-
-                            // Start main theme audio
-                            startMainThemeAudio();
-                        }, screenFadeOutDuration);
-                    }, textFadeOutDuration);
-                }, matrixDisplayDuration - textFadeOutDuration); // Start text fade out earlier
-            }, 800); // Pause after command typing is done
-        }, 2000); // Stop spinner after 2 seconds
-    });
-}
-
-function initMatrixAnimation() {
-    const ctx = matrixCanvas.getContext('2d');
-    matrixCanvas.width = window.innerWidth;
-    matrixCanvas.height = window.innerHeight;
-
-    const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
-    const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const nums = '0123456789';
-    const characters = katakana + latin + nums;
-
-    const fontSize = 16;
-    const columns = Math.floor(matrixCanvas.width / fontSize);
-    const drops = [];
-    for (let x = 0; x < columns; x++) {
-        drops[x] = 1;
-    }
-
-    function drawMatrix() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // Semi-transparent black for fading effect
-        ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-
-        ctx.fillStyle = '#0F0'; // Green text
-        ctx.font = fontSize + 'px monospace';
-
-        for (let i = 0; i < drops.length; i++) {
-            const text = characters.charAt(Math.floor(Math.random() * characters.length));
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-            if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
-                drops[i] = 0; // Reset drop to top
-            }
-            drops[i]++;
-        }
-        matrixAnimationId = requestAnimationFrame(drawMatrix);
-    }
-    drawMatrix();
-
-    window.addEventListener('resize', () => { // Adjust canvas on resize during matrix
-        if (matrixCanvas.style.display === 'block') {
-            matrixCanvas.width = window.innerWidth;
-            matrixCanvas.height = window.innerHeight;
-            // Recalculate columns if needed, or simply let it adjust
-            // For simplicity, not re-initializing drops here, might cause visual jump on resize
-        }
-    });
-}
-
-// Main theme audio functions
-function startMainThemeAudio() {
-    try {
-        mainThemeAudio = new Audio('resources/maintheme.mp3');
-        mainThemeAudio.loop = true; // Loop the background music
-        mainThemeAudio.volume = 0.3; // Set volume to 30% for background music
-
-        if (!isMuted) {
-            mainThemeAudio.play().catch(error => {
-                console.warn('Main theme audio playback failed:', error);
-            });
-        }
-
-        // Create and show the mute button
-        createMuteButton();
-    } catch (error) {
-        console.warn('Main theme audio initialization failed:', error);
-    }
-}
-
-function createMuteButton() {
-    // Check if button already exists
-    if (document.getElementById('mute-button')) return;
-
-    const muteButton = document.createElement('button');
-    muteButton.id = 'mute-button';
-    muteButton.className = 'retro-mute-button';
-    muteButton.innerHTML = isMuted ? '🔇' : '🔊';
-    muteButton.setAttribute('aria-label', isMuted ? 'Unmute audio' : 'Mute audio');
-
-    muteButton.addEventListener('click', toggleMute);
-
-    // Add button to page
-    document.body.appendChild(muteButton);
-}
-
-function toggleMute() {
-    isMuted = !isMuted;
-    const muteButton = document.getElementById('mute-button');
-
-    if (mainThemeAudio) {
-        if (isMuted) {
-            mainThemeAudio.pause();
-            muteButton.innerHTML = '🔇';
-            muteButton.setAttribute('aria-label', 'Unmute audio');
-        } else {
-            mainThemeAudio.play().catch(error => {
-                console.warn('Main theme audio playback failed:', error);
-            });
-            muteButton.innerHTML = '🔊';
-            muteButton.setAttribute('aria-label', 'Mute audio');
-        }
-    }
-}
-
-
-// Initialize Three.js when page loads
-window.addEventListener('load', () => {
-    initThree();
-    startLoadingSequence();
-
-    // Setup event listeners for sliders
-    const sliders = document.querySelectorAll('input[type="range"]');
-    sliders.forEach(slider => {
-        slider.addEventListener('input', () => {
-            // If user manually controls, and cube was picked up, reset it.
-            if (isCubePickedUp && pickupCube) {
-                scene.attach(pickupCube);
-                pickupCube.position.copy(initialCubePosition);
-                isCubePickedUp = false;
-            }
-            currentAnimation = null; // Stop animation on manual control
-            animationTime = 0;
-
-            const valueDisplay = document.getElementById(slider.id + '-value');
-            if (valueDisplay) { // Check if valueDisplay exists
-                if (slider.id === 'gripper') {
-                    valueDisplay.textContent = slider.value + '%';
-                } else {
-                    valueDisplay.textContent = slider.value + '°';
-                }
-            }
-            updateArmJoints();
-        });
-    });
-
-    // Setup event listeners for preset buttons
-    const presetButtons = document.querySelectorAll('.preset-btn');
-    presetButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const preset = button.getAttribute('data-preset');
-            applyPreset(preset);
-        });
-    });
-});
-
-// Intersection Observer for section animations
-const sections = document.querySelectorAll('section[id]');
-const observerOptions = {
-    root: null, // relative to document viewport
-    rootMargin: '0px',
-    threshold: 0.1 // 10% of the section is visible
-};
-
-const observerCallback = (entries, observer) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-
-            // Check if the intersecting section is 'about' and if animation hasn't run
-            if (entry.target.id === 'about' && !entry.target.dataset.aboutAnimated) {
-
-                entry.target.dataset.aboutAnimated = 'true'; // Set flag to true using a data attribute
-
-                // Initialize typing effects for the about section
-                const line1 = document.getElementById('profile-line-1');
-                const line2 = document.getElementById('profile-line-2');
-                const line3 = document.getElementById('profile-line-3');
-                const line4 = document.getElementById('profile-line-4');
-                const line5 = document.getElementById('profile-line-5');
-                const contactPrompt = document.getElementById('contact-prompt');
-
-                // Clear any existing animation comments that might set opacity to 0
-                [line1, line2, line3, line4, line5, contactPrompt].forEach(el => {
-                    // el.style.opacity = '1'; // Ensure visible before typing, handled by typeWriter now
-                });                        // Start typing with delays and proper chaining (disable audio for About section)
-                if (line1) typeWriter(line1, line1.textContent, 50, () => {
-                    if (line2) typeWriter(line2, line2.textContent, 50, () => {
-                        if (line3) typeWriter(line3, line3.textContent, 50, () => {
-                            if (line4) typeWriter(line4, line4.textContent, 50, () => {
-                                if (line5) typeWriter(line5, line5.textContent, 50, () => {
-                                    if (contactPrompt) typeWriter(contactPrompt, contactPrompt.textContent, 50, null, false);
-                                }, false);
-                            }, false);
-                        }, false);
-                    }, false);
-                }, false);
-            }
-        } else {
-            // Remove class if you want animation to re-trigger on scroll up/out
-            entry.target.classList.remove('is-visible');
-            // If you want the 'about' typing to re-trigger if it scrolls out and back in,
-            // you could remove the data attribute here:
-            // if (entry.target.id === 'about') {
-            //     delete entry.target.dataset.aboutAnimated;
-            // }
-        }
-    });
-};
-
-// Ensure this new observer is used
-const newSectionObserver = new IntersectionObserver(observerCallback, observerOptions);
-
-sections.forEach(section => {
-    if (!section.classList.contains('no-fade')) { // Check for no-fade class
-        section.classList.add('fade-in-section');
-    }
-    newSectionObserver.observe(section);
-}); function typeWriter(element, text, delay = 50, callback, enableAudio = true) {
-    element.innerHTML = ''; // Clear existing content
-    let i = 0;
-    element.style.opacity = '1'; // Make sure it's visible before typing
-    element.style.borderRight = '.15em solid #00FF00'; // Start with caret
-
-    // Audio context for typing sounds
-    let audioContext;
-    let oscillator;
-
-    function createTypingSound() {
-        try {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
-
-            oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-
-            // Random frequency for old terminal sound
-            oscillator.frequency.value = 800 + Math.random() * 400;
-            oscillator.type = 'square';
-
-            gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
-
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.1);
-        } catch (e) {
-            // Audio might not be supported, continue silently
-        }
-    }
-    function typing() {
-        if (i < text.length) {
-            const char = text.charAt(i);
-            element.innerHTML += char;
-
-            // Create typing sound for each character (only if audio is enabled)
-            if (enableAudio) {
-                createTypingSound();
-            }
-
-            // Variable delay for realistic typing
-            let currentDelay = delay;
-
-            // Add variance to typing speed
-            currentDelay += Math.random() * 30 - 15;
-
-            // Longer pauses after punctuation
-            if (char === '.' || char === '!' || char === '?') {
-                currentDelay += 200;
-            } else if (char === ',' || char === ';') {
-                currentDelay += 100;
-            } else if (char === ' ') {
-                currentDelay += 20;
-            }
-
-            // Ensure minimum delay
-            currentDelay = Math.max(currentDelay, 20);
-
-            i++;
-            setTimeout(typing, currentDelay);
-        } else {
-            element.style.borderRightColor = 'transparent'; // Remove caret after typing
-            element.classList.add('finished-typing-cursor');
-            if (callback) callback(); // Execute callback if provided
-        }
-    }
-    typing();
-}
-
-function showTab(tabId, clickedButton) {
-    // Hide all tab content
-    const tabContents = document.querySelectorAll('#about .matrix-tab-content');
-    tabContents.forEach(content => {
-        content.classList.remove('active-content');
-    });
-
-    // Deactivate all tab buttons
-    const tabButtons = document.querySelectorAll('#about .matrix-tab-button');
-    tabButtons.forEach(button => {
-        button.classList.remove('active');
-    });
-
-    // Show the selected tab content
-    const selectedTabContent = document.getElementById(tabId);
-    if (selectedTabContent) {
-        selectedTabContent.classList.add('active-content');
-
-        const elementsToAnimateDetails = [];
-
-        // Handle prompt element
-        const promptElement = selectedTabContent.querySelector('.matrix-prompt');
-        if (promptElement) {
-            if (!promptElement.hasAttribute('data-original-text')) {
-                promptElement.setAttribute('data-original-text', promptElement.textContent);
-            }
-            const textForPrompt = promptElement.getAttribute('data-original-text');
-            if (textForPrompt && textForPrompt.trim() !== "") {
-                elementsToAnimateDetails.push({
-                    el: promptElement,
-                    text: textForPrompt.trim()
-                });
-            }
-        }
-
-        // Handle list items
-        const listItems = selectedTabContent.querySelectorAll('.matrix-list li');
-        listItems.forEach(item => {
-            const highlightSpan = item.querySelector('span.matrix-highlight');
-            let textToType = "";
-            let targetElementForTyping;
-
-            if (highlightSpan) {
-                // Logic to handle elements with a leading static span and trailing dynamic text
-                let typeSpan = item.querySelector('span.typewriter-target');
-
-                if (!item.hasAttribute('data-original-trailing-text')) {
-                    // This block runs once per item to capture and store original trailing text
-                    let originalTrailingText = "";
-                    let currentNode = highlightSpan.nextSibling;
-                    while (currentNode) {
-                        if (currentNode.nodeType === Node.TEXT_NODE) {
-                            originalTrailingText += currentNode.textContent;
-                        } else if (currentNode.nodeType === Node.ELEMENT_NODE) {
-                            // If there are other unexpected elements, capture their text too.
-                            // This might need refinement if structure is very complex.
-                            originalTrailingText += currentNode.textContent;
-                        }
-                        currentNode = currentNode.nextSibling;
-                    }
-                    item.setAttribute('data-original-trailing-text', originalTrailingText.trim());
-                }
-
-                textToType = item.getAttribute('data-original-trailing-text');
-
-                // Ensure the typewriter-target span exists and is clean
-                if (!typeSpan) {
-                    typeSpan = document.createElement('span');
-                    typeSpan.className = 'typewriter-target';
-                    // Remove all nodes after highlightSpan before adding the new target span
-                    while (highlightSpan.nextSibling) {
-                        item.removeChild(highlightSpan.nextSibling);
-                    }
-                    item.appendChild(typeSpan);
-                } else {
-                    typeSpan.innerHTML = ''; // Clear if exists
-                }
-                targetElementForTyping = typeSpan;
-
-            } else {
-                // No highlight span, type the whole LI content
-                if (!item.hasAttribute('data-original-text')) {
-                    item.setAttribute('data-original-text', item.textContent);
-                }
-                textToType = item.getAttribute('data-original-text');
-                targetElementForTyping = item; // Type directly into the LI
-            }
-
-            if (textToType && textToType.trim() !== "") {
-                elementsToAnimateDetails.push({
-                    el: targetElementForTyping,
-                    text: textToType.trim()
-                });
-            }
-        });
-
-        // Prepare all target elements for animation
-        elementsToAnimateDetails.forEach(detail => {
-            detail.el.innerHTML = '';
-            detail.el.style.opacity = '0'; // typeWriter will set to 1
-            detail.el.classList.remove('finished-typing-cursor');
-            detail.el.style.borderRight = 'none';
-        });
-
-        // Chain the typeWriter calls
-        let currentElementIndex = 0;
-        function animateNextElement() {
-            if (currentElementIndex < elementsToAnimateDetails.length) {
-                const detail = elementsToAnimateDetails[currentElementIndex];
-                currentElementIndex++;                        // Ensure element is part of the DOM and visible
-                if (detail.el && detail.el.isConnected &&
-                    (detail.el.offsetParent !== null || getComputedStyle(detail.el).display !== 'none')) {
-                    typeWriter(detail.el, detail.text, 20, animateNextElement, false); // Disable audio for About section tab content
-                } else {
-                    // Element not visible or not in DOM, skip and proceed
-                    animateNextElement();
-                }
-            }
-        }
-
-        if (elementsToAnimateDetails.length > 0) {
-            animateNextElement();
-        }
-    }
-
-    // Activate the clicked button
-    if (clickedButton) {
-        clickedButton.classList.add('active');
-    }
-}
-// ================================
-// AI CHATBOT — Powered by Bytez API (openai/gpt-oss-20b)
-// ================================
-
-const BYTEZ_API_KEY = "a2b2438a59047e659c9a278c1b9fa1c5";
-const BYTEZ_MODEL = "Qwen/Qwen3-4B-Instruct-2507";
-const BYTEZ_API_URL = `https://api.bytez.com/models/v2/${BYTEZ_MODEL}`;
-
-const SYSTEM_PROMPT = `You are VamsiBot, the AI assistant embedded in Galaba Vamsi's personal portfolio website.
-Your job is to answer questions about Vamsi accurately, enthusiastically, and concisely.
-Always respond in the first-person-about-Vamsi style (e.g. "Vamsi is..." or "He has...").
-Keep responses under 200 words unless a detailed breakdown is explicitly requested.
-Use bullet points and bold text (**like this**) for readability.
-
-=== GALABA VAMSI — FULL PROFILE ===
-
-**Name:** Galaba Vamsi
-**Role:** Mechatronics Undergraduate, IIT Bhilai (2023–2027)
-**Contact:** galabavamsi@iitbhilai.ac.in | +91 7483047846
-**LinkedIn:** galaba-vamsi-334758211 | **GitHub:** Galabavamsi
-**Blog:** galabavamsi.github.io/blog
-
-**SUMMARY:**
-Results-driven Mechatronics undergraduate bridging Machine Learning, Robotics (ROS2/Isaac Sim), and Software Engineering. IEEE INDICON 2025 published researcher (First Author) in 6G RIS systems. Top 3.5% at Amazon ML Challenge (700/20,000+ teams). Building GNN architectures for protein modelling and open-source 6G simulators.
-
-**EDUCATION:**
-- B.Tech Mechatronics, IIT Bhilai (2023–2027)
-- Coursework: DLCV, AI & ML, DIP, Optimal Control, Control Systems, DSA, Robotics Systems
-
-**EXPERIENCE:**
-- Research Intern – 6G RIS Simulator & Testbed, IIT Bhilai (May–Aug 2025)
-  → Zero-budget open-source RIS simulator emulating USRPs, saving lakhs in hardware costs
-  → Published First Author & Co-Author IEEE INDICON 2025
-  → Custom two-layer RIS PCB with DipTrace/CST for RF energy harvesting
-- Team Lead – Arista Wi-Fi Optimization (Inter IIT Tech Meet 14.0) → 5th Rank
-
-**PROJECTS:**
-1. **AI-Powered Electron Interaction in Protein Structures** (2025–Present) — GNN architectures for quantum chemistry / protein modelling
-2. **Open-Source 6G RIS Simulator & Testbed** (2025) — IEEE INDICON, SDR/USRP, custom PCB
-3. **Amazon ML Challenge – Top 3.5%** (2025) — Qwen 2-VL 7B + RoBERTa, SMAPE 49.0, 75k data pairs
-4. **Shared-Action Autonomous Smart Wheelchair** (2025) — ROS2, Isaac Sim, MuJoCo, deep learning signal processing
-5. **Serenity Mental Health App** (2024) — Open-source Flutter app, CV emotion detection, doctor booking
-
-**SKILLS:**
-- AI/ML: PyTorch, GNN, Safe RL, Transformers (Qwen VL, ViT, RoBERTa), Bayesian Optimization, OpenCV
-- Robotics: ROS2, NVIDIA Isaac Sim, MuJoCo, PLC, Drone Dev, DipTrace, CST, PCB Design, SolidWorks
-- 6G/Networks: Wi-Fi PHY/MAC, IEEE 802.11k/v, SDR/USRP, OBSS-PD, RIS, Linux, Signal Processing
-- Web/App: React.js, Node.js, Three.js, WebGL, Flutter, Flask, REST APIs
-- Languages: Python, C/C++, JavaScript, Dart, Go, MATLAB, Bash
-
-**PUBLICATIONS:**
-- First Author: "An Open Emulator for Smart Radio Environments" — IEEE INDICON 2025
-- Co-Author: "Experience with RF Energy Harvesting-Driven Self-Powered RIS" — IEEE INDICON 2025
-
-**ACHIEVEMENTS:**
-- 🥇 5th Rank — Arista Networks Wi-Fi Optimization, Inter IIT Tech Meet 14.0
-- 🎖️ Top 3.5% — Amazon ML Challenge 2025 (700/20,000+ teams)
-- 🏆 Top 10 Finalist — Toyota Hackathon
-
-**INTERESTS:** Badminton (champion), Sci-Fi reading (Dune, The Martian), Film & Photography, Game Design, Blender/Unreal Engine
-=== END PROFILE ===`;
-
-class VamsiBotAI {
-    constructor() {
-        this.chatHistory = []; // stores {role, content} for the API
-        this.isTyping = false;
-        this.initializeChatbot();
-    }
-
-    initializeChatbot() {
-        this.chatbotContainer = document.getElementById('chatbot-container');
-        this.chatbotToggle = document.getElementById('chatbot-toggle');
-        this.chatbotClose = document.getElementById('chatbot-close');
-        this.chatbotMessages = document.getElementById('chatbot-messages');
-        this.chatbotInput = document.getElementById('chatbot-input');
-        this.chatbotSend = document.getElementById('chatbot-send');
-        this.suggestionButtons = document.querySelectorAll('.suggestion-btn');
-        this.bindEvents();
-    }
-
-    bindEvents() {
-        this.chatbotToggle.addEventListener('click', () => this.toggleChatbot());
-        this.chatbotClose.addEventListener('click', () => this.closeChatbot());
-        this.chatbotSend.addEventListener('click', () => this.handleUserMessage());
-        this.chatbotInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.handleUserMessage(); }
-        });
-        this.suggestionButtons.forEach(btn => {
-            btn.addEventListener('click', () => this.simulateUserMessage(btn.getAttribute('data-question')));
-        });
-    }
-
-    toggleChatbot() {
-        this.chatbotContainer.classList.contains('chatbot-hidden') ? this.openChatbot() : this.closeChatbot();
-    }
-    openChatbot() { this.chatbotContainer.classList.remove('chatbot-hidden'); this.chatbotToggle.style.display = 'none'; this.chatbotInput.focus(); }
-    closeChatbot() { this.chatbotContainer.classList.add('chatbot-hidden'); this.chatbotToggle.style.display = 'flex'; }
-
-    handleUserMessage() {
-        const message = this.chatbotInput.value.trim();
-        if (!message || this.isTyping) return;
-        this.chatbotInput.value = '';
-        this.sendMessage(message);
-    }
-
-    simulateUserMessage(message) { this.sendMessage(message); }
-
-    async sendMessage(userText) {
-        this.addMessage(userText, 'user');
-        this.showTypingIndicator();
-
-        // Append to history for multi-turn context
-        this.chatHistory.push({ role: 'user', content: userText });
-
-        try {
-            const response = await fetch(BYTEZ_API_URL, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Key ${BYTEZ_API_KEY}`,
-                    'content-type': 'application/json',
-                    'lang': 'javascript'
-                },
-                body: JSON.stringify({
-                    input: [
-                        { role: 'system', content: SYSTEM_PROMPT },
-                        ...this.chatHistory
-                    ]
-                })
-            });
-
-            if (!response.ok) {
-                const err = await response.text();
-                throw new Error(`Bytez API error ${response.status}: ${err}`);
-            }
-
-            const data = await response.json();
-            // Bytez v2 output can be a string, object, or choices array — extract safely
-            let assistantText;
-            if (typeof data?.output === 'string') {
-                assistantText = data.output;
-            } else if (typeof data?.output?.content === 'string') {
-                assistantText = data.output.content;
-            } else if (Array.isArray(data?.output)) {
-                assistantText = data.output.map(o => o?.content ?? o?.text ?? JSON.stringify(o)).join(' ');
-            } else if (data?.choices?.[0]?.message?.content) {
-                assistantText = data.choices[0].message.content;
-            } else if (data?.error) {
-                throw new Error(data.error);
-            } else {
-                assistantText = "I couldn't fetch a response right now. Please try again!";
-            }
-
-            this.chatHistory.push({ role: 'assistant', content: assistantText });
-            this.hideTypingIndicator();
-            this.addMessage(assistantText, 'bot');
-
-        } catch (error) {
-            console.error('VamsiBot API error:', error);
-            this.hideTypingIndicator();
-            this.addMessage("⚠️ Connection error. Please check your network and try again.", 'bot');
-            // Remove the failed user message from history so it can be retried
-            this.chatHistory.pop();
-        }
-    }
-
-    addMessage(text, sender) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${sender}-message`;
-
-        const prefix = document.createElement('span');
-        prefix.className = 'message-prefix';
-        prefix.textContent = sender === 'user' ? '[User]:' : '[VamsiBot]:';
-
-        const messageText = document.createElement('span');
-        messageText.className = 'message-text';
-
-        if (sender === 'bot') {
-            messageText.innerHTML = String(text)
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\n/g, '<br>');
-        } else {
-            messageText.textContent = text;
-        }
-
-        messageDiv.appendChild(prefix);
-        messageDiv.appendChild(messageText);
-        this.chatbotMessages.appendChild(messageDiv);
-        this.scrollToBottom();
-    }
-
-    showTypingIndicator() {
-        this.isTyping = true;
-        const div = document.createElement('div');
-        div.className = 'message bot-message typing-indicator';
-        div.id = 'typing-indicator';
-        div.innerHTML = '<span class="message-prefix">[VamsiBot]:</span><span class="loading-content"><span class="spinner">⟳</span> Thinking...</span>';
-        this.chatbotMessages.appendChild(div);
-        this.scrollToBottom();
-    }
-
-    hideTypingIndicator() {
-        this.isTyping = false;
-        const el = document.getElementById('typing-indicator');
-        if (el) el.remove();
-    }
-
-    scrollToBottom() { this.chatbotMessages.scrollTop = this.chatbotMessages.scrollHeight; }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
+    blip() { this.tone(660, 0.05); },
+    nav() { this.tone(440, 0.04); },
+    coin() { this.tone(988, 0.07); this.tone(1319, 0.18, 0.07, 0.05); },
+    achieve() { [523, 659, 784, 1047].forEach((f, i) => this.tone(f, 0.1, i * 0.09, 0.05)); },
+    eat() { this.tone(880, 0.05); this.tone(1175, 0.06, 0.05); },
+    over() { [392, 330, 262, 196].forEach((f, i) => this.tone(f, 0.14, i * 0.12, 0.05)); },
+    boot() { this.tone(262, 0.1); this.tone(523, 0.18, 0.1, 0.05); },
+  };
+
+  const soundBtn = $('#sound-btn');
+  const syncSoundBtn = () => soundBtn.classList.toggle('off', !audio.enabled);
+  syncSoundBtn();
+  soundBtn.addEventListener('click', () => {
+    audio.enabled = !audio.enabled;
+    localStorage.setItem('gv_sound', audio.enabled ? 'on' : 'off');
+    audio.ensure();
+    syncSoundBtn();
+    audio.blip();
+  });
+  // browsers require a gesture before audio — arm on first interaction
+  ['pointerdown', 'keydown'].forEach(ev =>
+    document.addEventListener(ev, () => audio.ensure(), { once: true, capture: true }));
+
+  /* ================= SCORE ================= */
+  let score = 0;
+  const scoreEl = $('#score');
+  function addScore(n) {
+    score += n;
+    scoreEl.textContent = String(score).padStart(6, '0');
+  }
+
+  /* ================= ACHIEVEMENTS ================= */
+  const ACH = [
+    { id: 'power_on', name: 'POWER ON', desc: 'Booted the cartridge.' },
+    { id: 'explorer', name: 'CARTOGRAPHER', desc: 'Visited every level.' },
+    { id: 'konami', name: 'GOD MODE', desc: '↑↑↓↓←→←→BA — you know the ways.' },
+    { id: 'snake_play', name: 'CARTRIDGE INSERTED', desc: 'Played the mystery ROM.' },
+    { id: 'snake_15', name: 'SNAKE CHARMER', desc: 'Scored 15+ in SNAKE.' },
+    { id: 'coins_10', name: 'BIG SPENDER', desc: 'Inserted 10 coins.' },
+    { id: 'terminal', name: 'HACKERMAN', desc: 'Opened the terminal.' },
+    { id: 'masher', name: 'BUTTON MASHER', desc: 'Clicked the logo 5 times.' },
+    { id: 'wanderer', name: 'BUG HUNTER', desc: 'Caught the wandering invader.' },
+    { id: 'pet_chat', name: 'MADE A FRIEND', desc: 'Had a chat with BIT.' },
+  ];
+  const unlocked = new Set(JSON.parse(localStorage.getItem('gv_ach') || '[]'));
+  const countEl = $('#secret-count');
+  const syncCount = () => { countEl.textContent = `ACHIEVEMENTS ${unlocked.size}/${ACH.length}`; };
+  syncCount();
+
+  const toastQueue = [];
+  let toastBusy = false;
+  function showToast(a) {
+    toastQueue.push(a);
+    if (!toastBusy) nextToast();
+  }
+  function nextToast() {
+    const a = toastQueue.shift();
+    if (!a) { toastBusy = false; return; }
+    toastBusy = true;
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = `<div class="toast-title">★ ACHIEVEMENT UNLOCKED</div>
+      <div class="toast-name">${a.name}</div><div class="toast-desc">${a.desc}</div>`;
+    $('#toasts').appendChild(el);
     setTimeout(() => {
-        try {
-            window.vamsiBotAI = new VamsiBotAI();
-            console.log('VamsiBotAI (Bytez-powered) initialized successfully');
-        } catch (error) {
-            console.error('Error initializing VamsiBotAI:', error);
-        }
-    }, 3000);
-});
+      el.classList.add('out');
+      setTimeout(() => { el.remove(); nextToast(); }, 320);
+    }, 2600);
+  }
 
+  function unlock(id) {
+    if (unlocked.has(id)) return;
+    const a = ACH.find(x => x.id === id);
+    if (!a) return;
+    unlocked.add(id);
+    localStorage.setItem('gv_ach', JSON.stringify([...unlocked]));
+    syncCount();
+    addScore(50);
+    audio.achieve();
+    showToast(a);
+  }
+
+  /* ================= PIXEL AVATAR ================= */
+  const PALETTE = {
+    h: '#1c2a20', s: '#e8b88a', g: '#5af78e', w: '#0a0e0b',
+    m: '#b07050', b: '#24332a', c: '#5af78e',
+  };
+  const SPRITE = [
+    '....hhhhhhhh....',
+    '...hhhhhhhhhh...',
+    '..hhhhhhhhhhhh..',
+    '..hhhhhhhhhhhh..',
+    '..hhsssssssshh..',
+    '..hssssssssssh..',
+    '..gggggggggggg..',
+    '..gwwgssssgwwg..',
+    '..gwwgssssgwwg..',
+    '..ssssssssssss..',
+    '..ssssssssssss..',
+    '...sssmmmmsss...',
+    '....ssssssss....',
+    '...bbbbbbbbbb...',
+    '..bbbcbbbbcbbb..',
+    '.bbbbbbbbbbbbbb.',
+  ];
+  (function drawAvatar() {
+    const cv = $('#avatar');
+    const ctx = cv.getContext('2d');
+    SPRITE.forEach((row, y) => {
+      [...row].forEach((ch, x) => {
+        if (ch === '.') return;
+        ctx.fillStyle = PALETTE[ch] || PALETTE.s;
+        ctx.fillRect(x, y, 1, 1);
+      });
+    });
+  })();
+
+  /* ================= BOOT SEQUENCE ================= */
+  const boot = $('#boot');
+  const bootLog = $('#boot-log');
+  const bootStart = $('#boot-start');
+  let bootDone = false;
+
+  function dismissBoot() {
+    if (bootDone) return;
+    bootDone = true;
+    sessionStorage.setItem('gv_booted', '1');
+    audio.ensure();
+    audio.boot();
+    boot.classList.add('out');
+    setTimeout(() => boot.remove(), 500);
+    unlock('power_on');
+    startTypewriter();
+  }
+
+  if (sessionStorage.getItem('gv_booted') || reducedMotion) {
+    boot.remove();
+    bootDone = true;
+    unlock('power_on');
+    startTypewriterSoon();
+  } else {
+    const LINES = [
+      ['GV BIOS v2.6 — 64K RAM ', 'OK'],
+      ['CPU: HUMAN BRAIN @ 3.6 GHz ', 'OK'],
+      ['LOADING PORTFOLIO.ROM ', '████████ 100%'],
+      ['CHECKSUM: NO AI SLOP DETECTED ', 'OK'],
+    ];
+    let li = 0;
+    (function typeLine() {
+      if (bootDone) return;
+      if (li >= LINES.length) {
+        bootStart.classList.remove('hidden');
+        return;
+      }
+      const [txt, ok] = LINES[li++];
+      const line = document.createElement('div');
+      bootLog.appendChild(line);
+      line.textContent = txt;
+      setTimeout(() => {
+        if (bootDone) return;
+        const okSpan = document.createElement('span');
+        okSpan.className = 'ok';
+        okSpan.textContent = ok;
+        line.appendChild(okSpan);
+        audio.tone(523 + li * 80, 0.03, 0, 0.02);
+        setTimeout(typeLine, 160);
+      }, 220);
+    })();
+    boot.addEventListener('click', dismissBoot);
+    document.addEventListener('keydown', function bootKey() {
+      dismissBoot();
+      document.removeEventListener('keydown', bootKey);
+    });
+  }
+
+  /* ================= TYPEWRITER ================= */
+  const ROLES = [
+    'FULL-STACK ENGINEER',
+    'AI/ML RESEARCHER',
+    'GPU SHADER WIZARD',
+    'CO-FOUNDER @ HUMAN SLOP',
+    'IEEE FIRST-AUTHOR',
+    'ZERO-BUDGET ARCHITECT',
+  ];
+  const twEl = $('#typewriter');
+  let twStarted = false;
+  function startTypewriterSoon() { setTimeout(startTypewriter, 300); }
+  function startTypewriter() {
+    if (twStarted) return;
+    twStarted = true;
+    if (reducedMotion) { twEl.textContent = ROLES[0]; return; }
+    let ri = 0, ci = 0, deleting = false;
+    (function tick() {
+      const word = ROLES[ri % ROLES.length];
+      if (!deleting) {
+        ci++;
+        if (ci === word.length) { deleting = true; setTimeout(tick, 1700); twEl.textContent = word; return; }
+      } else {
+        ci--;
+        if (ci === 0) { deleting = false; ri++; }
+      }
+      twEl.textContent = word.slice(0, ci);
+      setTimeout(tick, deleting ? 35 : 70);
+    })();
+  }
+
+  /* ================= STAT BARS — build segments ================= */
+  $$('.statbar').forEach(sb => {
+    const fill = +sb.dataset.fill;
+    const bar = $('.bar', sb);
+    for (let i = 0; i < 10; i++) {
+      const seg = document.createElement('i');
+      if (i < fill) { seg.classList.add('fill'); seg.style.setProperty('--s', i); }
+      bar.appendChild(seg);
+    }
+  });
+
+  /* ================= SCROLL REVEALS + SECTION TRACKING ================= */
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('on');
+      if (e.target.classList.contains('panel')) {
+        $$('.statbar', e.target).forEach(sb => sb.classList.add('lit'));
+      }
+      revealObs.unobserve(e.target);
+    });
+  }, { threshold: 0.12 });
+  $$('.reveal').forEach(el => revealObs.observe(el));
+  document.addEventListener('animationend', e => {
+    if (e.animationName === 'reveal-step') e.target.classList.add('done');
+  });
+
+  const SECTION_IDS = ['about', 'experience', 'projects', 'skills', 'trophies', 'contact'];
+  const visited = new Set();
+  const levelEl = $('#level');
+  const navLinks = $$('#nav a');
+
+  const sectionObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const id = e.target.id;
+      const lv = e.target.dataset.level;
+      if (lv) levelEl.textContent = lv;
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+      if (!visited.has(id)) {
+        visited.add(id);
+        addScore(10);
+        audio.nav();
+        if (SECTION_IDS.every(s => visited.has(s))) unlock('explorer');
+      }
+    });
+  }, { threshold: 0.25 });
+  SECTION_IDS.forEach(id => { const el = $('#' + id); if (el) sectionObs.observe(el); });
+
+  /* ================= XP BAR ================= */
+  const xpFill = $('#xp-fill');
+  let scrollTicking = false;
+  addEventListener('scroll', () => {
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(() => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      const pct = max > 0 ? (scrollY / max) * 100 : 0;
+      // quantize to 5% steps — pixels don't glide
+      xpFill.style.width = Math.round(pct / 5) * 5 + '%';
+      scrollTicking = false;
+    });
+  }, { passive: true });
+
+  /* ================= KONAMI ================= */
+  const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+    'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+  let kIdx = 0;
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT') return;
+    const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    kIdx = key === KONAMI[kIdx] ? kIdx + 1 : (key === KONAMI[0] ? 1 : 0);
+    if (kIdx === KONAMI.length) {
+      kIdx = 0;
+      document.body.classList.toggle('god');
+      unlock('konami');
+      audio.achieve();
+    }
+  });
+
+  /* ================= LOGO MASHER ================= */
+  let logoClicks = 0;
+  $('#logo').addEventListener('click', () => {
+    logoClicks++;
+    audio.blip();
+    const logo = $('#logo');
+    logo.classList.remove('shake');
+    void logo.offsetWidth; // restart animation
+    logo.classList.add('shake');
+    if (logoClicks >= 5) unlock('masher');
+  });
+
+  /* ================= COIN SLOT ================= */
+  let coins = 0;
+  $('#coin-slot').addEventListener('click', e => {
+    coins++;
+    addScore(1);
+    audio.coin();
+    const f = document.createElement('span');
+    f.className = 'coin-float';
+    f.textContent = '+1';
+    f.style.left = (e.clientX - 8) + 'px';
+    f.style.top = (e.clientY - 24) + 'px';
+    document.body.appendChild(f);
+    setTimeout(() => f.remove(), 850);
+    if (coins >= 10) unlock('coins_10');
+  });
+
+  /* ================= MODAL PLUMBING ================= */
+  function openModal(id) {
+    $('#' + id).classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    $('#' + id).classList.add('hidden');
+    document.body.style.overflow = '';
+    if (id === 'game-modal') snake.stop();
+  }
+  $$('.modal-close').forEach(b => b.addEventListener('click', () => closeModal(b.dataset.close)));
+  $$('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); }));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') $$('.modal:not(.hidden)').forEach(m => closeModal(m.id));
+  });
+
+  /* ================= SNAKE ================= */
+  const snake = (() => {
+    const cv = $('#snake');
+    const ctx = cv.getContext('2d');
+    const CELL = 16, N = 20; // 20x20 grid on 320px canvas
+    const scoreEl2 = $('#snake-score');
+    const bestEl = $('#snake-best');
+    const msgEl = $('#game-msg');
+    let body, dir, nextDir, food, sc, timer, speed, state; // state: idle|run|over
+    let best = +(localStorage.getItem('gv_snake_best') || 0);
+    bestEl.textContent = best;
+
+    const cssVar = n => getComputedStyle(document.body).getPropertyValue(n).trim();
+
+    function reset() {
+      body = [{ x: 9, y: 10 }, { x: 8, y: 10 }, { x: 7, y: 10 }];
+      dir = { x: 1, y: 0 };
+      nextDir = dir;
+      sc = 0;
+      speed = 130;
+      scoreEl2.textContent = 0;
+      spawnFood();
+      draw();
+    }
+    function spawnFood() {
+      do {
+        food = { x: (Math.random() * N) | 0, y: (Math.random() * N) | 0 };
+      } while (body.some(p => p.x === food.x && p.y === food.y));
+    }
+    function start() {
+      reset();
+      state = 'run';
+      msgEl.textContent = '';
+      unlock('snake_play');
+      clearInterval(timer);
+      timer = setInterval(step, speed);
+    }
+    function stop() {
+      clearInterval(timer);
+      state = 'idle';
+      msgEl.textContent = 'PRESS ANY KEY / TAP TO START';
+    }
+    function gameOver() {
+      clearInterval(timer);
+      state = 'over';
+      audio.over();
+      if (sc > best) {
+        best = sc;
+        localStorage.setItem('gv_snake_best', best);
+        bestEl.textContent = best;
+        msgEl.textContent = `NEW BEST: ${sc}! PRESS ANY KEY`;
+      } else {
+        msgEl.textContent = 'GAME OVER — PRESS ANY KEY';
+      }
+      if (sc >= 15) unlock('snake_15');
+      addScore(sc);
+      window.GVLB?.submit(sc);
+    }
+    function step() {
+      dir = nextDir;
+      const head = { x: body[0].x + dir.x, y: body[0].y + dir.y };
+      if (head.x < 0 || head.y < 0 || head.x >= N || head.y >= N ||
+          body.some(p => p.x === head.x && p.y === head.y)) return gameOver();
+      body.unshift(head);
+      if (head.x === food.x && head.y === food.y) {
+        sc++;
+        scoreEl2.textContent = sc;
+        audio.eat();
+        spawnFood();
+        if (sc % 5 === 0 && speed > 70) {
+          speed -= 12;
+          clearInterval(timer);
+          timer = setInterval(step, speed);
+        }
+      } else {
+        body.pop();
+      }
+      draw();
+    }
+    function draw() {
+      ctx.fillStyle = '#070a08';
+      ctx.fillRect(0, 0, cv.width, cv.height);
+      ctx.fillStyle = cssVar('--faint') || '#2a3a2e';
+      for (let i = 0; i <= N; i++) {
+        ctx.fillRect(i * CELL, 0, 1, cv.height);
+        ctx.fillRect(0, i * CELL, cv.width, 1);
+      }
+      ctx.fillStyle = cssVar('--gold') || '#ffb454';
+      ctx.fillRect(food.x * CELL + 3, food.y * CELL + 3, CELL - 6, CELL - 6);
+      const acc = cssVar('--accent') || '#5af78e';
+      body.forEach((p, i) => {
+        ctx.fillStyle = i === 0 ? acc : (i % 2 ? acc + 'cc' : acc);
+        ctx.fillRect(p.x * CELL + 1, p.y * CELL + 1, CELL - 2, CELL - 2);
+      });
+    }
+    function turn(d) {
+      const map = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } };
+      const nd = map[d];
+      if (!nd || (state !== 'run')) return;
+      if (nd.x === -dir.x && nd.y === -dir.y) return; // no 180s
+      nextDir = nd;
+    }
+    const naming = () => $('#game-modal').classList.contains('naming');
+    function onKey(e) {
+      const m = $('#game-modal');
+      if (m.classList.contains('hidden') || naming()) return;
+      if (!$('#lb-panel')?.classList.contains('hidden')) return; // rankings open
+      const dirs = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right',
+        w: 'up', s: 'down', a: 'left', d: 'right' };
+      if (e.key in dirs || ['Enter', ' '].includes(e.key) || state !== 'run') e.preventDefault();
+      if (state !== 'run') {
+        if (e.key !== 'Escape') start();
+        return;
+      }
+      const d = dirs[e.key];
+      if (d) turn(d);
+    }
+    document.addEventListener('keydown', onKey);
+    // touch: tap to start, swipe to steer
+    let tx = 0, ty = 0;
+    cv.addEventListener('touchstart', e => {
+      if (naming()) return;
+      const t = e.touches[0];
+      tx = t.clientX; ty = t.clientY;
+      if (state !== 'run') start();
+    }, { passive: true });
+    cv.addEventListener('touchmove', e => {
+      e.preventDefault();
+      const t = e.touches[0];
+      const dx = t.clientX - tx, dy = t.clientY - ty;
+      if (Math.abs(dx) + Math.abs(dy) < 24) return;
+      turn(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'));
+      tx = t.clientX; ty = t.clientY;
+    }, { passive: false });
+    $$('.dpad button').forEach(b => b.addEventListener('click', () => {
+      if (naming()) return;
+      if (state !== 'run') start(); else turn(b.dataset.dir);
+    }));
+    cv.addEventListener('click', () => { if (!naming() && state !== 'run') start(); });
+
+    reset();
+    state = 'idle';
+    return { stop, open() { openModal('game-modal'); stop(); draw(); } };
+  })();
+
+  $('#secret-cart').addEventListener('click', () => { audio.coin(); snake.open(); });
+
+  /* ================= TERMINAL ================= */
+  const term = (() => {
+    const out = $('#term-out');
+    const input = $('#term-in');
+    function print(html, cls = '') {
+      const d = document.createElement('div');
+      if (cls) d.className = cls;
+      d.innerHTML = html;
+      out.appendChild(d);
+      out.scrollTop = out.scrollHeight;
+    }
+    function open() {
+      openModal('terminal');
+      unlock('terminal');
+      if (!out.childElementCount) {
+        print('GV-SHELL v2.6 — type <span class="t-acc">help</span> for commands.', 't-dim');
+      }
+      setTimeout(() => input.focus(), 50);
+    }
+    const CMDS = {
+      help: () => print(
+        `<span class="t-acc">help</span>      this menu
+<span class="t-acc">whoami</span>    player info
+<span class="t-acc">ls</span>        list levels
+<span class="t-acc">open</span> &lt;x&gt;  jump to a level (e.g. open projects)
+<span class="t-acc">skills</span>    dump the stat sheet
+<span class="t-acc">resume</span>    open resume.pdf
+<span class="t-acc">contact</span>   how to reach me
+<span class="t-acc">snake</span>     insert the mystery cartridge
+<span class="t-acc">player</span> &lt;name&gt;  set your pilot name
+<span class="t-acc">secrets</span>   hints for the hidden stuff
+<span class="t-acc">sudo hire-me</span>  do it.
+<span class="t-acc">clear</span> / <span class="t-acc">exit</span>`),
+      whoami: () => print(`GALABA VAMSI — software engineer & AI/ML researcher.
+IIT Bhilai '27 · IEEE first-author · YC Startup School founder · Inter IIT 5th.`, 't-dim'),
+      ls: () => print('about/  experience/  projects/  skills/  trophies/  contact/', 't-acc'),
+      skills: () => print(`LANG:   python c/c++ ts/js kotlin swift dart go glsl cuda
+WEB:    react react-native node flutter postgresql aws openmpi
+AI/ML:  pytorch gatv2 safe-rl transformers opencv cupy
+SYS:    wifi-phy/mac sdr/usrp 802.11k/v pcb-design linux`, 't-dim'),
+      resume: () => { window.open('vamsi%20resume.pdf', '_blank'); print('opening resume.pdf ...', 't-dim'); },
+      contact: () => print(`email:    <a href="mailto:galabavamsi12@gmail.com">galabavamsi12@gmail.com</a>
+github:   <a href="https://github.com/Galabavamsi" target="_blank" rel="noopener">github.com/Galabavamsi</a>
+linkedin: <a href="https://www.linkedin.com/in/galabavamsi" target="_blank" rel="noopener">linkedin.com/in/galabavamsi</a>`),
+      snake: () => { closeModal('terminal'); snake.open(); },
+      secrets: () => print(`${ACH.length - unlocked.size} undiscovered...
+- the oldest cheat code in the book still works
+- the dusty cartridge in the library is playable
+- arcade machines love coins. ten of them.
+- the logo can take a beating
+- go AFK for ~30s and watch the floor
+- see every level to map the world
+- the critter in the corner answers questions`, 't-dim'),
+      konami: () => print('nice try. you have to actually press it. ↑↑ ...', 't-dim'),
+      clear: () => { out.innerHTML = ''; },
+      exit: () => closeModal('terminal'),
+      'sudo hire-me': () => {
+        print('[sudo] permission granted. compiling offer letter ...', 't-acc');
+        setTimeout(() => { location.href = 'mailto:galabavamsi12@gmail.com?subject=We%20want%20to%20hire%20you'; }, 900);
+      },
+      god: () => { document.body.classList.toggle('god'); print('palette override toggled.', 't-acc'); },
+    };
+    input.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      const raw = input.value.trim();
+      input.value = '';
+      if (!raw) return;
+      print(`<span class="t-cmd">guest@gv:~$ ${raw.replace(/</g, '&lt;')}</span>`);
+      audio.blip();
+      const lower = raw.toLowerCase();
+      if (CMDS[lower]) { CMDS[lower](); return; }
+      if (lower.startsWith('open ')) {
+        const arg = lower.slice(5).trim();
+        const alias = { wins: 'trophies', exp: 'experience', proj: 'projects', home: 'hero' };
+        const id = alias[arg] || arg;
+        const el = $('#' + id);
+        if (el) { closeModal('terminal'); el.scrollIntoView(); }
+        else print(`no such level: ${id}`, 't-dim');
+        return;
+      }
+      if (lower === 'player' || lower.startsWith('player ')) {
+        const arg = raw.slice(6).trim();
+        if (!arg) { print(`pilot: ${window.GVLB?.getName() || '(unset)'}`, 't-dim'); return; }
+        print(window.GVLB?.setName(arg)
+          ? `pilot name set: ${arg.replace(/</g, '&lt;')}`
+          : 'invalid name — 1-12 chars: letters, numbers, _ - space', 't-dim');
+        return;
+      }
+      if (lower === 'sudo' || lower.startsWith('sudo ')) { print('usage: sudo hire-me', 't-dim'); return; }
+      if (['hi', 'hello', 'hey'].includes(lower)) { print('hey. type help.', 't-dim'); return; }
+      if (lower === 'rm -rf /') { print('nice try. this ROM is read-only.', 't-dim'); return; }
+      print(`command not found: ${lower.replace(/</g, '&lt;')} — try help`, 't-dim');
+    });
+    return { open };
+  })();
+  $('#term-btn').addEventListener('click', term.open);
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && e.target.tagName !== 'INPUT' && $$('.modal:not(.hidden)').length === 0) {
+      e.preventDefault();
+      term.open();
+    }
+  });
+
+  /* ================= IDLE WANDERER ================= */
+  let idleTimer, wandererEl = null;
+  const INVADER = [
+    '..g....g..',
+    '...g..g...',
+    '..gggggg..',
+    '.gg.gg.gg.',
+    'gggggggggg',
+    'g.gggggg.g',
+    'g.g....g.g',
+    '...gg.gg..',
+  ];
+  function spawnWanderer() {
+    if (wandererEl || reducedMotion || document.hidden) return;
+    const cv = document.createElement('canvas');
+    cv.id = 'wanderer';
+    cv.width = 10; cv.height = 8;
+    cv.title = 'catch it!';
+    const ctx = cv.getContext('2d');
+    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--accent').trim() || '#5af78e';
+    INVADER.forEach((row, y) => [...row].forEach((ch, x) => { if (ch === 'g') ctx.fillRect(x, y, 1, 1); }));
+    cv.classList.add('bounce');
+    cv.addEventListener('pointerdown', () => {
+      unlock('wanderer');
+      addScore(25);
+      audio.coin();
+      cv.remove();
+      wandererEl = null;
+    });
+    cv.addEventListener('animationend', e => {
+      if (e.animationName === 'wander') { cv.remove(); wandererEl = null; }
+    });
+    document.body.appendChild(cv);
+    wandererEl = cv;
+  }
+  function resetIdle() {
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(spawnWanderer, 30000);
+  }
+  ['pointermove', 'keydown', 'scroll', 'pointerdown'].forEach(ev =>
+    addEventListener(ev, resetIdle, { passive: true }));
+  resetIdle();
+
+  /* ================= NAV BLIPS ================= */
+  $$('#nav a, .btn').forEach(el => el.addEventListener('click', () => audio.nav()));
+
+  /* ================= PUBLIC BRIDGE (used by pet.js) ================= */
+  window.GV = { unlock, addScore, audio };
+
+  /* ================= CONSOLE EASTER EGG ================= */
+  console.log(
+    '%c▶ PORTFOLIO.ROM %c\n\nhey, fellow dev. you get a hint:\nthe terminal has a `secrets` command.\n\n— vamsi',
+    'font-family: monospace; font-size: 20px; color: #5af78e; background: #0a0e0b; padding: 8px;',
+    'font-family: monospace; color: #6b8a70;'
+  );
+})();
