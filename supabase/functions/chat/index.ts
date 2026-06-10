@@ -11,7 +11,7 @@
    here so a stolen endpoint can't be abused for arbitrary usage.
    ============================================================ */
 
-const ALLOWED_ORIGIN = '*'; // tighten to 'https://galabavamsi.github.io' after testing
+const ALLOWED_ORIGIN = 'https://galabavamsi.github.io';
 
 const CORS = {
   'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
