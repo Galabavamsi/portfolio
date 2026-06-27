@@ -1,0 +1,16 @@
+node_modules/
+.env
+.env.local
+.env.*.local
+supabase/.env.local
+
+# Keep the local sprite library out of Git except the BIT sprites used by the site.
+spirte resources/*
+!spirte resources/craftpix-net-622999-free-pixel-art-tiny-hero-sprites/
+spirte resources/craftpix-net-622999-free-pixel-art-tiny-hero-sprites/*
+!spirte resources/craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Monster/
+spirte resources/craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Monster/*
+!spirte resources/craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Monster/Owlet_Monster_Idle_4.png
+!spirte resources/craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Monster/Owlet_Monster_Walk_6.png
+!spirte resources/craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Monster/Owlet_Monster_Hurt_4.png
+!spirte resources/craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Monster/Owlet_Monster_Attack1_4.png

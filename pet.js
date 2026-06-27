@@ -1,10 +1,7 @@
 /* ============================================================
-   BIT.EXE — pixel pet companion + DeepSeek-powered chat
-   a small animated tabby: wanders, sleeps, blinks, tracks your
-   cursor, comments while you scroll, and answers questions.
-
-   Chat endpoint comes from config.js — in production it points
-   at the Supabase Edge Function so no API key ships to clients.
+   BIT - small portfolio assistant + optional remote chat.
+   It always has a local resume-aware fallback, so the chat works
+   even when the deployed endpoint is unavailable during local dev.
    ============================================================ */
 (() => {
   'use strict';
@@ -13,41 +10,123 @@
   const CFG = {
     endpoint: (GVC.CHAT_ENDPOINT && !GVC.CHAT_ENDPOINT.includes('YOUR-')) ? GVC.CHAT_ENDPOINT : '',
     devKey: GVC.DEV_DEEPSEEK_KEY || '',
+    useRemoteLocally: !!GVC.USE_REMOTE_CHAT_LOCALLY,
   };
+  const LOCAL_ORIGIN = ['localhost', '127.0.0.1'].includes(window.location.hostname) ||
+    window.location.protocol === 'file:';
 
   const GV = window.GV || { unlock() {}, addScore() {}, audio: { blip() {}, nav() {}, coin() {}, eat() {} } };
   const $ = s => document.querySelector(s);
-  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ================= SYSTEM PROMPT ================= */
-  const SYSTEM = `You are BIT, a tiny 8-bit pixel cat who lives on Galaba Vamsi's retro portfolio website. You are his loyal pet, guide and hype-creature.
+  const LINKS = {
+    email: 'mailto:galabavamsi12@gmail.com',
+    portfolio: 'https://galabavamsi.github.io/portfolio',
+    linkedin: 'https://www.linkedin.com/in/galabavamsi/',
+    github: 'https://github.com/Galabavamsi',
+    resume: 'resume_vamsi.pdf',
+    ris: 'https://github.com/Galabavamsi/RIS-SIM',
+    humanSlop: 'https://humanslop.in/',
+    humanSlopApp: 'https://play.google.com/store/apps/details?id=com.humanslop.app',
+    electronGnn: 'https://github.com/Galabavamsi/Electron-GNN',
+    openPyfx: 'https://github.com/Galabavamsi/open-pyfx',
+    crater: 'https://github.com/Galabavamsi/Moon-Crater-Detection-using-DEM',
+    antenna: 'https://github.com/Galabavamsi/Antenna-Net',
+    serenity: 'https://github.com/Galabavamsi/Serenity',
+    openEmulator: 'https://drive.google.com/file/d/12oDPsflaUXKnSjfA3247HgFDDf4bJkCP/view?usp=drive_link',
+    risEnergy: 'https://ieeexplore.ieee.org/abstract/document/11392908/',
+    risReview: 'https://www.sciencedirect.com/science/article/pii/S1570870526001964',
+  };
+
+  const FACTS = {
+    summary: 'Galaba Vamsi is a B.Tech Mechatronics student at IIT Bhilai, graduating in May 2027. He works across software engineering, full-stack products, AI/ML, computer vision, wireless systems, GPU shader programming, and cloud infrastructure.',
+    experience: 'Research Intern at IIT Bhilai from May to Aug 2025 under Dr. Arzad Alam. He built an open-source 6G RIS simulator, emulated USRP workflows for LoS/NLoS environments, reduced hardware costs, and designed a two-layer RIS PCB workflow for RF energy harvesting research.',
+    humanSlop: 'Human Slop is an anti-AI social platform Vamsi co-founded in 2026. It uses React, PostgreSQL, AWS, hardware-bound biometric auth, and real-time typing forensics to defend against synthetic content.',
+    arista: 'For the Arista Networks Wi-Fi Optimization challenge at Inter IIT Tech Meet 14.0, Vamsi worked on a zero-budget Python simulator and AI-assisted RRM using Dual-CNNs, GNNs, and Safe RL. The team ranked 5th.',
+    projects: 'Selected projects: Arista Wi-Fi Optimization, Human Slop, Electron-GNN, Open-PyFX, Lunar Crater Detection, AntennaNet, Amazon ML Challenge, Serenity, and the RIS simulator.',
+    skills: 'Languages: Python, C/C++, TypeScript, JavaScript, Kotlin, Swift, Dart, Go, GLSL, CUDA. Tools: React.js, React Native, Node.js, Flutter, PostgreSQL, AWS, OpenMPI, PyTorch, GNNs, Safe RL, Transformers, OpenCV, CuPy, SDR/USRP, PCB design, Linux, and Git.',
+    education: 'Education: B.Tech in Mechatronics at IIT Bhilai, Aug 2023 to May 2027. Coursework includes DSA, OOP, deep learning for computer vision, AI/ML, digital image processing, and optimal control.',
+    achievements: 'Highlights: 1st place IIT Bhilai Web Development Competition, YC Startup School, 5th rank Inter IIT Tech Meet Arista challenge, top 3.5% Amazon ML Challenge, top 1% JEE Advanced, top 10 Toyota Hackathon, 95% Class 12, and 94% Class 10.',
+    publications: 'Publications: first-author An Open Emulator for Smart Radio Environments; co-author Experience with RF Energy Harvesting-Driven Self-Powered RIS at IEEE INDICON 2025; co-author a ScienceDirect review on RIS simulation models and deployments.',
+    contact: 'Best contact: galabavamsi12@gmail.com or LinkedIn. Phone from resume: +91 7483047846. He is open to software engineering and AI/ML research roles.',
+  };
+
+  const SYSTEM = `You are BIT, a small portfolio assistant on Galaba Vamsi's website.
 
 STYLE RULES:
-- Replies under 80 words. Plain text only — no markdown, no asterisks, no emoji (an occasional ^-^ or meow is fine).
-- Playful retro-videogame flavor. The site's sections are "levels". You are a cat, act slightly catlike.
+- Replies under 80 words. Plain text only. No markdown and no emoji.
+- Be warm, direct, and easy to understand.
 - Be accurate about Vamsi. Never invent facts not listed below.
-- If asked something unrelated to Vamsi or this site, answer in one short sentence, then nudge back to Vamsi.
+- If asked something unrelated to Vamsi or this site, answer briefly, then offer to help with Vamsi's work, projects, skills, or contact details.
 
-FACTS ABOUT GALABA VAMSI:
-- B.Tech Mechatronics, IIT Bhilai (Aug 2023 – May 2027). Focus: software engineering, full-stack, AI/ML, computer vision.
-- Research Intern, IIT Bhilai (May–Aug 2025, advisor Dr. Arzad Alam): built a zero-budget open-source 6G RIS simulator emulating USRPs in LoS/NLoS environments, saving lakhs in hardware costs; designed a two-layer RIS PCB (DipTrace/CST) for RF energy harvesting.
-- Publications: First-Author of "An Open Emulator for Smart Radio Environments"; Co-Author of "Experience with RF Energy Harvesting-Driven Self-Powered RIS" (IEEE INDICON 2025).
-- Co-Founder of Human Slop (2026): anti-AI social platform (React, PostgreSQL, AWS) with hardware-bound biometric auth and real-time typing forensics blocking 100% of synthetic content. Accepted into Y Combinator Startup School.
-- Inter IIT Tech Meet 14.0, 5th rank: Arista Networks Wi-Fi optimization — Python simulator + AI-assisted RRM with Dual-CNNs, GNNs, Safe RL; +15% throughput, <2% false positives, 100% DFS compliance.
-- Electron-GNN (ongoing): two-tower hybrid GNN (GATv2) predicting quantum absorption spectra from molecular geometry, replacing expensive RT-TDDFT simulations.
-- Open-PyFX: GPU-accelerated video FX suite in Python + GLSL (CRT emulation, ASCII edge detection, 3D LUTs).
-- Lunar Crater Detection: CV pipeline on Digital Elevation Models, F1 0.839, CuPy/CUDA backend with 4.07x speedup.
-- AntennaNet: KD-Tree nearest-neighbour anchoring for inverse EM design, 144-D search spaces, Python-MEEP on OpenMPI clusters.
-- Rumikai: zero-backend on-device intelligence engine in TypeScript with Kotlin/Swift bridges for context-aware widgets.
-- Serenity: Flutter mental wellness app with CV-based real-time emotion detection and appointment booking.
-- Amazon ML Challenge 2025: top 3.5% (700/20,000+), multimodal price prediction with Qwen 2-VL 7B and ViT+RoBERTa two-tower, SMAPE 49.0.
-- Other wins: 1st place IIT Bhilai Web Dev Competition, top 1% JEE Advanced, top 10 finalist Toyota Hackathon, 95% class 12, 94% class 10.
-- Skills: Python, C/C++, TypeScript/JS, Kotlin, Swift, Dart, Go, GLSL, CUDA; React/React Native, Node, Flutter, PostgreSQL, AWS, OpenMPI; PyTorch, GNNs, Safe RL, Transformers, OpenCV, CuPy; Wi-Fi PHY/MAC, SDR/USRP, IEEE 802.11k/v, PCB design; Linux, Git.
-- Contact: galabavamsi12@gmail.com · github.com/Galabavamsi · linkedin.com/in/galabavamsi · resume is the RESUME.PDF button on the site.
-- He is open to software engineering and AI/ML research roles. Encourage recruiters to email him.
-- This site has a snake game leaderboard — visitors enter a pilot name and compete.
+FACTS:
+${Object.values(FACTS).join('\n')}
+Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, LinkedIn ${LINKS.linkedin}, GitHub ${LINKS.github}, resume ${LINKS.resume}, RIS ${LINKS.ris}, Human Slop ${LINKS.humanSlop}, Human Slop app ${LINKS.humanSlopApp}, Electron-GNN ${LINKS.electronGnn}, Open-PyFX ${LINKS.openPyfx}, Lunar Crater Detection ${LINKS.crater}, AntennaNet ${LINKS.antenna}, Serenity ${LINKS.serenity}, publications ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
 
-SITE SECRETS you may hint at (never spell out fully): the konami code works, a dusty cartridge in the library is playable, the terminal opens with /, coins exist in the footer, going AFK summons something.`;
+  function includesAny(text, words) {
+    return words.some(word => text.includes(word));
+  }
+
+  function localAnswer(question) {
+    const q = question.toLowerCase();
+
+    if (includesAny(q, ['link', 'github', 'linkedin', 'portfolio'])) {
+      return `Resume links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, LinkedIn ${LINKS.linkedin}, GitHub ${LINKS.github}, resume ${LINKS.resume}, RIS ${LINKS.ris}, Human Slop ${LINKS.humanSlop}, app ${LINKS.humanSlopApp}, Electron-GNN ${LINKS.electronGnn}, Open-PyFX ${LINKS.openPyfx}, crater detection ${LINKS.crater}, AntennaNet ${LINKS.antenna}, Serenity ${LINKS.serenity}, papers ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
+    }
+    if (includesAny(q, ['email', 'contact', 'phone', 'hire', 'recruit', 'reach'])) {
+      return `${FACTS.contact} LinkedIn: ${LINKS.linkedin}. GitHub: ${LINKS.github}.`;
+    }
+    if (includesAny(q, ['resume', 'cv'])) {
+      return `The resume is linked as ${LINKS.resume}. It includes Vamsi's experience, projects, skills, achievements, publications, email, LinkedIn, and GitHub.`;
+    }
+    if (includesAny(q, ['publication', 'paper', 'ieee', 'science', 'indicon'])) {
+      return `${FACTS.publications} Links: ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
+    }
+    if (includesAny(q, ['experience', 'intern', 'ris', '6g', 'usrp', 'wireless'])) {
+      return `${FACTS.experience} RIS GitHub: ${LINKS.ris}.`;
+    }
+    if (includesAny(q, ['human slop', 'startup', 'social', 'anti-ai', 'anti ai'])) {
+      return `${FACTS.humanSlop} Web: ${LINKS.humanSlop}. App: ${LINKS.humanSlopApp}.`;
+    }
+    if (includesAny(q, ['arista', 'wi-fi', 'wifi', 'rrm', 'inter iit'])) {
+      return FACTS.arista;
+    }
+    if (includesAny(q, ['electron', 'gnn', 'quantum'])) {
+      return `Electron-GNN is a two-tower hybrid GNN using GATv2 to predict molecular absorption spectra from geometry. GitHub: ${LINKS.electronGnn}.`;
+    }
+    if (includesAny(q, ['open-pyfx', 'pyfx', 'glsl', 'shader', 'video'])) {
+      return `Open-PyFX is a Python and GLSL video FX suite for CRT emulation, ASCII edge detection, and 3D LUT workflows. GitHub: ${LINKS.openPyfx}.`;
+    }
+    if (includesAny(q, ['crater', 'lunar', 'moon', 'dem'])) {
+      return `Lunar Crater Detection extracts craters from DEM data with F1 0.839 and a CuPy/CUDA morphology backend. GitHub: ${LINKS.crater}.`;
+    }
+    if (includesAny(q, ['antenna', 'meep', 'em design'])) {
+      return `AntennaNet uses KD-tree nearest-neighbour anchoring for inverse EM design in 144D search spaces, with Python-MEEP on OpenMPI. GitHub: ${LINKS.antenna}.`;
+    }
+    if (includesAny(q, ['serenity', 'mental', 'wellness', 'flutter'])) {
+      return `Serenity is a Flutter mental wellness app with CV-based real-time emotion detection, stress games, exercises, and doctor booking. GitHub: ${LINKS.serenity}.`;
+    }
+    if (includesAny(q, ['amazon', 'ml challenge', 'qwen', 'vit', 'roberta'])) {
+      return `Amazon ML Challenge: Vamsi placed in the top 3.5%, using Qwen 2-VL 7B and a ViT/RoBERTa two-tower model for multimodal price prediction.`;
+    }
+    if (includesAny(q, ['project', 'built', 'work'])) {
+      return `${FACTS.projects} Ask for any project name and I can give the direct link if one exists.`;
+    }
+    if (includesAny(q, ['skill', 'stack', 'technology', 'tech'])) {
+      return FACTS.skills;
+    }
+    if (includesAny(q, ['education', 'iit', 'college', 'degree', 'coursework'])) {
+      return FACTS.education;
+    }
+    if (includesAny(q, ['achievement', 'award', 'rank', 'jee', 'hackathon', 'competition'])) {
+      return FACTS.achievements;
+    }
+    if (includesAny(q, ['about', 'summary', 'who', 'intro', 'vamsi'])) {
+      return FACTS.summary;
+    }
+
+    return `I can help with Vamsi's resume, projects, skills, publications, experience, achievements, or contact details. Quick summary: ${FACTS.summary}`;
+  }
 
   /* ================= DOM ================= */
   const wrap = document.createElement('div');
@@ -55,8 +134,8 @@ SITE SECRETS you may hint at (never spell out fully): the konami code works, a d
   wrap.innerHTML = `
     <div id="pet-bubble" class="hidden" role="status"></div>
     <div id="pet-fx"></div>
-    <canvas id="pet-cv" width="16" height="15" title="BIT — click to chat"
-      role="button" tabindex="0" aria-label="BIT the pixel pet — click to chat"></canvas>`;
+    <canvas id="pet-cv" width="32" height="32" title="BIT - ask about Vamsi"
+      role="button" tabindex="0" aria-label="BIT assistant - click to chat"></canvas>`;
   document.body.appendChild(wrap);
 
   const chat = document.createElement('div');
@@ -66,8 +145,8 @@ SITE SECRETS you may hint at (never spell out fully): the konami code works, a d
   chat.setAttribute('aria-label', 'Chat with BIT');
   chat.innerHTML = `
     <div class="pet-head">
-      <span>BIT.EXE — VAMSI'S PET</span>
-      <button id="pet-close" aria-label="Close chat">✕</button>
+      <span>BIT - PORTFOLIO ASSISTANT</span>
+      <button id="pet-close" aria-label="Close chat">x</button>
     </div>
     <div id="pet-log"></div>
     <form id="pet-form">
@@ -84,93 +163,38 @@ SITE SECRETS you may hint at (never spell out fully): the konami code works, a d
   const input = $('#pet-in');
   const sendBtn = $('#pet-send');
   const ctx = cv.getContext('2d');
-  const cssVar = n => getComputedStyle(document.body).getPropertyValue(n).trim();
+  cv.width = 32;
+  cv.height = 32;
+  ctx.imageSmoothingEnabled = false;
 
-  /* ================= SPRITE =================
-     16x15 front-facing tabby.
-     o outline · b body · s stripe · i inner ear · l belly/muzzle
-     n nose · h blush · c collar · g gold tag                    */
-  const BASE = [
-    '.oo..........oo.',
-    '.oio........oio.',
-    '.oibo......obio.',
-    '.obbbbbbbbbbbbo.',
-    'obsbbbbbbbbbbsbo',
-    'obbbbbbbbbbbbbbo', // eyes drawn dynamically on this row
-    'obbbbbbnnbbbbbbo',
-    'ohbbllllllllbbho',
-    '.obbbbbbbbbbbbo.',
-    '.occcccccccccco.',
-    '.obbbbbggbbbbbo.',
-    '.obllllllllllbo.',
-    '.obllllllllllbo.',
-    '.obllllllllllbo.',
-    '................', // paw row drawn dynamically
-  ];
-  // tail frames: little appendage on the right edge
-  const TAILS = [
-    [[15, 10], [15, 11], [15, 12]],
-    [[15, 9], [15, 10], [14, 8]],
-    [[15, 11], [15, 12], [15, 13]],
-  ];
-  // paw row variants: 0 = both down, 1 = left up, 2 = right up
-  const PAWS = [
-    [[2, 14], [3, 14], [4, 14], [5, 14], [6, 14], [9, 14], [10, 14], [11, 14], [12, 14], [13, 14]],
-    [[2, 14], [3, 14], [4, 13], [5, 13], [6, 14], [9, 14], [10, 14], [11, 14], [12, 14], [13, 14]],
-    [[2, 14], [3, 14], [4, 14], [5, 14], [6, 14], [9, 14], [10, 13], [11, 13], [12, 14], [13, 14]],
-  ];
+  /* ================= SPRITE ================= */
+  const ASSET_ROOT = 'spirte resources/';
+  function loadSprite(src) {
+    const img = new Image();
+    img.src = src;
+    return img;
+  }
+  const PET_SPRITES = {
+    idle: { img: loadSprite(`${ASSET_ROOT}craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Monster/Owlet_Monster_Idle_4.png`), frames: 4 },
+    walk: { img: loadSprite(`${ASSET_ROOT}craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Monster/Owlet_Monster_Walk_6.png`), frames: 6 },
+    sleep: { img: loadSprite(`${ASSET_ROOT}craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Monster/Owlet_Monster_Hurt_4.png`), frames: 4 },
+    happy: { img: loadSprite(`${ASSET_ROOT}craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Monster/Owlet_Monster_Attack1_4.png`), frames: 4 },
+  };
 
   function drawPet(st) {
-    const acc = cssVar('--accent') || '#5af78e';
-    const dim = cssVar('--accent-dim') || '#2e7d4a';
-    const C = {
-      o: '#10241a', b: acc, s: dim, i: '#ffb454', l: '#d8ffe6',
-      n: '#ffb454', h: '#ffb454', c: '#8a5a1e', g: '#ffd866',
-    };
+    const sprite = PET_SPRITES[st.mode] || PET_SPRITES.idle;
+    if (!sprite.img.complete) return;
     ctx.clearRect(0, 0, cv.width, cv.height);
-    BASE.forEach((row, y) => [...row].forEach((ch, x) => {
-      if (ch === '.') return;
-      // ear twitch: drop one ear's inner pixel for a frame
-      if (ch === 'i' && st.twitch && ((st.twitch === 1 && x < 8) || (st.twitch === 2 && x >= 8))) return;
-      ctx.fillStyle = C[ch];
-      ctx.fillRect(x, y, 1, 1);
-    }));
-    // paws
-    const paw = PAWS[st.paw] || PAWS[0];
-    ctx.fillStyle = C.o;
-    paw.forEach(([x, y]) => ctx.fillRect(x, y, 1, 1));
-    // tail
-    ctx.fillStyle = C.s;
-    (TAILS[st.tail] || TAILS[0]).forEach(([x, y]) => ctx.fillRect(x, y, 1, 1));
-    // eyes
-    const EY = 5;
-    if (st.eyes === 'closed') {
-      ctx.fillStyle = C.o;
-      ctx.fillRect(3, EY, 2, 1);
-      ctx.fillRect(11, EY, 2, 1);
-    } else if (st.eyes === 'happy') {
-      ctx.fillStyle = C.o;
-      [[2, EY], [3, EY - 1], [4, EY], [11, EY], [12, EY - 1], [13, EY]]
-        .forEach(([x, y]) => ctx.fillRect(x, y, 1, 1));
-    } else { // open, pupil tracks cursor (st.pupil: 0 = left px, 1 = right px)
-      ctx.fillStyle = '#f4fff6';
-      ctx.fillRect(3, EY, 2, 1);
-      ctx.fillRect(11, EY, 2, 1);
-      ctx.fillStyle = '#07120b';
-      ctx.fillRect(3 + st.pupil, EY, 1, 1);
-      ctx.fillRect(11 + st.pupil, EY, 1, 1);
-    }
+    ctx.drawImage(sprite.img, (st.frame % sprite.frames) * 32, 0, 32, 32, 0, 0, 32, 32);
   }
 
   /* ================= ANIMATION ENGINE ================= */
-  let mode = 'idle';            // idle | walk | sleep | happy
+  let mode = 'idle';
   let frame = 0;
-  let pupil = 0;                // 0|1 — follows cursor
-  let blinkUntil = 0, nextBlink = Date.now() + 3000;
-  let twitch = 0, nextTwitch = Date.now() + 6000;
-  let walkUntil = 0;            // scroll-run timer
+  let nextBlink = Date.now() + 3000;
+  let walkUntil = 0;
   let lastInput = Date.now();
-  let petX = 0;                 // translateX offset (0 .. -WANDER_RANGE)
+  let petX = 0;
   const WANDER_RANGE = 150;
 
   function currentMode() {
@@ -185,32 +209,11 @@ SITE SECRETS you may hint at (never spell out fully): the konami code works, a d
     const now = Date.now();
     mode = currentMode();
     if (mode !== 'sleep' && now > nextBlink) {
-      blinkUntil = now + 150;
       nextBlink = now + 2600 + Math.random() * 2800;
     }
-    if (now > nextTwitch) {
-      twitch = 1 + (Math.random() * 2 | 0);
-      nextTwitch = now + 5000 + Math.random() * 7000;
-      setTimeout(() => { twitch = 0; }, 320);
-    }
-    drawPet({
-      eyes: mode === 'sleep' ? 'closed'
-        : mode === 'happy' ? 'happy'
-        : now < blinkUntil ? 'closed' : 'open',
-      pupil,
-      tail: mode === 'sleep' ? 0 : [0, 1, 0, 2][(frame >> 2) % 4],
-      paw: mode === 'walk' ? (frame % 2 ? 1 : 2) : 0,
-      twitch,
-    });
+    drawPet({ mode, frame });
   }, 150);
 
-  /* pupils follow the cursor */
-  addEventListener('pointermove', e => {
-    const r = cv.getBoundingClientRect();
-    pupil = e.clientX < r.left + r.width / 2 ? 0 : 1;
-  }, { passive: true });
-
-  /* run-in-place while the page scrolls */
   addEventListener('scroll', () => { if (!sleeping) walkUntil = Date.now() + 450; }, { passive: true });
 
   /* ---------- wandering ---------- */
@@ -253,20 +256,20 @@ SITE SECRETS you may hint at (never spell out fully): the konami code works, a d
     if (!sleeping) return;
     sleeping = false;
     clearInterval(zzzTimer);
-    say('mrrp?! i was resting my pixels.', 3500);
+    say('I am awake. Ask me about the portfolio.', 3500);
   }
   setInterval(() => { if (Date.now() - lastInput > 45000) fallAsleep(); }, 5000);
   ['pointerdown', 'keydown', 'scroll'].forEach(ev =>
     addEventListener(ev, wakeUp, { passive: true }));
   addEventListener('pointermove', () => { lastInput = Date.now(); }, { passive: true });
 
-  /* ---------- hearts when petted ---------- */
+  /* ---------- small click effect ---------- */
   function hearts() {
     for (let i = 0; i < 3; i++) {
       setTimeout(() => {
         const h = document.createElement('span');
         h.className = 'pet-heart';
-        h.textContent = '♥';
+        h.textContent = '<3';
         h.style.right = (12 + Math.random() * 36) + 'px';
         fx.appendChild(h);
         setTimeout(() => h.remove(), 1100);
@@ -277,7 +280,7 @@ SITE SECRETS you may hint at (never spell out fully): the konami code works, a d
   /* ================= SPEECH BUBBLE ================= */
   let bubbleTimer, lastSay = 0;
   function say(text, hold = 5200) {
-    if (!chat.classList.contains('hidden')) return; // quiet while chatting
+    if (!chat.classList.contains('hidden')) return;
     lastSay = Date.now();
     bubble.textContent = text;
     bubble.classList.remove('hidden');
@@ -288,20 +291,13 @@ SITE SECRETS you may hint at (never spell out fully): the konami code works, a d
   const canSay = (gap = 9000) => Date.now() - lastSay > gap &&
     document.visibilityState === 'visible' && !sleeping;
 
-  /* greet once the boot screen is gone */
-  (function waitBoot() {
-    if (document.getElementById('boot')) return setTimeout(waitBoot, 400);
-    setTimeout(() => say("hi! i'm BIT, vamsi's pixel pet. click me to ask anything ^-^", 6500), 900);
-  })();
-
-  /* section commentary while scrolling */
   const SECTION_LINES = {
-    about: "that's his character sheet. 100% true. i fact-checked it myself.",
-    experience: 'IEEE first-author at 20. i am a very proud pet.',
-    projects: 'psst... one of these cartridges is not like the others.',
-    skills: 'he feeds me CUDA kernels for breakfast.',
-    trophies: 'shiny. very shiny. do not touch.',
-    contact: 'go on, recruit him. i need the kibble money.',
+    about: 'Quick background and education.',
+    experience: 'Research, startup work, and publications.',
+    projects: 'Selected projects from the resume.',
+    skills: 'Technical stack and research tools.',
+    achievements: 'Competition and academic highlights.',
+    contact: 'Email, LinkedIn, GitHub, and resume.',
   };
   const saidSections = new Set();
   const secObs = new IntersectionObserver(entries => entries.forEach(e => {
@@ -316,15 +312,11 @@ SITE SECRETS you may hint at (never spell out fully): the konami code works, a d
     if (el) secObs.observe(el);
   });
 
-  /* idle quips */
   const QUIPS = [
-    'found the konami code yet?',
-    'try pressing / sometime. just saying.',
-    'i am 16 pixels wide and entirely slop-free.',
-    'meow. that is pet-speak for "hire vamsi".',
-    'he once saved lakhs of rupees with software. i saved a screenshot.',
-    'the footer accepts coins. i accept head pats.',
-    'beat the snake high score. claim your place among the pilots.',
+    "Ask me about Vamsi's projects, skills, or research work.",
+    'I can summarize the portfolio if you are short on time.',
+    'Recruiters can start with the Experience and Projects sections.',
+    'The resume link is available in the top right and contact section.',
   ];
   let quipIdx = Math.floor(Math.random() * QUIPS.length);
   setInterval(() => {
@@ -351,7 +343,7 @@ SITE SECRETS you may hint at (never spell out fully): the konami code works, a d
     bubble.classList.add('hidden');
     GV.audio.coin();
     if (!log.childElementCount) {
-      addMsg('bot', "meow! i'm BIT. ask me anything about vamsi — projects, skills, how to hire him, or where the secrets are.");
+      addMsg('bot', 'Hi, I am BIT. Ask me about Vamsi, his projects, skills, research work, links, or contact details.');
     }
     setTimeout(() => input.focus(), 60);
   }
@@ -368,6 +360,62 @@ SITE SECRETS you may hint at (never spell out fully): the konami code works, a d
     if (e.key === 'Escape' && !chat.classList.contains('hidden')) closeChat();
   });
 
+  async function askRemote(text) {
+    const direct = !!CFG.devKey;
+    if (!direct && LOCAL_ORIGIN && !CFG.useRemoteLocally) return '';
+    if (!direct && !CFG.endpoint) return '';
+
+    const url = direct ? 'https://api.deepseek.com/chat/completions' : CFG.endpoint;
+    const headers = { 'Content-Type': 'application/json' };
+    if (direct) headers.Authorization = 'Bearer ' + CFG.devKey;
+    const msgs = [{ role: 'system', content: SYSTEM }, ...history.slice(-12)];
+    const body = direct
+      ? { model: 'deepseek-v4-flash', messages: msgs, stream: true, max_tokens: 500, temperature: 0.5, thinking: { type: 'disabled' } }
+      : { messages: msgs };
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), direct ? 15000 : 8500);
+    let res;
+    try {
+      res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body), signal: controller.signal });
+    } finally {
+      clearTimeout(timeout);
+    }
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+
+    const contentType = res.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      const json = await res.json();
+      return json.answer || json.content || json.choices?.[0]?.message?.content || '';
+    }
+
+    const reader = res.body && res.body.getReader();
+    if (!reader) return '';
+    const dec = new TextDecoder();
+    let buf = '', full = '';
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop();
+      for (const line of lines) {
+        const t = line.trim();
+        if (!t.startsWith('data:')) continue;
+        const data = t.slice(5).trim();
+        if (data === '[DONE]') continue;
+        try {
+          const parsed = JSON.parse(data);
+          const delta = parsed.choices?.[0]?.delta?.content || parsed.answer || parsed.content || '';
+          full += delta;
+        } catch {
+          full += data;
+        }
+      }
+    }
+    return full.trim();
+  }
+
   $('#pet-form').addEventListener('submit', async e => {
     e.preventDefault();
     const text = input.value.trim();
@@ -383,53 +431,17 @@ SITE SECRETS you may hint at (never spell out fully): the konami code works, a d
     sendBtn.disabled = true;
 
     try {
-      const direct = !!CFG.devKey;
-      if (!direct && !CFG.endpoint) {
-        throw new Error('brain not deployed — set CHAT_ENDPOINT in config.js');
+      let answer = '';
+      try {
+        answer = await askRemote(text);
+      } catch {
+        answer = '';
       }
-      const url = direct ? 'https://api.deepseek.com/chat/completions' : CFG.endpoint;
-      const headers = { 'Content-Type': 'application/json' };
-      if (direct) headers.Authorization = 'Bearer ' + CFG.devKey;
-      const msgs = [{ role: 'system', content: SYSTEM }, ...history.slice(-12)];
-      const body = direct
-        ? { model: 'deepseek-v4-flash', messages: msgs, stream: true, max_tokens: 500, temperature: 0.8, thinking: { type: 'disabled' } }
-        : { messages: msgs };
-      const res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-
-      const reader = res.body.getReader();
-      const dec = new TextDecoder();
-      let buf = '', full = '';
-      for (;;) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buf += dec.decode(value, { stream: true });
-        const lines = buf.split('\n');
-        buf = lines.pop();
-        for (const line of lines) {
-          const t = line.trim();
-          if (!t.startsWith('data:')) continue;
-          const data = t.slice(5).trim();
-          if (data === '[DONE]') continue;
-          try {
-            const delta = JSON.parse(data).choices?.[0]?.delta;
-            if (delta && delta.content) {
-              full += delta.content;
-              botEl.textContent = full;
-              log.scrollTop = log.scrollHeight;
-            }
-          } catch { /* partial frame, ignored */ }
-        }
-      }
-      if (!full) full = '...static noises... try that again?';
-      botEl.textContent = full;
-      history.push({ role: 'assistant', content: full });
+      if (!answer) answer = localAnswer(text);
+      botEl.textContent = answer;
+      history.push({ role: 'assistant', content: answer });
       if (history.length > 24) history.splice(0, history.length - 24);
       GV.audio.nav();
-    } catch (err) {
-      botEl.textContent = 'connection lost (' + err.message + '). the hamster powering my brain needs a sec — try again.';
-      botEl.classList.add('err');
-      history.pop();
     } finally {
       botEl.classList.remove('typing');
       pending = false;
