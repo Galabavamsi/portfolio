@@ -9,9 +9,23 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=d443ef7">
+  <link rel="stylesheet" href="style.css?v=loader-1">
 </head>
 <body>
+  <div id="loading-screen" class="loading-screen" role="status" aria-live="polite" aria-label="Loading portfolio">
+    <div class="loading-shell">
+      <p class="loader-kicker">Portfolio loading</p>
+      <div class="loader-logo">Galaba Vamsi</div>
+      <div class="loader-status">
+        <span id="loader-status">Preparing portfolio</span>
+        <span id="loader-percent">0%</span>
+      </div>
+      <div class="loader-bar" aria-hidden="true">
+        <span id="loader-progress"></span>
+      </div>
+    </div>
+  </div>
+
   <header class="site-header">
     <a class="brand" href="#home" aria-label="Galaba Vamsi home">GV</a>
     <nav class="site-nav" aria-label="Primary navigation">
@@ -256,8 +270,8 @@
     <p>(c) 2026 Galaba Vamsi. Built with care, pixels, and plain language.</p>
   </footer>
 
-  <script src="config.js?v=d443ef7"></script>
-  <script src="script.js?v=d443ef7"></script>
-  <script src="pet.js?v=d443ef7"></script>
+  <script src="config.js?v=loader-1"></script>
+  <script src="script.js?v=loader-1"></script>
+  <script src="pet.js?v=loader-1"></script>
 </body>
 </html>
