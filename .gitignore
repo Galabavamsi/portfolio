@@ -3,6 +3,8 @@ node_modules/
 .env.local
 .env.*.local
 supabase/.env.local
+.supabase-db-password.tmp
+supabase/.temp/
 
 # Keep the local sprite library out of Git except the BIT sprites used by the site.
 spirte resources/*

@@ -376,7 +376,16 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, L
 
     const url = direct ? 'https://api.deepseek.com/chat/completions' : CFG.endpoint;
     const headers = { 'Content-Type': 'application/json' };
-    if (direct) headers.Authorization = 'Bearer ' + CFG.devKey;
+    if (direct) {
+      headers.Authorization = 'Bearer ' + CFG.devKey;
+    } else {
+      // Supabase gateway expects these even when the function has JWT verify off.
+      const anon = GVC.SUPABASE_ANON_KEY || '';
+      if (anon) {
+        headers.Authorization = 'Bearer ' + anon;
+        headers.apikey = anon;
+      }
+    }
     const msgs = [{ role: 'system', content: SYSTEM }, ...history.slice(-12)];
     const body = direct
       ? { model: 'deepseek-v4-flash', messages: msgs, stream: true, max_tokens: 500, temperature: 0.5, thinking: { type: 'disabled' } }
