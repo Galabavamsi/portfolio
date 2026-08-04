@@ -58,6 +58,7 @@ before committing**.
 | `style.css` | phosphor-CRT theme |
 | `script.js` | audio, boot, snake, terminal, achievements |
 | `pet.js` | BIT the pixel cat + DeepSeek chat |
+| `blog/` | build-log posts (`index.html` listing, `blog.css`, `blog.js`, `figures/`) |
 | `leaderboard.js` | pilot names + Supabase high scores |
 | `config.js` | deployment config (public values only) |
 | `supabase/` | DB schema + chat proxy edge function |

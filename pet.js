@@ -6,6 +6,8 @@
 (() => {
   'use strict';
 
+  const SCRIPT_URL = document.currentScript ? document.currentScript.src : location.href;
+
   const GVC = window.GV_CONFIG || {};
   const CFG = {
     endpoint: (GVC.CHAT_ENDPOINT && !GVC.CHAT_ENDPOINT.includes('YOUR-')) ? GVC.CHAT_ENDPOINT : '',
@@ -33,6 +35,7 @@
     crater: 'https://github.com/Galabavamsi/Moon-Crater-Detection-using-DEM',
     antenna: 'https://github.com/Galabavamsi/Antenna-Net',
     serenity: 'https://github.com/Galabavamsi/Serenity',
+    blog: 'https://galabavamsi.github.io/portfolio/blog/',
     openEmulator: 'https://drive.google.com/file/d/12oDPsflaUXKnSjfA3247HgFDDf4bJkCP/view?usp=drive_link',
     risEnergy: 'https://ieeexplore.ieee.org/abstract/document/11392908/',
     risReview: 'https://www.sciencedirect.com/science/article/pii/S1570870526001964',
@@ -49,6 +52,7 @@
     achievements: 'Highlights: 1st place IIT Bhilai Web Development Competition, YC Startup School, 5th rank Inter IIT Tech Meet Arista challenge, top 3.5% Amazon ML Challenge, top 1% JEE Advanced, top 10 Toyota Hackathon, 95% Class 12, and 94% Class 10.',
     publications: 'Publications: first-author An Open Emulator for Smart Radio Environments; co-author Experience with RF Energy Harvesting-Driven Self-Powered RIS at IEEE INDICON 2025; co-author a ScienceDirect review on RIS simulation models and deployments.',
     contact: 'Best contact: galabavamsi12@gmail.com or LinkedIn. Phone from resume: +91 7483047846. He is open to software engineering and AI/ML research roles.',
+    blog: 'The blog holds build logs, one post per experiment. The first post covers Physical AI experiment 01: a 1.9M-parameter JEPA world model reproducing the LeWorldModel recipe on Push-T, trained in about 7 minutes on an 8 GB laptop RTX 4070. Training was stable and collapse-free, the latent space encoded agent position without supervision, action ablations confirmed the predictor uses control input, but held-out rollouts drifted after about 2 steps and CEM planning reached 0.000 coverage because the data had almost no goal-directed pushing.',
   };
 
   const SYSTEM = `You are BIT, a small portfolio assistant on Galaba Vamsi's website.
@@ -61,7 +65,7 @@ STYLE RULES:
 
 FACTS:
 ${Object.values(FACTS).join('\n')}
-Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, LinkedIn ${LINKS.linkedin}, GitHub ${LINKS.github}, resume ${LINKS.resume}, RIS ${LINKS.ris}, Human Slop ${LINKS.humanSlop}, Human Slop app ${LINKS.humanSlopApp}, Electron-GNN ${LINKS.electronGnn}, Open-PyFX ${LINKS.openPyfx}, Lunar Crater Detection ${LINKS.crater}, AntennaNet ${LINKS.antenna}, Serenity ${LINKS.serenity}, publications ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
+Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, LinkedIn ${LINKS.linkedin}, GitHub ${LINKS.github}, resume ${LINKS.resume}, RIS ${LINKS.ris}, Human Slop ${LINKS.humanSlop}, Human Slop app ${LINKS.humanSlopApp}, Electron-GNN ${LINKS.electronGnn}, Open-PyFX ${LINKS.openPyfx}, Lunar Crater Detection ${LINKS.crater}, AntennaNet ${LINKS.antenna}, Serenity ${LINKS.serenity}, publications ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
 
   function includesAny(text, words) {
     return words.some(word => text.includes(word));
@@ -108,6 +112,9 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, LinkedIn ${LINKS.link
     }
     if (includesAny(q, ['amazon', 'ml challenge', 'qwen', 'vit', 'roberta'])) {
       return `Amazon ML Challenge: Vamsi placed in the top 3.5%, using Qwen 2-VL 7B and a ViT/RoBERTa two-tower model for multimodal price prediction.`;
+    }
+    if (includesAny(q, ['blog', 'post', 'write-up', 'writeup', 'article', 'world model', 'jepa', 'push-t', 'pusht'])) {
+      return `${FACTS.blog} Read it here: ${LINKS.blog}`;
     }
     if (includesAny(q, ['project', 'built', 'work'])) {
       return `${FACTS.projects} Ask for any project name and I can give the direct link if one exists.`;
@@ -168,7 +175,8 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, LinkedIn ${LINKS.link
   ctx.imageSmoothingEnabled = false;
 
   /* ================= SPRITE ================= */
-  const ASSET_ROOT = 'spirte resources/';
+  // Resolved against this script's own URL so pages in subfolders still find the sprites.
+  const ASSET_ROOT = new URL('spirte resources/', SCRIPT_URL).href;
   function loadSprite(src) {
     const img = new Image();
     img.src = src;
@@ -295,6 +303,7 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, LinkedIn ${LINKS.link
     about: 'Quick background and education.',
     experience: 'Research, startup work, and publications.',
     projects: 'Selected projects from the resume.',
+    blog: 'Build logs from the experiments folder.',
     skills: 'Technical stack and research tools.',
     achievements: 'Competition and academic highlights.',
     contact: 'Email, LinkedIn, GitHub, and resume.',

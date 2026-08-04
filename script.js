@@ -93,8 +93,11 @@
   }
 
   const navLinks = $$('.site-nav a');
+  // Only same-page anchors take part in scroll-spy; blog pages link out with paths.
   const sections = navLinks
-    .map(link => $(link.getAttribute('href')))
+    .map(link => link.getAttribute('href'))
+    .filter(href => href && href.startsWith('#'))
+    .map(href => $(href))
     .filter(Boolean);
 
   if ('IntersectionObserver' in window) {

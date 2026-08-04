@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I trained a world model on my laptop | Galaba Vamsi</title>
+  <meta name="description" content="Reproducing the LeWorldModel recipe at 1.9M parameters on an 8 GB laptop GPU: two loss terms, seven minutes of training, an emergent latent state space, and a planner that scored zero.">
+  <link rel="canonical" href="https://galabavamsi.github.io/portfolio/blog/jepa-world-model-pusht.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="I trained a world model on my laptop. It learned physics and still could not push a block.">
+  <meta property="og:description" content="Physical AI experiment 01: a 1.9M-parameter JEPA world model on Push-T, trained in seven minutes on an RTX 4070 laptop. What worked, what failed, and why data was the binding constraint.">
+  <meta property="og:image" content="https://galabavamsi.github.io/portfolio/blog/figures/01-jepa-pusht/01-architecture.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2315110d'/%3E%3Crect x='3' y='3' width='10' height='10' fill='%23d98938'/%3E%3Crect x='5' y='5' width='6' height='6' fill='%23f5e7d0'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css?v=blog-1">
+  <link rel="stylesheet" href="blog.css?v=blog-1">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html" aria-label="Galaba Vamsi home">GV</a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#projects">Projects</a>
+      <a href="index.html" class="active">Blog</a>
+      <a href="../index.html#skills">Skills</a>
+      <a href="../index.html#contact">Contact</a>
+    </nav>
+    <a class="header-link" href="../resume_vamsi.pdf" target="_blank" rel="noopener">Resume</a>
+  </header>
+
+  <div class="read-bar" aria-hidden="true"><span id="read-progress"></span></div>
+
+  <main>
+    <article>
+      <header class="post-head">
+        <a class="back-link" href="index.html">&lt;- All posts</a>
+        <p class="section-label">Physical AI / Experiment 01</p>
+        <h1 class="post-title">I trained a world model on my laptop. It learned physics and still could not push a block.</h1>
+        <p class="standfirst">
+          Both halves of that sentence are the point. In one day I went from reading about
+          world models to a trained, instrumented JEPA running on an 8 GB laptop GPU. It
+          learned real action-conditioned dynamics in seven minutes, and it scored exactly
+          zero on the task.
+        </p>
+        <ul class="post-meta">
+          <li>Aug 4, 2026</li>
+          <li>12 min read</li>
+          <li><span class="tag">Physical AI</span></li>
+          <li><span class="tag">JEPA</span></li>
+          <li><span class="tag">PyTorch</span></li>
+        </ul>
+      </header>
+
+      <div class="post-layout">
+        <aside class="post-toc" aria-label="Table of contents">
+          <p>On this page</p>
+          <ol>
+            <li><a href="#why">Why world models</a></li>
+            <li><a href="#recipe">The recipe</a></li>
+            <li><a href="#build">The build</a></li>
+            <li><a href="#stability">It trains without tricks</a></li>
+            <li><a href="#latents">State appears in the latents</a></li>
+            <li><a href="#actions">The model uses actions</a></li>
+            <li><a href="#generalization">Where it breaks</a></li>
+            <li><a href="#planning">The planner scores zero</a></li>
+            <li><a href="#lessons">Lessons and what is next</a></li>
+            <li><a href="#refs">References</a></li>
+          </ol>
+        </aside>
+
+        <div class="post-body">
+          <p class="lede">
+            A world model is a system that predicts how an environment will change under
+            your actions. It is the piece most people think is missing between today's
+            models and machines that act competently in the physical world, and it is the
+            thing I most wanted to understand by building rather than by reading.
+          </p>
+
+          <div class="stat-grid">
+            <div class="stat"><b>1,909,664</b><span>parameters</span></div>
+            <div class="stat"><b>7 min</b><span>training time</span></div>
+            <div class="stat"><b>8 GB</b><span>laptop RTX 4070</span></div>
+            <div class="stat"><b>0.000</b><span>planning coverage</span></div>
+          </div>
+
+          <h2 id="why">Why world models, and why JEPA</h2>
+
+          <p>
+            The two reference points in this space right now are both out of reach for an
+            individual. Meta's V-JEPA 2 plans robot manipulation from a video-pretrained
+            latent predictor. NVIDIA's Cosmos trains omnimodal world foundation models
+            across thousands of GPUs. Neither is something I can train.
+          </p>
+
+          <p>
+            What is reachable is the <em>mechanism</em>. A Joint-Embedding Predictive
+            Architecture predicts the <strong>representation</strong> of the next
+            observation rather than its pixels. That distinction matters more than it
+            sounds: a pixel predictor has to invent the exact texture of every surface it
+            has never seen, while an embedding predictor is allowed to throw unpredictable
+            detail away. LeCun proposed this as the foundation for autonomous machine
+            intelligence in 2022; I-JEPA instantiated it for images, V-JEPA for video, and
+            V-JEPA 2-AC added action conditioning for planning.
+          </p>
+
+          <p>
+            There is one classic way this fails. If the encoder maps every frame to the same
+            constant vector, prediction becomes trivially perfect and the representation is
+            worthless. This is <strong>representation collapse</strong>, and the historical
+            fixes are fiddly: EMA teacher networks, stop-gradients, variance and covariance
+            penalties. A lot of JEPA implementation difficulty is really collapse-avoidance
+            machinery.
+          </p>
+
+          <p>
+            LeJEPA replaced all of it with one idea: push the embedding distribution toward
+            an isotropic Gaussian. A collapsed embedding is maximally non-Gaussian, so the
+            regularizer rules collapse out by construction rather than by heuristic.
+            LeWorldModel then showed that this is enough to train an action-conditioned
+            world model end to end from pixels, at around 15M parameters on a single GPU.
+            That is the recipe I wanted to reproduce, shrunk to fit a laptop.
+          </p>
+
+          <h2 id="recipe">The recipe: two encoders, one predictor, two losses</h2>
+
+          <p>
+            The whole system is four small modules. A CNN encoder maps a 64&times;64 frame to
+            a 128-dimensional latent. A tiny MLP embeds the 2-D action. A residual MLP takes
+            the current latent plus the action embedding and predicts the next latent. There
+            is no decoder anywhere, because nothing ever has to be turned back into pixels.
+          </p>
+
+          <figure class="post-figure">
+            <img src="figures/01-jepa-pusht/01-architecture.png"
+                 alt="Architecture diagram: a frame goes through a CNN encoder to latent z_t; an action goes through an MLP; a predictor maps the pair to a predicted next latent, compared by MSE against the encoded real next frame, while SIGReg pushes embeddings toward an isotropic Gaussian."
+                 loading="lazy">
+            <figcaption>
+              <b>Figure 1.</b> Two encoders sharing weights, an action encoder, a residual-MLP
+              predictor, and two losses. Both losses attach to encoder outputs and everything
+              trains jointly.
+            </figcaption>
+          </figure>
+
+          <p>The objective is the part worth staring at:</p>
+
+          <div class="equation">
+            L = <span class="term">MSE(&#7825;<sub>t+1</sub>, z<sub>t+1</sub>)</span>
+            &nbsp;+&nbsp; 0.5 &middot; <span class="term">SIGReg(z)</span>
+            <small>Multi-step latent prediction error, plus one anti-collapse term. That is all of it.</small>
+          </div>
+
+          <p>
+            No EMA teacher. No stop-gradient, so gradients flow into the target branch too.
+            No pixel reconstruction. <code>SIGReg</code> implements the Epps-Pulley normality
+            test: latents are projected onto 64 random unit directions, and the empirical
+            characteristic function of each 1-D projection is matched against that of a
+            standard normal over 17 quadrature points. Prediction targets come from rolling
+            the predictor forward eight steps from a single starting latent, with no teacher
+            forcing.
+          </p>
+
+          <h2 id="build">The build: 160 episodes, one dependency fight, eight minutes</h2>
+
+          <p>
+            The environment is Push-T from the LeRobot benchmark, where a circular agent has
+            to push a T-shaped block onto a target zone. It is small enough to iterate on in
+            minutes but still has the two ingredients that make world modelling hard: contact
+            dynamics and a goal-conditioned reward.
+          </p>
+
+          <p>
+            I collected 160 episodes, 25,600 transitions, with a scripted mixture policy:
+            half smooth random walk, half noisy pursuit of the block so that collisions
+            actually happen. Frames were rendered at 96&times;96 and resized to 64&times;64.
+            Split was 144 training episodes against 16 held-out ones, so 23,184 training
+            frames and 2,576 validation frames.
+          </p>
+
+          <p>
+            One dependency fight is worth recording, because it cost more time than the
+            model did. <code>gym-pusht</code> 0.1.6 crashed on <code>reset()</code> with
+            <code>AttributeError: 'Space' object has no attribute 'add_collision_handler'</code>.
+            The environment targets the pymunk 6 API and pip had happily installed pymunk 7,
+            which removed that method. The entire fix:
+          </p>
+
+          <pre><code>pip install "pymunk&lt;7"</code></pre>
+
+          <p>After that, the full pipeline ran unattended:</p>
+
+          <pre><code>$py = ".\.venv\Scripts\python.exe"
+&amp; $py collect_data.py --episodes 160 --max-steps 160   <span class="c"># ~2 min</span>
+&amp; $py train.py --steps 15000 --run runs/run1           <span class="c"># ~7 min</span>
+&amp; $py viz.py --run runs/run1                           <span class="c"># diagnostics</span>
+&amp; $py plan.py --run runs/run1                          <span class="c"># CEM planning</span></code></pre>
+
+          <p>
+            Collect, train, visualise and plan: <strong>8.0 minutes end to end</strong> on an
+            RTX 4070 laptop with 8 GB of VRAM. Training ran 15,000 steps at 36.4 iterations
+            per second with batches of 64 eight-step clips in bf16, which works out to roughly
+            21,000 frame encodings per second.
+          </p>
+
+          <p>
+            I then asked the model four questions, each paired with a control. The controls
+            are the only reason I trust the answers.
+          </p>
+
+          <h2 id="stability">Result 1: it trains stably, without any of the tricks</h2>
+
+          <figure class="post-figure">
+            <img src="figures/01-jepa-pusht/02-training-diagnostics.png"
+                 alt="Three training curves: prediction loss falling to near zero while a shuffled-target control stays near two, SIGReg loss decreasing, and mean embedding standard deviation rising from 0.06 to about 1."
+                 loading="lazy">
+            <figcaption>
+              <b>Figure 2.</b> Prediction loss against a shuffled-target chance baseline,
+              the SIGReg term, and mean per-dimension embedding standard deviation.
+            </figcaption>
+          </figure>
+
+          <p>
+            Final prediction MSE was <strong>0.0009</strong>. The shuffled-target control,
+            where I score each prediction against a randomly chosen other clip's future,
+            sat at <strong>2.14</strong>. That is a factor of roughly 2,400, and it is the
+            number that tells me the predictor is tracking <em>which</em> future belongs to
+            <em>which</em> clip rather than learning the average frame.
+          </p>
+
+          <p>
+            Embedding standard deviation rose from 0.06 to <strong>1.02</strong> and held
+            there, which is the isotropic-Gaussian target. Collapse would have driven it to
+            zero. It never went near zero, on the first try, with no teacher network.
+          </p>
+
+          <p>
+            The two diagnostics also agree with each other, which is a check I like. For
+            128-dimensional latents distributed as a standard normal, the expected MSE
+            between two independent samples is about 2.0 per dimension. The shuffled control
+            settled at 2.14. The chance baseline and the Gaussianity target are consistent.
+          </p>
+
+          <p>
+            One honest wrinkle. When I looked at how Gaussian the latent space actually
+            became, random 1-D projections had mean &minus;0.02 and standard deviation 1.05,
+            so the first two moments were on target, but the distribution was peakier than a
+            normal with heavier tails, and the covariance spectrum had an
+            <strong>effective rank of 26 out of 128</strong>. The regularizer got the
+            marginals approximately right, while the prediction loss concentrated variance
+            into the couple of dozen directions that actually matter for dynamics. Perfect
+            isotropy was not reached and, for everything below, was not needed.
+          </p>
+
+          <h2 id="latents">Result 2: physical state appears in the latent space</h2>
+
+          <figure class="post-figure">
+            <img src="figures/01-jepa-pusht/03-latent-pca.png"
+                 alt="PCA scatter of latent embeddings, coloured by agent x-position, showing a smooth left-to-right colour gradient."
+                 loading="lazy">
+            <figcaption>
+              <b>Figure 3.</b> PCA of 4,000 frame latents coloured by agent x-position, a
+              variable the model was never given. The smooth gradient means the latent
+              organised itself around physical state.
+            </figcaption>
+          </figure>
+
+          <p>
+            The model only ever saw pixels and actions. It was never told where the agent
+            was. To quantify what it picked up anyway, I fit ridge probes on frozen training
+            latents and evaluated them on held-out episodes. Crucially, I ran the same probes
+            against an <strong>untrained encoder with random weights</strong>, because
+            random convolutional features are a notoriously strong basis for reading static
+            properties out of images.
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Probe target (val R&sup2;)</th><th>Trained encoder</th><th>Random-weight encoder</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Agent x-position</td><td class="win">0.589</td><td>0.044</td></tr>
+                <tr><td>Agent y-position</td><td class="win">0.168</td><td>0.089</td></tr>
+                <tr><td>Coverage reward</td><td>0.363</td><td class="win">0.590</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            Agent x-position went from R&sup2; 0.04 to 0.59, a 13-fold jump. That is the JEPA
+            promise working: predictive pretraining surfaced the action-driven state variable
+            with no state supervision at all.
+          </p>
+
+          <p>
+            The third row is why the control was worth running. Coverage, which is a static
+            visual property, decodes <em>better</em> from random features (0.59) than from
+            the trained latent (0.36). Predictive training compressed the representation
+            toward what is predictable and action-relevant, and discarded some static
+            appearance detail along the way. Had I reported only the trained-encoder column,
+            I would have claimed a general-purpose representation. It is not one. It is a
+            representation of the things the model needed in order to predict.
+          </p>
+
+          <h2 id="actions">Result 3: the predictor genuinely uses the actions</h2>
+
+          <p>
+            An action-conditioned model that quietly ignores its actions is a real failure
+            mode, and it hides well because the loss still goes down. Push-T frames change
+            slowly, so "assume nothing moves" is a genuinely competitive prediction. To test
+            this I rolled out 128 held-out clips three ways: with the true actions, with
+            actions zeroed, and with actions swapped in from a different clip.
+          </p>
+
+          <figure class="post-figure">
+            <img src="figures/01-jepa-pusht/04-action-ablation.png"
+                 alt="Rollout error curves comparing true actions, zeroed actions, shuffled actions, and a frozen-latent baseline across prediction horizons."
+                 loading="lazy">
+            <figcaption>
+              <b>Figure 4.</b> Open-loop rollout error on 128 held-out clips under action
+              corruption, with the frozen-latent baseline for reference.
+            </figcaption>
+          </figure>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Latent MSE</th><th>h=1</th><th>h=4</th><th>h=8</th><th>h=16</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>True actions</td><td class="win">0.015</td><td class="win">0.096</td><td class="win">0.236</td><td class="win">0.348</td></tr>
+                <tr><td>Zeroed actions</td><td>0.041</td><td>0.232</td><td>0.399</td><td>0.435</td></tr>
+                <tr><td>Shuffled actions</td><td>0.043</td><td>0.339</td><td>0.623</td><td>0.772</td></tr>
+                <tr><td>Frozen-latent baseline</td><td>0.010</td><td>0.052</td><td>0.140</td><td>0.227</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            The ordering is exactly what a working action-conditioned model produces. Wrong
+            actions hurt more than no actions, because zeroed actions read as "stay still",
+            which is a plausible prior here, while shuffled actions actively point the
+            prediction somewhere false. Both hurt far more than the truth, by a factor of
+            2.4 to 3.5 at a four-step horizon. The model is routing control input into its
+            predictions rather than behaving as a passive video prior.
+          </p>
+
+          <h2 id="generalization">Result 4: it does not generalise, and that is the whole story</h2>
+
+          <p>
+            Look at the bottom row of that table again. The frozen-latent baseline, which
+            predicts that the scene simply does not change, beats my model at every horizon
+            on held-out data.
+          </p>
+
+          <figure class="post-figure">
+            <img src="figures/01-jepa-pusht/05-horizon-error.png"
+                 alt="Line chart where world-model rollout error rises above the frozen-latent baseline after about two prediction steps."
+                 loading="lazy">
+            <figcaption>
+              <b>Figure 5.</b> On held-out episodes, rollout error crosses above the
+              "nothing moves" baseline after roughly two steps.
+            </figcaption>
+          </figure>
+
+          <p>
+            The two numbers to hold side by side: rollout error on training data was 0.0009,
+            and on held-out episodes at the same horizon it was about <strong>0.24</strong>.
+            The model has largely memorised the dynamics of its 144 training episodes. It has
+            not learned dynamics that transfer to 16 new ones.
+          </p>
+
+          <figure class="post-figure dark">
+            <img src="figures/01-jepa-pusht/06-rollout-strip.png"
+                 alt="Two rows of frames: real future frames on top, nearest-neighbour decodings of predicted latents below."
+                 loading="lazy">
+            <figcaption>
+              <b>Figure 6.</b> Watching the model imagine. Predicted latents decoded by
+              nearest-neighbour lookup (bottom) against the real future (top). The scene
+              roughly tracks, but block pose flickers.
+            </figcaption>
+          </figure>
+
+          <div class="callout">
+            <span class="callout-label">Why the honest framing matters</span>
+            <p>
+              Without the shuffled-target control, Figure 2 would look like generic
+              loss-goes-down. Without the random-encoder probe, Figure 3 would look like a
+              general-purpose representation. Without the frozen-latent baseline, Figure 5
+              would look like success. Every conclusion in this post flipped or narrowed
+              because of a control, and controls cost minutes at this scale.
+            </p>
+          </div>
+
+          <h2 id="planning">The planner: zero coverage, two identifiable causes</h2>
+
+          <p>
+            The reason to build a world model is to plan with it. I implemented
+            model-predictive control with the Cross-Entropy Method: 256 candidate action
+            sequences per step, 32 elites, four refinement iterations, an eight-step horizon,
+            replanned at every environment step. The cost is the latent distance between the
+            predicted future and the latent of a goal image.
+          </p>
+
+          <figure class="post-figure dark pixel">
+            <img src="figures/01-jepa-pusht/07-plan.gif"
+                 alt="Animation of the planner moving the agent around the Push-T arena without ever pushing the block onto the target zone."
+                 loading="lazy">
+            <figcaption>
+              <b>Figure 7.</b> 150 steps of CEM planning in latent space. The agent moves.
+              The block is never pushed onto the target. Max coverage: <b>0.000</b>.
+            </figcaption>
+          </figure>
+
+          <p>
+            Zero. Not a low score, an absent one. Two mechanisms explain it, and both were
+            already visible in earlier diagnostics.
+          </p>
+
+          <p>
+            <strong>The training data contains almost no goal-directed pushing.</strong> Mean
+            per-episode maximum coverage across the dataset was 0.195, and most episodes never
+            approach the goal at all. A world model cannot plan through dynamics it has never
+            observed, and the generalisation gap from the previous section compounds at every
+            replanning step.
+          </p>
+
+          <p>
+            <strong>The cost function is partially satisfiable without touching the block.</strong>
+            My goal image contains an agent somewhere. Moving my agent to that position lowers
+            the latent distance at zero pushing cost, so the planner parks the agent and
+            declares victory. It optimised exactly what I wrote down. This is a miniature
+            version of the goal-specification problems reported for image-goal MPC systems at
+            far larger scale.
+          </p>
+
+          <p>
+            I am reporting this as a baseline rather than a defect. It is the measurement that
+            makes the next experiment falsifiable: collect scripted pushing data, and either
+            coverage moves or my explanation was wrong.
+          </p>
+
+          <div class="callout">
+            <span class="callout-label">Scope</span>
+            <p>
+              This is a mechanism reproduction, not a benchmark result. LeWorldModel reports
+              around 94% Push-T success using expert demonstrations, a roughly 15M-parameter
+              model and a tuned planner. My run is 1.9M parameters on 25,600 self-collected
+              transitions from a random-ish policy. The numbers here are not comparable to
+              the paper's, and are not meant to be.
+            </p>
+          </div>
+
+          <h2 id="lessons">Lessons, and what is next</h2>
+
+          <p>
+            <strong>The barrier to entry is not compute.</strong> Two loss terms, 1.9M
+            parameters, seven minutes, 8 GB, working on the first try. The hard parts of
+            world-model research turned out to be data and evaluation discipline, not
+            architecture or hardware.
+          </p>
+
+          <p>
+            <strong>Representation quality, dynamics generalisation and planning competence
+            are three different things.</strong> This experiment cleanly separated them: state
+            is encoded, actions are used, and yet held-out prediction and planning both fail.
+            Each one needed its own measurement, and success on one told me nothing about the
+            others.
+          </p>
+
+          <p>
+            <strong>Every failure traced back to the same cause.</strong> Corner-heavy state
+            coverage, near-zero goal coverage, 144 episodes of dynamics. Data was the binding
+            constraint, and data collection runs at about 80 episodes per minute on this
+            machine, which makes the next steps cheap.
+          </p>
+
+          <p>Ordered by expected information per hour:</p>
+
+          <ol>
+            <li>
+              <strong>Ten times the data</strong>, roughly 25 minutes of collection, then
+              re-measure the held-out horizon curve. This directly falsifies the claim that
+              data is the bottleneck.
+            </li>
+            <li>
+              <strong>A scripted pushing policy, then replan.</strong> Tests cause one of the
+              planning failure. An agent-free goal image tests cause two.
+            </li>
+            <li>
+              <strong>Sweep the regularizer weight and projection count</strong> to map
+              effective rank against generalisation.
+            </li>
+            <li>
+              <strong>Fuse proprioception with modality dropout.</strong> Agent position is
+              already stored per step, so this is a small change, and it is the on-ramp to
+              the multimodal sensor world models I actually want to work on.
+            </li>
+            <li>
+              <strong>Move to benchmarked infrastructure</strong> for standardised baselines
+              and solvers instead of my own harness.
+            </li>
+          </ol>
+
+          <p>
+            The thing I did not expect going in was how much of the value came from the
+            controls rather than the model. The model took an afternoon. Knowing which of its
+            apparent successes were real took the instrumentation, and that is the part I am
+            keeping for the next experiment.
+          </p>
+
+          <h2 id="refs">References</h2>
+
+          <ul class="ref-list">
+            <li>[1] Maes, L. et al. <em>LeWorldModel: Stable End-to-End Joint-Embedding Predictive Architecture from Pixels.</em> 2026. <a href="https://arxiv.org/abs/2603.19312" target="_blank" rel="noopener">arXiv:2603.19312</a> &middot; <a href="https://github.com/lucas-maes/le-wm" target="_blank" rel="noopener">code</a></li>
+            <li>[2] Balestriero, R. &amp; LeCun, Y. <em>LeJEPA: Provable and Scalable Self-Supervised Learning Without the Heuristics.</em> 2025. <a href="https://arxiv.org/abs/2511.08544" target="_blank" rel="noopener">arXiv:2511.08544</a></li>
+            <li>[3] Assran, M. et al. <em>V-JEPA 2: Self-Supervised Video Models Enable Understanding, Prediction and Planning.</em> 2025. <a href="https://arxiv.org/abs/2506.09985" target="_blank" rel="noopener">arXiv:2506.09985</a></li>
+            <li>[4] Assran, M. et al. <em>Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture (I-JEPA).</em> CVPR 2023. <a href="https://arxiv.org/abs/2301.08243" target="_blank" rel="noopener">arXiv:2301.08243</a></li>
+            <li>[5] LeCun, Y. <em>A Path Towards Autonomous Machine Intelligence.</em> 2022. <a href="https://openreview.net/forum?id=BZ5a1r-kVsf" target="_blank" rel="noopener">OpenReview</a></li>
+            <li>[6] Hafner, D. et al. <em>Mastering Diverse Domains through World Models (DreamerV3).</em> <a href="https://github.com/danijar/dreamerv3" target="_blank" rel="noopener">code</a></li>
+            <li>[7] Push-T environment, from LeRobot. <a href="https://github.com/huggingface/gym-pusht" target="_blank" rel="noopener">gym-pusht</a></li>
+          </ul>
+
+          <div class="post-end">
+            <h2>Setup, in full</h2>
+            <p>
+              Encoder: four convolution blocks (stride 2, GroupNorm, SiLU) into a 128-d
+              linear projection. Action encoder: two-layer MLP to 64-d. Predictor: residual
+              MLP, three hidden layers of 512. AdamW at 3e-4 with 500 warmup steps, weight
+              decay 1e-4, gradient clipping at 1.0, bf16 autocast with losses in fp32.
+              SIGReg weight 0.5, 64 projections, 17 quadrature points. Python 3.12.4,
+              PyTorch 2.13.0+cu126, gymnasium 1.3.0, gym-pusht 0.1.6, pymunk 6.11.1.
+              Single seed, single environment, single hyperparameter setting, no error bars.
+            </p>
+            <div class="hero-actions">
+              <a class="btn primary" href="index.html">More build logs</a>
+              <a class="btn" href="../index.html#projects">See projects</a>
+              <a class="btn" href="mailto:galabavamsi12@gmail.com">Email me</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <p>(c) 2026 Galaba Vamsi. Built with care, pixels, and plain language.</p>
+  </footer>
+
+  <script src="../config.js?v=blog-1"></script>
+  <script src="../script.js?v=blog-1"></script>
+  <script src="blog.js?v=blog-1"></script>
+  <script src="../pet.js?v=blog-1"></script>
+</body>
+</html>

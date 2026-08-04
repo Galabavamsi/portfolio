@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | Galaba Vamsi</title>
+  <meta name="description" content="Build logs and experiment write-ups by Galaba Vamsi on world models, physical AI, computer vision, and systems work.">
+  <link rel="canonical" href="https://galabavamsi.github.io/portfolio/blog/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2315110d'/%3E%3Crect x='3' y='3' width='10' height='10' fill='%23d98938'/%3E%3Crect x='5' y='5' width='6' height='6' fill='%23f5e7d0'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css?v=blog-1">
+  <link rel="stylesheet" href="blog.css?v=blog-1">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html" aria-label="Galaba Vamsi home">GV</a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#projects">Projects</a>
+      <a href="index.html" class="active" aria-current="page">Blog</a>
+      <a href="../index.html#skills">Skills</a>
+      <a href="../index.html#contact">Contact</a>
+    </nav>
+    <a class="header-link" href="../resume_vamsi.pdf" target="_blank" rel="noopener">Resume</a>
+  </header>
+
+  <main>
+    <section class="page-head reveal">
+      <a class="back-link" href="../index.html">&lt;- Back to portfolio</a>
+      <p class="section-label">Blog</p>
+      <h1>Build logs</h1>
+      <p class="hero-lead">
+        Write-ups from my experiments folder. One post per experiment: what I set out to
+        test, the exact numbers I measured, and the parts that did not work. Failures get
+        the same space as results, because that is where the useful information is.
+      </p>
+    </section>
+
+    <div class="post-list">
+      <a class="post-card reveal" href="jepa-world-model-pusht.html">
+        <figure class="card-thumb">
+          <img src="figures/01-jepa-pusht/03-latent-pca.png"
+               alt="PCA scatter plot of latent embeddings showing a smooth colour gradient by agent x-position."
+               loading="lazy">
+        </figure>
+        <ul class="post-meta">
+          <li>Aug 4, 2026</li>
+          <li>12 min read</li>
+          <li><span class="tag">Physical AI</span></li>
+          <li><span class="tag">JEPA</span></li>
+          <li><span class="tag">PyTorch</span></li>
+        </ul>
+        <h3>I trained a world model on my laptop. It learned physics and still could not push a block.</h3>
+        <p>
+          Experiment 01: reproducing the LeWorldModel recipe at 1.9M parameters on an 8 GB
+          laptop GPU. Two loss terms, seven minutes of training, a latent space that
+          organises itself around physical state, and a planner that scores exactly zero.
+        </p>
+        <p class="card-cta">Read the write-up -&gt;</p>
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    <p>(c) 2026 Galaba Vamsi. Built with care, pixels, and plain language.</p>
+  </footer>
+
+  <script src="../config.js?v=blog-1"></script>
+  <script src="../script.js?v=blog-1"></script>
+  <script src="../pet.js?v=blog-1"></script>
+</body>
+</html>
