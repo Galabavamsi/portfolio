@@ -33,6 +33,7 @@
     hflowPr353: 'https://github.com/Hebbian-Robotics/hflow/pull/353',
     hflowPr360: 'https://github.com/Hebbian-Robotics/hflow/pull/360',
     hflowPr362: 'https://github.com/Hebbian-Robotics/hflow/pull/362',
+    hflowPr367: 'https://github.com/Hebbian-Robotics/hflow/pull/367',
     hflowIssue365: 'https://github.com/Hebbian-Robotics/hflow/issues/365',
     robocurve: 'https://robocurve.org/',
     robocurveYc: 'https://www.ycombinator.com/companies/robocurve',
@@ -57,7 +58,7 @@
     summary: 'Galaba Vamsi is a B.Tech Mechatronics student at IIT Bhilai, graduating in May 2027. He works across software engineering, full-stack products, AI/ML, computer vision, wireless systems, GPU shader programming, and cloud infrastructure.',
     experience: 'Research Intern at IIT Bhilai from May to Aug 2025 under Dr. Arzad Alam. He built an open-source 6G RIS simulator, emulated USRP workflows for LoS/NLoS environments, reduced hardware costs, and designed a two-layer RIS PCB workflow for RF energy harvesting research.',
     swiggy: 'Vamsi was a Marketing Intern at Swiggy Ltd for the Campus CEO project from May to July 2024. He managed a campaign with 15 social media posts and contributed to campus marketing initiatives and execution.',
-    hflow: 'Hebbian Robotics (YC S26) is the organization behind HFlow, an open-source robotics data processing and evaluation framework. In 2026, Vamsi contributed 4 maintainer-reviewed and merged pull requests: #350, #353, #360, and #362. PR #362 matched saved EgoSuite labels by HFlow source provenance. Issue #365, improving cold camera_frame_stats throughput on 1080p video without weakening per-frame evidence, was accepted and is in progress. HFlow: ' + LINKS.hflow + '. PRs: ' + LINKS.hflowPr350 + ', ' + LINKS.hflowPr353 + ', ' + LINKS.hflowPr360 + ', ' + LINKS.hflowPr362 + '. Issue: ' + LINKS.hflowIssue365 + '.',
+    hflow: 'Hebbian Robotics (YC S26) is the organization behind HFlow, an open-source robotics data processing and evaluation framework. In 2026, Vamsi contributed 5 maintainer-reviewed and merged pull requests: #350, #353, #360, #362, and #367. PR #367 resolved HFlow issue #365 by adding a reproducible cold camera_frame_stats evidence benchmark with separate transform timing, fresh episode workdirs, and FFmpeg/CPU provenance reporting, without changing the shipped filter graph. HFlow: ' + LINKS.hflow + '. PRs: ' + LINKS.hflowPr350 + ', ' + LINKS.hflowPr353 + ', ' + LINKS.hflowPr360 + ', ' + LINKS.hflowPr362 + ', ' + LINKS.hflowPr367 + '. Issue: ' + LINKS.hflowIssue365 + '.',
     robocurve: 'Robocurve is an active YC Summer 2026 company in San Francisco and a Public Benefit Corporation building open-source tools and independent benchmarks for physical AI. Website: ' + LINKS.robocurve + '. YC: ' + LINKS.robocurveYc + '.',
     inspectRobots: 'Inspect Robots is Robocurve\'s MIT-licensed open-source evaluation framework for physical AI. It runs policies on real or simulated embodiments with auditable logs and Rerun visualization. Repository: ' + LINKS.inspectRobots + '.',
     inspectRobotsContribution: 'Vamsi has an open pull request awaiting approval on Inspect Robots: PR #434 adds a first-party inspect-robots-wandb plugin with a WandbSink for recording evaluation configuration and final aggregate metrics in one Weights & Biases run per evaluation. PR: ' + LINKS.inspectRobotsPr434 + '.',
@@ -82,7 +83,7 @@ STYLE RULES:
 
 FACTS:
 ${Object.values(FACTS).join('\n')}
-Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, LinkedIn ${LINKS.linkedin}, GitHub ${LINKS.github}, resume ${LINKS.resume}, HFlow ${LINKS.hflow}, HFlow PRs ${LINKS.hflowPr350}, ${LINKS.hflowPr353}, ${LINKS.hflowPr360}, ${LINKS.hflowPr362}, HFlow issue ${LINKS.hflowIssue365}, Robocurve ${LINKS.robocurve}, Robocurve YC ${LINKS.robocurveYc}, inspect-robots ${LINKS.inspectRobots}, inspect-robots PR ${LINKS.inspectRobotsPr434}, RIS ${LINKS.ris}, Human Slop ${LINKS.humanSlop}, Human Slop app ${LINKS.humanSlopApp}, Human Slop GitHub ${LINKS.humanSlopGithub}, Arista slides ${LINKS.aristaSlides}, Electron-GNN ${LINKS.electronGnn}, Open-PyFX ${LINKS.openPyfx}, Lunar Crater Detection ${LINKS.crater}, AntennaNet ${LINKS.antenna}, Serenity ${LINKS.serenity}, publications ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
+Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, LinkedIn ${LINKS.linkedin}, GitHub ${LINKS.github}, resume ${LINKS.resume}, HFlow ${LINKS.hflow}, HFlow PRs ${LINKS.hflowPr350}, ${LINKS.hflowPr353}, ${LINKS.hflowPr360}, ${LINKS.hflowPr362}, ${LINKS.hflowPr367}, HFlow issue ${LINKS.hflowIssue365}, Robocurve ${LINKS.robocurve}, Robocurve YC ${LINKS.robocurveYc}, inspect-robots ${LINKS.inspectRobots}, inspect-robots PR ${LINKS.inspectRobotsPr434}, RIS ${LINKS.ris}, Human Slop ${LINKS.humanSlop}, Human Slop app ${LINKS.humanSlopApp}, Human Slop GitHub ${LINKS.humanSlopGithub}, Arista slides ${LINKS.aristaSlides}, Electron-GNN ${LINKS.electronGnn}, Open-PyFX ${LINKS.openPyfx}, Lunar Crater Detection ${LINKS.crater}, AntennaNet ${LINKS.antenna}, Serenity ${LINKS.serenity}, publications ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
 
   function includesAny(text, words) {
     return words.some(word => text.includes(word));
@@ -91,7 +92,7 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, L
   function localAnswer(question) {
     const q = question.toLowerCase();
 
-    if (includesAny(q, ['hflow', 'hebbian robotics', '#350', '#353', '#360', '#362', '#365']) || (q.includes('hebbian') && !q.includes('learning'))) {
+    if (includesAny(q, ['hflow', 'hebbian robotics', '#350', '#353', '#360', '#362', '#365', '#367']) || (q.includes('hebbian') && !q.includes('learning'))) {
       return `If you mean Hebbian Robotics: ${FACTS.hflow}`;
     }
     if (includesAny(q, ['robocurve', 'yc summer 2026', 'public benefit'])) {
