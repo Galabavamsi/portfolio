@@ -34,7 +34,9 @@
     hflowPr360: 'https://github.com/Hebbian-Robotics/hflow/pull/360',
     hflowPr362: 'https://github.com/Hebbian-Robotics/hflow/pull/362',
     hflowPr367: 'https://github.com/Hebbian-Robotics/hflow/pull/367',
+    hflowPr400: 'https://github.com/Hebbian-Robotics/hflow/pull/400',
     hflowIssue365: 'https://github.com/Hebbian-Robotics/hflow/issues/365',
+    hflowIssue399: 'https://github.com/Hebbian-Robotics/hflow/issues/399',
     robocurve: 'https://robocurve.org/',
     robocurveYc: 'https://www.ycombinator.com/companies/robocurve',
     inspectRobots: 'https://github.com/robocurve/inspect-robots',
@@ -48,6 +50,12 @@
     crater: 'https://github.com/Galabavamsi/Moon-Crater-Detection-using-DEM',
     antenna: 'https://github.com/Galabavamsi/Antenna-Net',
     serenity: 'https://github.com/Galabavamsi/Serenity',
+    charter: 'https://github.com/Galabavamsi/charter',
+    charterEvaluator: 'https://core-api-production-087b.up.railway.app',
+    digitalTwin: 'https://github.com/Galabavamsi/pneumatic-sorting-digital-twin',
+    heatcast: 'https://github.com/Galabavamsi/heatcast',
+    heatcastDemo: 'https://web-pearl-ten-99.vercel.app',
+    pondPlanning: 'https://github.com/Galabavamsi/ai-village-pond-planning',
     blog: 'https://galabavamsi.github.io/portfolio/blog/',
     openEmulator: 'https://drive.google.com/file/d/12oDPsflaUXKnSjfA3247HgFDDf4bJkCP/view?usp=drive_link',
     risEnergy: 'https://ieeexplore.ieee.org/abstract/document/11392908/',
@@ -58,13 +66,17 @@
     summary: 'Galaba Vamsi is a B.Tech Mechatronics student at IIT Bhilai, graduating in May 2027. He works across software engineering, full-stack products, AI/ML, computer vision, wireless systems, GPU shader programming, and cloud infrastructure.',
     experience: 'Research Intern at IIT Bhilai from May to Aug 2025 under Dr. Arzad Alam. He built an open-source 6G RIS simulator, emulated USRP workflows for LoS/NLoS environments, reduced hardware costs, and designed a two-layer RIS PCB workflow for RF energy harvesting research.',
     swiggy: 'Vamsi was a Marketing Intern at Swiggy Ltd for the Campus CEO project from May to July 2024. He managed a campaign with 15 social media posts and contributed to campus marketing initiatives and execution.',
-    hflow: 'Hebbian Robotics (YC S26) is the organization behind HFlow, an open-source robotics data processing and evaluation framework. In 2026, Vamsi contributed 5 maintainer-reviewed and merged pull requests: #350, #353, #360, #362, and #367. PR #367 resolved HFlow issue #365 by adding a reproducible cold camera_frame_stats evidence benchmark with separate transform timing, fresh episode workdirs, and FFmpeg/CPU provenance reporting, without changing the shipped filter graph. HFlow: ' + LINKS.hflow + '. PRs: ' + LINKS.hflowPr350 + ', ' + LINKS.hflowPr353 + ', ' + LINKS.hflowPr360 + ', ' + LINKS.hflowPr362 + ', ' + LINKS.hflowPr367 + '. Issue: ' + LINKS.hflowIssue365 + '.',
+    hflow: 'Hebbian Robotics (YC S26) is the organization behind HFlow, an open-source robotics data processing and evaluation framework. In 2026, Vamsi contributed 6 maintainer-reviewed and merged pull requests: #350, #353, #360, #362, #367, and #400. PR #400 resolved HFlow issue #399 by refusing LeRobot depth videos before conversion when depth markers are present, preserving the existing RGB path and preventing loss of 12-bit depth semantics. PR #367 resolved HFlow issue #365 by adding a reproducible cold camera_frame_stats evidence benchmark with separate transform timing, fresh episode workdirs, and FFmpeg/CPU provenance reporting, without changing the shipped filter graph. HFlow: ' + LINKS.hflow + '. PRs: ' + LINKS.hflowPr350 + ', ' + LINKS.hflowPr353 + ', ' + LINKS.hflowPr360 + ', ' + LINKS.hflowPr362 + ', ' + LINKS.hflowPr367 + ', ' + LINKS.hflowPr400 + '. Issues: ' + LINKS.hflowIssue365 + ', ' + LINKS.hflowIssue399 + '.',
     robocurve: 'Robocurve is an active YC Summer 2026 company in San Francisco and a Public Benefit Corporation building open-source tools and independent benchmarks for physical AI. Website: ' + LINKS.robocurve + '. YC: ' + LINKS.robocurveYc + '.',
     inspectRobots: 'Inspect Robots is Robocurve\'s MIT-licensed open-source evaluation framework for physical AI. It runs policies on real or simulated embodiments with auditable logs and Rerun visualization. Repository: ' + LINKS.inspectRobots + '.',
     inspectRobotsContribution: 'Vamsi has an open pull request awaiting approval on Inspect Robots: PR #434 adds a first-party inspect-robots-wandb plugin with a WandbSink for recording evaluation configuration and final aggregate metrics in one Weights & Biases run per evaluation. PR: ' + LINKS.inspectRobotsPr434 + '.',
     humanSlop: 'Human Slop is an anti-AI social platform Vamsi co-founded in 2026 and continues to build. It uses React, PostgreSQL, AWS, hardware-bound biometric authentication, and real-time typing forensics to defend against synthetic content.',
     arista: 'For the Arista Networks Wi-Fi Optimization challenge at Inter IIT Tech Meet 14.0, Vamsi built a client-aware Wi-Fi RRM system in NS-3 using 3 RF metrics, 5 ms / 100,000-sample I/Q captures, 16-class Dual-CNN inference, and a 5-AP / 50-client topology with IEEE 802.11k/v. The team ranked 5th. Slides: ' + LINKS.aristaSlides,
-    projects: 'Selected projects: Arista Wi-Fi Optimization, Human Slop, Electron-GNN, Open-PyFX, Lunar Crater Detection, AntennaNet, Amazon ML Challenge, Serenity, and the RIS simulator. Arista details: 3 RF metrics, 100,000-sample I/Q captures, 16 classes, 5 access points, and 50 client stations.',
+    charter: 'Charter is an agentic commerce prototype for the Razorpay AI Buildathon Track 01. Chat, voice, and MCP share a bounded commerce core with frozen Razorpay test-mode quotes, audit trails, and fail-closed payment handling. GitHub: ' + LINKS.charter + '. Evaluator: ' + LINKS.charterEvaluator + '.',
+    digitalTwin: 'The Pneumatic Sorting Digital Twin is an open-source Unity workspace for modular electropneumatic automation. It covers offline sorting and stamping kits with simulated axes, HMI flows, telemetry, and replay. GitHub: ' + LINKS.digitalTwin + '.',
+    heatcast: 'HeatCast is a neighborhood heat-planning scorecard for US planners combining FortyGuard thermal maps, heat exceedance and streak analysis, vulnerability data, indoor sites, walking routes, and planning tools. GitHub: ' + LINKS.heatcast + '. Demo: ' + LINKS.heatcastDemo + '.',
+    pondPlanning: 'AI Village Pond Planning is a terrain-only backend API that turns contour maps into pond-site and catchment recommendations using metric projection, elevation-grid interpolation, D8 flow routing, and GeoJSON outputs. GitHub: ' + LINKS.pondPlanning + '.',
+    projects: 'Selected projects: Arista Wi-Fi Optimization, Human Slop, Charter, Pneumatic Sorting Digital Twin, HeatCast, AI Village Pond Planning, Electron-GNN, Open-PyFX, Lunar Crater Detection, AntennaNet, Amazon ML Challenge, Serenity, and the RIS simulator. Ask for any project name for its direct link.',
     skills: 'Languages: Python, C/C++, TypeScript, JavaScript, SQL, GLSL, CUDA. AI/ML: PyTorch, GATv2, Safe RL, Transformers, OpenCV, CuPy, NumPy. Software and systems: React, React Native, Flutter, FastAPI, Node.js, REST APIs, WebSockets, PostgreSQL, AWS, Supabase, Docker, ROS 2, Gazebo, MEEP, OpenMPI, SDR/USRP. Developer tools: Git, Linux, GitHub Actions, CI/CD, pytest, Ruff, ty, static analysis, and regression testing.',
     education: 'Education: B.Tech in Mechatronics at IIT Bhilai, Aug 2023 to May 2027. Coursework includes DSA, OOP, deep learning for computer vision, AI/ML, digital image processing, and optimal control.',
     achievements: 'Highlights: 1st place IIT Bhilai Web Development Competition, YC Startup School, 5th rank Inter IIT Tech Meet Arista challenge, top 3.5% Amazon ML Challenge, top 1% JEE Advanced, top 10 Toyota Hackathon, 95% Class 12, and 94% Class 10.',
@@ -83,7 +95,7 @@ STYLE RULES:
 
 FACTS:
 ${Object.values(FACTS).join('\n')}
-Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, LinkedIn ${LINKS.linkedin}, GitHub ${LINKS.github}, resume ${LINKS.resume}, HFlow ${LINKS.hflow}, HFlow PRs ${LINKS.hflowPr350}, ${LINKS.hflowPr353}, ${LINKS.hflowPr360}, ${LINKS.hflowPr362}, ${LINKS.hflowPr367}, HFlow issue ${LINKS.hflowIssue365}, Robocurve ${LINKS.robocurve}, Robocurve YC ${LINKS.robocurveYc}, inspect-robots ${LINKS.inspectRobots}, inspect-robots PR ${LINKS.inspectRobotsPr434}, RIS ${LINKS.ris}, Human Slop ${LINKS.humanSlop}, Human Slop app ${LINKS.humanSlopApp}, Human Slop GitHub ${LINKS.humanSlopGithub}, Arista slides ${LINKS.aristaSlides}, Electron-GNN ${LINKS.electronGnn}, Open-PyFX ${LINKS.openPyfx}, Lunar Crater Detection ${LINKS.crater}, AntennaNet ${LINKS.antenna}, Serenity ${LINKS.serenity}, publications ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
+Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, LinkedIn ${LINKS.linkedin}, GitHub ${LINKS.github}, resume ${LINKS.resume}, HFlow ${LINKS.hflow}, HFlow PRs ${LINKS.hflowPr350}, ${LINKS.hflowPr353}, ${LINKS.hflowPr360}, ${LINKS.hflowPr362}, ${LINKS.hflowPr367}, ${LINKS.hflowPr400}, HFlow issues ${LINKS.hflowIssue365}, ${LINKS.hflowIssue399}, Robocurve ${LINKS.robocurve}, Robocurve YC ${LINKS.robocurveYc}, inspect-robots ${LINKS.inspectRobots}, inspect-robots PR ${LINKS.inspectRobotsPr434}, RIS ${LINKS.ris}, Human Slop ${LINKS.humanSlop}, Human Slop app ${LINKS.humanSlopApp}, Human Slop GitHub ${LINKS.humanSlopGithub}, Charter ${LINKS.charter}, Charter evaluator ${LINKS.charterEvaluator}, digital twin ${LINKS.digitalTwin}, HeatCast ${LINKS.heatcast}, HeatCast demo ${LINKS.heatcastDemo}, pond planning ${LINKS.pondPlanning}, Arista slides ${LINKS.aristaSlides}, Electron-GNN ${LINKS.electronGnn}, Open-PyFX ${LINKS.openPyfx}, Lunar Crater Detection ${LINKS.crater}, AntennaNet ${LINKS.antenna}, Serenity ${LINKS.serenity}, publications ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
 
   function includesAny(text, words) {
     return words.some(word => text.includes(word));
@@ -92,8 +104,20 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, L
   function localAnswer(question) {
     const q = question.toLowerCase();
 
-    if (includesAny(q, ['hflow', 'hebbian robotics', '#350', '#353', '#360', '#362', '#365', '#367']) || (q.includes('hebbian') && !q.includes('learning'))) {
+    if (includesAny(q, ['hflow', 'hebbian robotics', '#350', '#353', '#360', '#362', '#365', '#367', '#399', '#400']) || (q.includes('hebbian') && !q.includes('learning'))) {
       return `If you mean Hebbian Robotics: ${FACTS.hflow}`;
+    }
+    if (includesAny(q, ['charter', 'razorpay', 'agentic commerce', 'mcp'])) {
+      return FACTS.charter;
+    }
+    if (includesAny(q, ['digital twin', 'pneumatic', 'sorting', 'stamping', 'unity'])) {
+      return FACTS.digitalTwin;
+    }
+    if (includesAny(q, ['heatcast', 'heat scorecard', 'fortyguard', 'heat planner'])) {
+      return FACTS.heatcast;
+    }
+    if (includesAny(q, ['pond planning', 'pond', 'catchment', 'contour map'])) {
+      return FACTS.pondPlanning;
     }
     if (includesAny(q, ['robocurve', 'yc summer 2026', 'public benefit'])) {
       return `${FACTS.robocurve} ${FACTS.inspectRobots} PR #434: ${LINKS.inspectRobotsPr434}`;
@@ -105,7 +129,7 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, L
       return FACTS.swiggy;
     }
     if (includesAny(q, ['link', 'github', 'linkedin', 'portfolio'])) {
-      return `Resume links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, LinkedIn ${LINKS.linkedin}, GitHub ${LINKS.github}, resume ${LINKS.resume}, HFlow ${LINKS.hflow}, Human Slop ${LINKS.humanSlop}, app ${LINKS.humanSlopApp}, Human Slop GitHub ${LINKS.humanSlopGithub}, Arista slides ${LINKS.aristaSlides}, Electron-GNN ${LINKS.electronGnn}, Open-PyFX ${LINKS.openPyfx}, crater detection ${LINKS.crater}, AntennaNet ${LINKS.antenna}, Serenity ${LINKS.serenity}, papers ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
+      return `Resume links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, LinkedIn ${LINKS.linkedin}, GitHub ${LINKS.github}, resume ${LINKS.resume}, HFlow ${LINKS.hflow}, Human Slop ${LINKS.humanSlop}, app ${LINKS.humanSlopApp}, Human Slop GitHub ${LINKS.humanSlopGithub}, Charter ${LINKS.charter}, digital twin ${LINKS.digitalTwin}, HeatCast ${LINKS.heatcast}, pond planning ${LINKS.pondPlanning}, Arista slides ${LINKS.aristaSlides}, Electron-GNN ${LINKS.electronGnn}, Open-PyFX ${LINKS.openPyfx}, crater detection ${LINKS.crater}, AntennaNet ${LINKS.antenna}, Serenity ${LINKS.serenity}, papers ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
     }
     if (includesAny(q, ['email', 'contact', 'phone', 'hire', 'recruit', 'reach'])) {
       return `${FACTS.contact} LinkedIn: ${LINKS.linkedin}. GitHub: ${LINKS.github}.`;

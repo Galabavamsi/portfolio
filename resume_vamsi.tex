@@ -1,6 +1,6 @@
 \documentclass[10pt,a4paper]{article}
 
-\usepackage[a4paper,margin=0.42in]{geometry}
+\usepackage[a4paper,margin=0.30in]{geometry}
 \usepackage{fontspec}
 \setmainfont{Noto Sans}
 \usepackage[english]{babel}
@@ -19,7 +19,7 @@
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0pt}
-\linespread{0.86}
+\linespread{0.82}
 \urlstyle{same}
 
 \titleformat{\section}
@@ -50,7 +50,7 @@
 }
 
 \begin{document}
-\enlargethispage{3\baselineskip}
+\enlargethispage{6\baselineskip}
 
 {\fontsize{22}{24}\selectfont\textbf{\color{textdark}Galaba Vamsi}}\par
 \vspace{0.1em}
@@ -80,10 +80,11 @@ Mechatronics undergraduate at IIT Bhilai with a focus on software engineering, A
 
 \entry{Open-Source Contributor - HFlow}{Hebbian Robotics (YC S26) | \href{https://github.com/Hebbian-Robotics/hflow}{HFlow repository}}{2026}
 \begin{itemize}
-  \item Addressed 3 tracked issues through 3 maintainer-reviewed and merged pull requests for an open-source SDK supporting scalable multimodal data pipelines in robotics and Physical AI.
+  \item Addressed 6 tracked issues through 6 maintainer-reviewed and merged pull requests in an open-source robotics and Physical AI SDK.
   \item \href{https://github.com/Hebbian-Robotics/hflow/pull/350}{PR \#350} / \href{https://github.com/Hebbian-Robotics/hflow/issues/296}{issue \#296}: implemented paginated LeRobot tree traversal using \texttt{Link: rel="next"} headers, preserved request headers, deduplicated paths, rejected unsafe cross-origin URLs, and prevented pagination loops.
   \item \href{https://github.com/Hebbian-Robotics/hflow/pull/353}{PR \#353} / \href{https://github.com/Hebbian-Robotics/hflow/issues/292}{issue \#292}: resolved LeRobot video-cache collisions by including camera, chunk, and file indexes in cache identity and bumping the converter version.
   \item \href{https://github.com/Hebbian-Robotics/hflow/pull/360}{PR \#360} / \href{https://github.com/Hebbian-Robotics/hflow/issues/314}{issue \#314}: centralized safe ingest URI parsing across the CLI, server, and SDK and added validation for blank, absolute, and parent-escaping paths.
+  \item \href{https://github.com/Hebbian-Robotics/hflow/pull/367}{PR \#367} / \href{https://github.com/Hebbian-Robotics/hflow/issues/365}{issue \#365}: added a cold \texttt{camera\_frame\_stats} evidence benchmark with transform timing and provenance; \href{https://github.com/Hebbian-Robotics/hflow/pull/400}{PR \#400} / \href{https://github.com/Hebbian-Robotics/hflow/issues/399}{issue \#399}: refused LeRobot depth videos before conversion to preserve 12-bit depth semantics.
 \end{itemize}
 
 \entry{Research Intern - 6G RIS Simulator and Testbed Development}{IIT Bhilai | Advisor: Dr. Arzad Alam}{May 2025 - Aug 2025}
@@ -126,11 +127,7 @@ Mechatronics undergraduate at IIT Bhilai with a focus on software engineering, A
 
 \section*{Achievements}
 {\small\color{textdark}
-\textbf{1st Place:} IIT Bhilai Web Development Competition. $\quad$
-\textbf{5th Rank:} Arista Networks Wi-Fi Challenge, Inter IIT Tech Meet 14.0.\\
-\textbf{Top 3.5\%:} Amazon ML Challenge. $\quad$
-\textbf{YC Startup School:} Human Slop accepted. $\quad$
-\textbf{Top 10 Finalist:} Toyota Hackathon.
+\textbf{1st Place:} IIT Bhilai Web Development Competition; \textbf{5th Rank:} Arista Networks Wi-Fi Challenge, Inter IIT Tech Meet 14.0; \textbf{Top 3.5\%:} Amazon ML Challenge; \textbf{YC Startup School:} Human Slop accepted; \textbf{Top 10 Finalist:} Toyota Hackathon.
 }
 
 \end{document}
