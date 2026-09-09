@@ -1,6 +1,6 @@
 \documentclass[10pt,a4paper]{article}
 
-\usepackage[a4paper,margin=0.30in]{geometry}
+\usepackage[a4paper,left=0.30in,right=0.30in,top=0.27in,bottom=0.27in]{geometry}
 \usepackage{fontspec}
 \setmainfont{Noto Sans}
 \usepackage[english]{babel}
@@ -19,7 +19,7 @@
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0pt}
-\linespread{0.79}
+\linespread{0.88}
 \urlstyle{same}
 
 \titleformat{\section}
@@ -30,9 +30,9 @@
 
 \setlist[itemize]{
   label=\textbullet,
-  leftmargin=1.15em,
-  itemsep=0.02em,
-  topsep=0.05em,
+  leftmargin=1.1em,
+  itemsep=0.04em,
+  topsep=0.07em,
   parsep=0pt,
   partopsep=0pt
 }
@@ -50,12 +50,12 @@
 }
 
 \begin{document}
-\enlargethispage{6\baselineskip}
 
+% Full-width header and summary keep the reading order clear for ATS parsers.
 {\fontsize{22}{24}\selectfont\textbf{\color{textdark}Galaba Vamsi}}\par
-\vspace{0.1em}
+\vspace{0.08em}
 {\small\color{primary}Software Engineer | AI/ML | Computer Vision | Systems}\par
-\vspace{0.18em}
+\vspace{0.14em}
 {\small\color{textlight}
 \href{tel:+917483047846}{+91 7483047846} $\vert$
 \href{mailto:galabavamsi12@gmail.com}{galabavamsi12@gmail.com} $\vert$
@@ -65,16 +65,13 @@
 
 \section*{Professional Summary}
 {\small\color{textdark}
-Mechatronics undergraduate at IIT Bhilai with a focus on software engineering, AI/ML, computer vision, robotics, and GPU systems. Builds full-stack products, open-source tooling, simulators, and visual applications with Python, TypeScript, React, PyTorch, CUDA, and cloud platforms.
+Mechatronics undergraduate at IIT Bhilai focused on software engineering, AI/ML, computer vision, robotics, and GPU systems. Builds full-stack products, open-source tooling, simulators, and visual applications with Python, TypeScript, React, PyTorch, CUDA, and cloud platforms.
 }
 
-\section*{Skills}
-{\small\color{textdark}
-\textbf{Languages:} Python, C/C++, TypeScript, JavaScript, SQL, GLSL, CUDA.\\
-\textbf{AI/ML:} PyTorch, Graph Neural Networks (GATv2), Safe Reinforcement Learning, Transformers, OpenCV, CuPy, NumPy.\\
-\textbf{Software and Systems:} React, React Native, Flutter, FastAPI, Node.js, REST APIs, WebSockets, PostgreSQL, AWS, Supabase, Docker, ROS 2, Gazebo, MEEP, OpenMPI, SDR/USRP.\\
-\textbf{Developer Tools:} Git, Linux, GitHub Actions, CI/CD, pytest, Ruff, ty, static analysis, regression testing.
-}
+\vspace{0.12em}
+\noindent\begin{minipage}[t]{0.645\textwidth}
+\vspace{0pt}
+\small
 
 \section*{Experience}
 
@@ -87,7 +84,7 @@ Mechatronics undergraduate at IIT Bhilai with a focus on software engineering, A
   \item \href{https://github.com/Hebbian-Robotics/hflow/pull/367}{PR \#367} / \href{https://github.com/Hebbian-Robotics/hflow/issues/365}{issue \#365}: benchmarked 3 cold 1080p30 checks (900 frames/check; 4.897 s median) and separated transform timing/provenance; \href{https://github.com/Hebbian-Robotics/hflow/pull/400}{PR \#400} / \href{https://github.com/Hebbian-Robotics/hflow/issues/399}{issue \#399}: refused LeRobot depth videos before conversion to preserve 12-bit depth semantics.
 \end{itemize}
 
-\entry{Research Intern - 6G RIS Simulator and Testbed Development}{IIT Bhilai | Advisor: Dr. Arzad Alam}{May 2025 - Aug 2025}
+\entry{Research Intern - 6G RIS Simulator}{IIT Bhilai | Advisor: Dr. Arzad Alam}{May 2025 - Aug 2025}
 \begin{itemize}
   \item Built a zero-budget, open-source Python simulator with USRP-style interfaces for line-of-sight and non-line-of-sight wireless environments; RIM-SIM v2 includes 6 paper-grounded scenarios, a 20 Hz WebSocket feed, and 103 passing tests. \href{https://github.com/Galabavamsi/RIM-SIM-V2}{[GitHub]}
   \item Designed and validated a 2-layer reconfigurable intelligent surface (RIS) PCB workflow for self-powered RF energy harvesting; contributed to 3 related publications (1 as first author and 2 as co-author).
@@ -114,21 +111,40 @@ Mechatronics undergraduate at IIT Bhilai with a focus on software engineering, A
 
 \project{Amazon ML Challenge - Top 3.5\%}{Multimodal price prediction with Qwen 2-VL 7B and a ViT/RoBERTa two-tower model; 75,000 data pairs; SMAPE 49.0.}{2025}
 
+\end{minipage}\hfill
+\begin{minipage}[t]{0.325\textwidth}
+\vspace{0pt}
+\footnotesize
+\raggedright
+
+\section*{Skills}
+{\color{textdark}
+\textbf{Languages:} Python, C/C++, TypeScript, JavaScript, SQL, GLSL, CUDA.\par
+\textbf{AI/ML:} PyTorch, Graph Neural Networks (GATv2), Safe Reinforcement Learning, Transformers, OpenCV, CuPy, NumPy.\par
+\textbf{Software and Systems:} React, React Native, Flutter, FastAPI, Node.js, REST APIs, WebSockets, PostgreSQL, AWS, Supabase, Docker, ROS 2, Gazebo, MEEP, OpenMPI, SDR/USRP.\par
+\textbf{Developer Tools:} Git, Linux, GitHub Actions, CI/CD, pytest, Ruff, ty, static analysis, regression testing.
+}
+
 \section*{Education}
 \entry{B.Tech. in Mechatronics}{Indian Institute of Technology Bhilai}{Aug 2023 - May 2027}
-{\small\color{textdark}\textbf{Coursework:} Data Structures and Algorithms, Object-Oriented Programming, Deep Learning for Computer Vision, AI and Machine Learning, Digital Image Processing, Optimal Control.}
+{\color{textdark}\textbf{Coursework:} Data Structures and Algorithms, Object-Oriented Programming, Deep Learning for Computer Vision, AI and Machine Learning, Digital Image Processing, Optimal Control.}
 
 \section*{Publications}
-{\small\color{textdark}
-\textbf{First author:} \textit{An Open Emulator for Smart Radio Environments}. \href{https://drive.google.com/file/d/12oDPsflaUXKnSjfA3247HgFDDf4bJkCP/view?usp=drive_link}{[Link]}\\
-\textbf{Co-author:} \textit{Experience with RF Energy Harvesting-Driven Self-Powered RIS}, IEEE INDICON 2025. \href{https://ieeexplore.ieee.org/abstract/document/11392908/}{[Link]}\\
+{\color{textdark}
+\textbf{First author:} \textit{An Open Emulator for Smart Radio Environments}. \href{https://drive.google.com/file/d/12oDPsflaUXKnSjfA3247HgFDDf4bJkCP/view?usp=drive_link}{[Link]}\par
+\textbf{Co-author:} \textit{Experience with RF Energy Harvesting-Driven Self-Powered RIS}, IEEE INDICON 2025. \href{https://ieeexplore.ieee.org/abstract/document/11392908/}{[Link]}\par
 \textbf{Co-author:} \textit{A systematic literature review on simulation models and deployments for reconfigurable intelligent surfaces}. \href{https://www.sciencedirect.com/science/article/pii/S1570870526001964}{[Link]}
 }
 
-\vspace{-0.6em}
 \section*{Achievements}
-{\small\color{textdark}
-\textbf{1st Place:} IIT Bhilai Web Development Competition; \textbf{5th Rank:} Arista Networks Wi-Fi Challenge, Inter IIT Tech Meet 14.0; \textbf{Top 3.5\%:} Amazon ML Challenge; \textbf{YC Startup School:} Human Slop accepted; \textbf{Top 10 Finalist:} Toyota Hackathon.
+{\color{textdark}
+\textbf{1st Place:} IIT Bhilai Web Development Competition.\par
+\textbf{5th Rank:} Arista Networks Wi-Fi Challenge, Inter IIT Tech Meet 14.0.\par
+\textbf{Top 3.5\%:} Amazon ML Challenge.\par
+\textbf{YC Startup School:} Human Slop accepted.\par
+\textbf{Top 10 Finalist:} Toyota Hackathon.
 }
+
+\end{minipage}
 
 \end{document}
