@@ -36,6 +36,7 @@
       <a href="#blog">Blog</a>
       <a href="#skills">Skills</a>
       <a href="#achievements">Achievements</a>
+      <a href="#resume">Resume</a>
       <a href="#contact">Contact</a>
     </nav>
     <a class="header-link" href="resume_vamsi.pdf" target="_blank" rel="noopener">Resume</a>
@@ -110,7 +111,7 @@
             <summary>Contribution log</summary>
             <ul>
             <li><a class="text-link inline" href="https://github.com/Hebbian-Robotics/hflow/pull/400" target="_blank" rel="noopener">PR #400 · merged</a> · <a class="text-link inline" href="https://github.com/Hebbian-Robotics/hflow/issues/399" target="_blank" rel="noopener">issue #399</a> — Refused LeRobot depth videos before conversion when depth markers were present, preventing the RGB H.264 path from silently losing 12-bit depth semantics while preserving the existing RGB path.</li>
-            <li><a class="text-link inline" href="https://github.com/Hebbian-Robotics/hflow/pull/367" target="_blank" rel="noopener">PR #367 · merged · featured</a> · <a class="text-link inline" href="https://github.com/Hebbian-Robotics/hflow/issues/365" target="_blank" rel="noopener">issue #365</a> — Added a reproducible cold <code>camera_frame_stats</code> evidence benchmark with separate transform timing, fresh episode workdirs, and FFmpeg/CPU provenance reporting; resolved the issue without changing the shipped filter graph.</li>
+            <li><a class="text-link inline" href="https://github.com/Hebbian-Robotics/hflow/pull/367" target="_blank" rel="noopener">PR #367 · merged · featured</a> · <a class="text-link inline" href="https://github.com/Hebbian-Robotics/hflow/issues/365" target="_blank" rel="noopener">issue #365</a> — Added a reproducible cold <code>camera_frame_stats</code> evidence benchmark: 3 cold 1080p30 checks, 900 decoded frames each, and a 4.897 s median; separated transform timing and provenance, and documented that no repeatable semantics-preserving speedup was demonstrated, so the shipped filter graph stayed unchanged.</li>
             <li><a class="text-link inline" href="https://github.com/Hebbian-Robotics/hflow/pull/362" target="_blank" rel="noopener">PR #362 · merged</a> — Matched saved EgoSuite labels by HFlow source provenance instead of basenames, preserving unambiguous legacy reports and rejecting ambiguous matches.</li>
             <li><a class="text-link inline" href="https://github.com/Hebbian-Robotics/hflow/pull/360" target="_blank" rel="noopener">PR #360 · merged</a> · <a class="text-link inline" href="https://github.com/Hebbian-Robotics/hflow/issues/314" target="_blank" rel="noopener">issue #314</a> — Centralized ingest URI parsing across the CLI, server, and SDK with shared trimming and safety checks; normalized safe relative URIs and rejected blank, absolute, and parent-escaping paths.</li>
             <li><a class="text-link inline" href="https://github.com/Hebbian-Robotics/hflow/pull/353" target="_blank" rel="noopener">PR #353 · merged</a> · <a class="text-link inline" href="https://github.com/Hebbian-Robotics/hflow/issues/292" target="_blank" rel="noopener">issue #292</a> — LeRobot video-cache filenames omitted the video file index; included the camera key, video chunk index, and video file index in cache identity and bumped the converter version to invalidate stale outputs.</li>
@@ -370,6 +371,18 @@
         <div class="highlight"><b>Top 1%</b><span>JEE Advanced</span></div>
         <div class="highlight"><b>Top 10 Finalist</b><span>Toyota Hackathon</span></div>
         <div class="highlight"><b>Academics</b><span>95% in Class 12 and 94% in Class 10</span></div>
+      </div>
+    </section>
+
+    <section id="resume" class="section narrow reveal">
+      <p class="section-label">Resume</p>
+      <h2>One-page snapshot of my engineering work.</h2>
+      <div class="panel">
+        <p class="muted">Software engineering, AI/ML, computer vision, systems, research, projects, and verified open-source contributions.</p>
+        <div class="panel-actions">
+          <a class="text-link" href="resume_vamsi.pdf" target="_blank" rel="noopener">Open PDF</a>
+          <a class="text-link" href="resume_vamsi.pdf" download>Download PDF</a>
+        </div>
       </div>
     </section>
 
