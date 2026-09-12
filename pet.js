@@ -24,8 +24,19 @@
   const LINKS = {
     email: 'mailto:galabavamsi12@gmail.com',
     portfolio: 'https://galabavamsi.github.io/portfolio',
+    techProfile: 'https://galabavamsi.github.io/portfolio/#home',
+    filmProfile: 'https://galabavamsi.github.io/portfolio/#film',
     linkedin: 'https://www.linkedin.com/in/galabavamsi/',
     github: 'https://github.com/Galabavamsi',
+    twitter: 'https://x.com/Galaba_Vamsi',
+    instagram: 'https://www.instagram.com/galaba_vamsi/',
+    instagramReels: 'https://www.instagram.com/galaba_vamsi/reels/',
+    youtube: 'https://www.youtube.com/@galabavamsi12',
+    fpsChannel: 'https://www.youtube.com/@fps_iitbh',
+    asita: 'https://www.instagram.com/asita_productions/',
+    scholar: 'https://scholar.google.com/citations?user=UNjZa1sAAAAJ&hl=en',
+    researchgate: 'https://www.researchgate.net/profile/Galaba-Vamsi',
+    ieeeAuthor: 'https://ieeexplore.ieee.org/author/943675488152924',
     resume: 'resume_vamsi.pdf',
     ris: 'https://github.com/Galabavamsi/RIS-SIM',
     hflow: 'https://github.com/Hebbian-Robotics/hflow',
@@ -60,10 +71,42 @@
     openEmulator: 'https://drive.google.com/file/d/12oDPsflaUXKnSjfA3247HgFDDf4bJkCP/view?usp=drive_link',
     risEnergy: 'https://ieeexplore.ieee.org/abstract/document/11392908/',
     risReview: 'https://www.sciencedirect.com/science/article/pii/S1570870526001964',
+    grayAura: 'https://www.youtube.com/watch?v=ZRrBCcASFnA',
+    god: 'https://youtu.be/-WPj4VcHnSs',
+    reverie: 'https://youtu.be/X63npde0tC8',
+    lottery: 'https://youtu.be/neheCtcgAfw',
+    tohfa: 'https://youtu.be/bAIMAUsxbjE',
+    fresherIntro: 'https://youtu.be/g7hVDZTYmq0',
+    animalSuccession: 'https://youtu.be/ONRd5ax9iXw',
+    asyncFilm: 'https://youtu.be/HAzgRXeCtuI',
+    successfulFailure: 'https://youtu.be/ZOxLzjBaoKc',
+    coreMemories: 'https://youtu.be/qLJkAH8nXMg',
+    mudane: 'https://youtu.be/9foVftC4LJs',
+    trip: 'https://youtu.be/XAaaViNTpWc',
+    journeyMind: 'https://youtu.be/7GcstdUX7UE',
+    losers: 'https://youtu.be/66JtvPzybow',
+    theEnd: 'https://youtu.be/ER3DwZ469TY',
+    happyDeepavali: 'https://youtu.be/LOgHtpYJypw',
+    prayatna: 'https://youtu.be/3wTTq6JrtQs',
+    prayatnaV2: 'https://youtu.be/IpJYDcB0L9E',
+    prayatnaV3: 'https://youtu.be/llhwHbiQI38',
+    prayatnaAlt: 'https://youtu.be/dliJ7sz_Taw',
+    tripAlt: 'https://youtu.be/vznfDWRf3RI',
+    randomshit: 'https://youtu.be/Lg4jWclYDZE',
+    randomshit1: 'https://youtu.be/UU9OkEUBNs0',
+    innocence: 'https://youtu.be/xaVmTJU2Pxw',
   };
 
   const FACTS = {
-    summary: 'Galaba Vamsi is a B.Tech Mechatronics student at IIT Bhilai, graduating in May 2027. He works across software engineering, full-stack products, AI/ML, computer vision, wireless systems, GPU shader programming, and cloud infrastructure.',
+    summary: 'Galaba Vamsi is a B.Tech Mechatronics student at IIT Bhilai, graduating in May 2027. He has two portfolio profiles: a tech profile for software engineering, AI/ML, computer vision, wireless systems, GPU systems, and research; and a film profile for filmmaking, editing, directing, writing, cinematography, and visual experiments. Switch between them with the Tech and Film buttons in the header.',
+    filmSummary: 'Vamsi is a filmmaker, editor, director, writer, and Mechatronics student at IIT Bhilai. He works across narrative short films, music videos, campus films, startup/product content, social-first reels, video essays, and visual experiments. His technical background in AI/ML, computer vision, robotics, GPU systems, and full-stack software helps him work across both the creative and technical sides of production.',
+    filmWorkflow: 'Vamsi can take a project from idea to script, shot planning, direction, camera/production, edit, sound and visual polish, and final publishing. His strongest creative combination is filmmaking and visual storytelling, writing and directing, editing and post-production, social-first instincts, technical fluency, and fast production under difficult constraints.',
+    grayAura: 'Gray Aura is an official music video for Godchild and Thrsdae, produced by Asita Production. Vamsi directed it with Harshal Singh, contributed cinematography with Harshal Singh and Aditya Singh, and edited it. Video: ' + LINKS.grayAura + '. Asita Productions: ' + LINKS.asita + '.',
+    fpsFilms: 'Vamsi worked with FPS — IIT Bhilai as a director, editor, and writer. The team made films under the Inter-IIT 51-hour format, developing, shooting, and editing complete films under extreme time constraints. Key films include गोद (' + LINKS.god + '), REVERIE (' + LINKS.reverie + '), Lottery (' + LINKS.lottery + '), TOHFA (' + LINKS.tohfa + '), and Fresher\'s Introduction 2024 (' + LINKS.fresherIntro + '). FPS channel: ' + LINKS.fpsChannel + '.',
+    filmArchive: 'Personal film and video work includes Animal Succession edit (' + LINKS.animalSuccession + '), ASYNC — a Backrooms lore short film made in approximately four hours (' + LINKS.asyncFilm + '), A Successful Failure (' + LINKS.successfulFailure + '), Core Memories (' + LINKS.coreMemories + '), MUDANE — a Sony FX30 experiment (' + LINKS.mudane + '), TRIP — Fuji XT3 (' + LINKS.trip + '), A Journey Through Mind (' + LINKS.journeyMind + '), LOSERS — Fuji XT3 (' + LINKS.losers + '), THE END — Fuji XT3 (' + LINKS.theEnd + '), Happy Deepavali (' + LINKS.happyDeepavali + '), PRAYATNA 6.0 versions, RANDOMSHIT, and INNOCENCE. The public collection is on ' + LINKS.youtube + '.',
+    socialLinks: 'Creative links: Instagram ' + LINKS.instagram + ', Instagram Reels ' + LINKS.instagramReels + ', personal YouTube ' + LINKS.youtube + ', FPS channel ' + LINKS.fpsChannel + ', X/Twitter ' + LINKS.twitter + ', and Asita Productions ' + LINKS.asita + '.',
+    researchProfiles: 'Research profiles: Google Scholar ' + LINKS.scholar + ', ResearchGate ' + LINKS.researchgate + ', and IEEE Xplore author profile ' + LINKS.ieeeAuthor + '.',
+    profileSwitch: 'The portfolio has separate Tech and Film profiles. Tech covers software engineering, AI/ML, projects, experience, publications, and skills. Film covers direction, writing, editing, cinematography, music videos, campus films, startup content, and visual experiments. Use the Tech and Film buttons in the header, or open ' + LINKS.filmProfile + ' for the film profile.',
     experience: 'Research Intern at IIT Bhilai from May to Aug 2025 under Dr. Arzad Alam. He built an open-source 6G RIS simulator, emulated USRP workflows for LoS/NLoS environments, reduced hardware costs, and designed a two-layer RIS PCB workflow for RF energy harvesting research.',
     swiggy: 'Vamsi was a Marketing Intern at Swiggy Ltd for the Campus CEO project from May to July 2024. He managed a campaign with 15 social media posts and contributed to campus marketing initiatives and execution.',
     hflow: 'Hebbian Robotics (YC S26) is the organization behind HFlow, an open-source robotics data processing and evaluation framework. In 2026, Vamsi contributed 6 maintainer-reviewed and merged pull requests: #350, #353, #360, #362, #367, and #400. PR #400 resolved HFlow issue #399 by refusing LeRobot depth videos before conversion when depth markers are present, preserving the existing RGB path and preventing loss of 12-bit depth semantics. PR #367 resolved HFlow issue #365 by adding a reproducible cold camera_frame_stats evidence benchmark covering 3 cold 1080p30 checks with 900 decoded frames each and a 4.897 s median; it separated transform timing and provenance and documented that no repeatable semantics-preserving speedup was demonstrated, without changing the shipped filter graph. HFlow: ' + LINKS.hflow + '. PRs: ' + LINKS.hflowPr350 + ', ' + LINKS.hflowPr353 + ', ' + LINKS.hflowPr360 + ', ' + LINKS.hflowPr362 + ', ' + LINKS.hflowPr367 + ', ' + LINKS.hflowPr400 + '. Issues: ' + LINKS.hflowIssue365 + ', ' + LINKS.hflowIssue399 + '.',
@@ -91,11 +134,18 @@ STYLE RULES:
 - Replies under 80 words. Plain text only. No markdown and no emoji.
 - Be warm, direct, and easy to understand.
 - Be accurate about Vamsi. Never invent facts not listed below.
+- The website has separate Tech and Film profiles. Tell visitors to use the Tech/Film switcher when relevant.
 - If asked something unrelated to Vamsi or this site, answer briefly, then offer to help with Vamsi's work, projects, skills, or contact details.
+
+ACCURACY NOTES:
+- Do not claim Vamsi worked at PinkSauce Studios. He reached the final round for a Filmmaker Intern role; it did not become employment.
+- Do not claim a specific role on the Homeie reel unless the user provides confirmation.
+- Do not invent a single showreel URL; the YouTube channel and portfolio archive are the public reel collection.
+- Treat follower, view, and engagement numbers as dated snapshots, not current metrics.
 
 FACTS:
 ${Object.values(FACTS).join('\n')}
-Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, LinkedIn ${LINKS.linkedin}, GitHub ${LINKS.github}, resume ${LINKS.resume}, HFlow ${LINKS.hflow}, HFlow PRs ${LINKS.hflowPr350}, ${LINKS.hflowPr353}, ${LINKS.hflowPr360}, ${LINKS.hflowPr362}, ${LINKS.hflowPr367}, ${LINKS.hflowPr400}, HFlow issues ${LINKS.hflowIssue365}, ${LINKS.hflowIssue399}, Robocurve ${LINKS.robocurve}, Robocurve YC ${LINKS.robocurveYc}, inspect-robots ${LINKS.inspectRobots}, inspect-robots PR ${LINKS.inspectRobotsPr434}, RIS ${LINKS.ris}, Human Slop ${LINKS.humanSlop}, Human Slop app ${LINKS.humanSlopApp}, Human Slop GitHub ${LINKS.humanSlopGithub}, Charter ${LINKS.charter}, Charter evaluator ${LINKS.charterEvaluator}, digital twin ${LINKS.digitalTwin}, HeatCast ${LINKS.heatcast}, HeatCast demo ${LINKS.heatcastDemo}, pond planning ${LINKS.pondPlanning}, Arista slides ${LINKS.aristaSlides}, Electron-GNN ${LINKS.electronGnn}, Open-PyFX ${LINKS.openPyfx}, Lunar Crater Detection ${LINKS.crater}, AntennaNet ${LINKS.antenna}, Serenity ${LINKS.serenity}, publications ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
+Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, tech profile ${LINKS.techProfile}, film profile ${LINKS.filmProfile}, blog ${LINKS.blog}, LinkedIn ${LINKS.linkedin}, GitHub ${LINKS.github}, X/Twitter ${LINKS.twitter}, Instagram ${LINKS.instagram}, personal YouTube ${LINKS.youtube}, FPS channel ${LINKS.fpsChannel}, Google Scholar ${LINKS.scholar}, ResearchGate ${LINKS.researchgate}, IEEE author ${LINKS.ieeeAuthor}, resume ${LINKS.resume}, Gray Aura ${LINKS.grayAura}, Asita Productions ${LINKS.asita}, HFlow ${LINKS.hflow}, HFlow PRs ${LINKS.hflowPr350}, ${LINKS.hflowPr353}, ${LINKS.hflowPr360}, ${LINKS.hflowPr362}, ${LINKS.hflowPr367}, ${LINKS.hflowPr400}, HFlow issues ${LINKS.hflowIssue365}, ${LINKS.hflowIssue399}, Robocurve ${LINKS.robocurve}, Robocurve YC ${LINKS.robocurveYc}, inspect-robots ${LINKS.inspectRobots}, inspect-robots PR ${LINKS.inspectRobotsPr434}, RIS ${LINKS.ris}, Human Slop ${LINKS.humanSlop}, Human Slop app ${LINKS.humanSlopApp}, Human Slop GitHub ${LINKS.humanSlopGithub}, Charter ${LINKS.charter}, Charter evaluator ${LINKS.charterEvaluator}, digital twin ${LINKS.digitalTwin}, HeatCast ${LINKS.heatcast}, HeatCast demo ${LINKS.heatcastDemo}, pond planning ${LINKS.pondPlanning}, Arista slides ${LINKS.aristaSlides}, Electron-GNN ${LINKS.electronGnn}, Open-PyFX ${LINKS.openPyfx}, Lunar Crater Detection ${LINKS.crater}, AntennaNet ${LINKS.antenna}, Serenity ${LINKS.serenity}, publications ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
 
   function includesAny(text, words) {
     return words.some(word => text.includes(word));
@@ -104,6 +154,27 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, L
   function localAnswer(question) {
     const q = question.toLowerCase();
 
+    if (includesAny(q, ['switch profile', 'switch profiles', 'tech profile', 'film profile', 'two profile', 'two profiles', 'which profile'])) {
+      return FACTS.profileSwitch;
+    }
+    if (includesAny(q, ['gray aura', 'music video', 'asita production', 'asita productions'])) {
+      return FACTS.grayAura;
+    }
+    if (includesAny(q, ['fps', 'inter-iit', '51-hour', '51 hour', 'गोद', 'reverie', 'lottery', 'tohfa', 'fresher'])) {
+      return FACTS.fpsFilms;
+    }
+    if (includesAny(q, ['film', 'filmmak', 'film work', 'film credits', 'director', 'editor', 'cinematograph', 'writer', 'short film', 'visual experiment', 'creative work'])) {
+      return `${FACTS.filmSummary} ${FACTS.filmWorkflow}`;
+    }
+    if (includesAny(q, ['async', 'animal succession', 'successful failure', 'core memories', 'mudane', 'trip', 'losers', 'innocence', 'film archive', 'film links'])) {
+      return FACTS.filmArchive;
+    }
+    if (includesAny(q, ['scholar', 'researchgate', 'research gate', 'ieee xplore', 'ieee author', 'citation profile', 'research links', 'publication links'])) {
+      return FACTS.researchProfiles;
+    }
+    if (includesAny(q, ['instagram', 'youtube', 'twitter', 'x.com', 'social link', 'social media'])) {
+      return FACTS.socialLinks;
+    }
     if (includesAny(q, ['hflow', 'hebbian robotics', '#350', '#353', '#360', '#362', '#365', '#367', '#399', '#400']) || (q.includes('hebbian') && !q.includes('learning'))) {
       return `If you mean Hebbian Robotics: ${FACTS.hflow}`;
     }
@@ -152,7 +223,7 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, L
     if (includesAny(q, ['electron', 'gnn', 'quantum'])) {
       return `Electron-GNN is a V3 two-tower GATv2 model predicting molecular absorption spectra from geometry. It was evaluated on 2 molecules with 39 and 55 target peaks. Faculty advisor: Dr. Soumajit Pramanik. GitHub: ${LINKS.electronGnn}.`;
     }
-    if (includesAny(q, ['open-pyfx', 'pyfx', 'glsl', 'shader', 'video'])) {
+    if (includesAny(q, ['open-pyfx', 'pyfx', 'glsl', 'shader', 'video fx', 'video effects'])) {
       return `Open-PyFX is a Python and GLSL video FX suite for CRT emulation, ASCII edge detection, and 3D LUT workflows. GitHub: ${LINKS.openPyfx}.`;
     }
     if (includesAny(q, ['crater', 'lunar', 'moon', 'dem'])) {
@@ -358,8 +429,15 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, L
     experience: 'Research, startup work, and publications.',
     projects: 'Selected projects from the resume.',
     blog: 'Build logs from the experiments folder.',
+    media: 'Personal videos, startup stories, and short films.',
     skills: 'Technical stack and research tools.',
     achievements: 'Competition and academic highlights.',
+    research: 'Google Scholar, ResearchGate, IEEE, and publications.',
+    'film-home': 'The filmmaker profile: direction, editing, writing, and visual storytelling.',
+    'film-work': 'Selected credits: Gray Aura, FPS films, and Human Slop content.',
+    'film-archive': 'Short films, campus work, and visual experiments.',
+    'film-process': 'From idea and script to production, post, and publishing.',
+    'film-links': 'Creative links, channels, and contact details.',
     contact: 'Email, LinkedIn, GitHub, and resume.',
   };
   const saidSections = new Set();
@@ -376,10 +454,10 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, L
   });
 
   const QUIPS = [
-    "Ask me about Vamsi's projects, skills, or research work.",
+    "Ask me about Vamsi's tech or film profile.",
     'I can summarize the portfolio if you are short on time.',
-    'Recruiters can start with the Experience and Projects sections.',
-    'The resume link is available in the top right and contact section.',
+    'Try the Film profile for credits, shorts, and creative process.',
+    'The resume and social links are available from the active profile.',
   ];
   let quipIdx = Math.floor(Math.random() * QUIPS.length);
   setInterval(() => {
@@ -406,7 +484,7 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, blog ${LINKS.blog}, L
     bubble.classList.add('hidden');
     GV.audio.coin();
     if (!log.childElementCount) {
-      addMsg('bot', 'Hi, I am BIT. Ask me about Vamsi, his projects, skills, research work, links, or contact details.');
+      addMsg('bot', 'Hi, I am BIT. Ask me about either Vamsi profile: tech/research or film/creative work.');
     }
     setTimeout(() => input.focus(), 60);
   }

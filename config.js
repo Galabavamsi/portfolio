@@ -16,8 +16,9 @@ window.GV_CONFIG = {
 
   CHAT_ENDPOINT: 'https://exctwduhrnklcgbaphdb.supabase.co/functions/v1/chat',
 
-  // Lets localhost call the deployed chat proxy for realistic testing.
-  USE_REMOTE_CHAT_LOCALLY: true,
+  // Keep local testing deterministic and use BIT's current on-page knowledge.
+  // Deployed hosts still use the Supabase chat proxy.
+  USE_REMOTE_CHAT_LOCALLY: false,
 
   // Local direct-to-DeepSeek testing only. Keep this blank before deploy.
   DEV_DEEPSEEK_KEY: '',

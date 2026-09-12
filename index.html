@@ -29,7 +29,11 @@
 
   <header class="site-header">
     <a class="brand" href="#home" aria-label="Galaba Vamsi home">GV</a>
-    <nav class="site-nav" aria-label="Primary navigation">
+    <div class="profile-switcher" role="group" aria-label="Choose portfolio profile">
+      <button class="profile-tab is-active" type="button" data-profile="tech" aria-pressed="true">Tech</button>
+      <button class="profile-tab" type="button" data-profile="film" aria-pressed="false">Film</button>
+    </div>
+    <nav class="site-nav tech-nav" data-profile-nav="tech" aria-label="Tech profile navigation">
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
@@ -41,10 +45,17 @@
       <a href="#resume">Resume</a>
       <a href="#contact">Contact</a>
     </nav>
-    <a class="header-link" href="resume_vamsi.pdf" target="_blank" rel="noopener">Resume</a>
+    <nav class="site-nav film-nav" data-profile-nav="film" aria-label="Film profile navigation" hidden>
+      <a href="#film-work">Work</a>
+      <a href="#film-archive">Archive</a>
+      <a href="#film-process">Process</a>
+      <a href="#film-links">Links</a>
+    </nav>
+    <a class="header-link tech-header-link" href="resume_vamsi.pdf" target="_blank" rel="noopener">Resume</a>
+    <a class="header-link film-header-link" href="https://www.instagram.com/galaba_vamsi/" target="_blank" rel="noopener" hidden>Instagram</a>
   </header>
 
-  <main>
+  <main id="tech-profile" class="profile-panel is-active" data-profile-panel="tech">
     <section id="home" class="hero section">
       <div class="hero-copy reveal">
         <p class="eyebrow">Software Engineer / AI-ML Researcher / IIT Bhilai</p>
@@ -508,12 +519,168 @@
     </section>
   </main>
 
+  <main id="film-profile" class="profile-panel" data-profile-panel="film" hidden>
+    <span id="film" class="profile-anchor" aria-hidden="true"></span>
+    <section id="film-home" class="hero section film-hero">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">Filmmaker / Editor / Director / Writer / IIT Bhilai</p>
+        <h1>Stories with a pulse.</h1>
+        <p class="hero-lead">
+          I write, direct, shoot, and edit narrative films, music videos, startup content,
+          and social-first stories where culture, technology, and visual mood meet.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#film-work">View Film Work</a>
+          <a class="btn" href="https://www.youtube.com/@galabavamsi12" target="_blank" rel="noopener">Personal YouTube</a>
+          <a class="btn" href="https://www.instagram.com/galaba_vamsi/" target="_blank" rel="noopener">Instagram</a>
+        </div>
+      </div>
+      <figure class="profile-card reveal film-profile-card">
+        <img src="assets/profile.png" alt="Pixel art portrait of Galaba Vamsi">
+        <figcaption>Idea &rarr; script &rarr; direction &rarr; edit &rarr; publish</figcaption>
+      </figure>
+    </section>
+
+    <section id="film-work" class="section reveal">
+      <p class="section-label">Selected Work</p>
+      <h2>From music videos to 51-hour films.</h2>
+      <div class="film-credit-grid">
+        <article class="panel film-credit">
+          <figure class="film-credit-thumb">
+            <img src="https://i.ytimg.com/vi/ZRrBCcASFnA/hq720.jpg" alt="Gray Aura official music video thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin">
+          </figure>
+          <div>
+            <p class="video-meta">Music video / Asita Production</p>
+            <h3>Godchild, Thrsdae — Gray Aura</h3>
+            <p>Directed by Galaba Vamsi and Harshal Singh. Cinematography by Harshal Singh, Galaba Vamsi, and Aditya Singh. Edited by Galaba Vamsi.</p>
+            <div class="panel-actions">
+              <a class="text-link" href="https://www.youtube.com/watch?v=ZRrBCcASFnA" target="_blank" rel="noopener">Watch video</a>
+              <a class="text-link" href="https://www.instagram.com/asita_productions/" target="_blank" rel="noopener">Asita Productions</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel film-credit">
+          <figure class="film-credit-thumb">
+            <img src="https://i.ytimg.com/vi/-WPj4VcHnSs/hq720.jpg" alt="God Inter-IIT 8.0 film thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin">
+          </figure>
+          <div>
+            <p class="video-meta">FPS / Inter-IIT 8.0</p>
+            <h3>FPS — 51-hour filmmaking</h3>
+            <p>Director, editor, and writer with FPS — IIT Bhilai, developing, shooting, and finishing films under extreme time constraints with a student production team.</p>
+            <div class="panel-actions">
+              <a class="text-link" href="https://youtu.be/-WPj4VcHnSs" target="_blank" rel="noopener">Watch गोद</a>
+              <a class="text-link" href="https://www.youtube.com/@fps_iitbh" target="_blank" rel="noopener">FPS channel</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel film-credit">
+          <figure class="film-credit-thumb">
+            <img src="https://i.ytimg.com/vi/0WVlbskpzC8/hq720.jpg" alt="Launching Human Slop video thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin">
+          </figure>
+          <div>
+            <p class="video-meta">Startup / Product storytelling</p>
+            <h3>Human Slop</h3>
+            <p>Created and contributed to launch and social content for the anti-AI social platform I co-founded, translating a technical product into visual stories for an internet-native audience.</p>
+            <div class="panel-actions">
+              <a class="text-link" href="https://youtu.be/0WVlbskpzC8" target="_blank" rel="noopener">Launch video</a>
+              <a class="text-link" href="https://humanslop.in/" target="_blank" rel="noopener">Open Human Slop</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="film-archive" class="section reveal">
+      <p class="section-label">Film Archive</p>
+      <h2>Shorts, experiments, and campus work.</h2>
+      <div class="film-archive-grid">
+        <a class="video-card panel" href="https://youtu.be/-WPj4VcHnSs" target="_blank" rel="noopener" aria-label="Watch God Inter-IIT 8.0 on YouTube">
+          <figure class="video-thumb"><img src="https://i.ytimg.com/vi/-WPj4VcHnSs/hq720.jpg" alt="God Inter-IIT 8.0 thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5-9-5.5Z"></path></svg></span></figure>
+          <div class="video-body"><p class="video-meta">Inter-IIT 8.0 / 51-hour film</p><h3>गोद</h3></div>
+        </a>
+        <a class="video-card panel" href="https://youtu.be/X63npde0tC8" target="_blank" rel="noopener" aria-label="Watch REVERIE Inter-IIT 7.0 on YouTube">
+          <figure class="video-thumb"><img src="https://i.ytimg.com/vi/X63npde0tC8/hq720.jpg" alt="REVERIE Inter-IIT 7.0 thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5-9-5.5Z"></path></svg></span></figure>
+          <div class="video-body"><p class="video-meta">Inter-IIT 7.0 / 51-hour film</p><h3>REVERIE</h3></div>
+        </a>
+        <a class="video-card panel" href="https://youtu.be/neheCtcgAfw" target="_blank" rel="noopener" aria-label="Watch Lottery on YouTube">
+          <figure class="video-thumb"><img src="https://i.ytimg.com/vi/neheCtcgAfw/hq720.jpg" alt="Lottery film thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5-9-5.5Z"></path></svg></span></figure>
+          <div class="video-body"><p class="video-meta">FPS / Campus film</p><h3>Lottery</h3></div>
+        </a>
+        <a class="video-card panel" href="https://youtu.be/bAIMAUsxbjE" target="_blank" rel="noopener" aria-label="Watch TOHFA on YouTube">
+          <figure class="video-thumb"><img src="https://i.ytimg.com/vi/bAIMAUsxbjE/hq720.jpg" alt="TOHFA film thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5-9-5.5Z"></path></svg></span></figure>
+          <div class="video-body"><p class="video-meta">FPS / Campus film</p><h3>TOHFA</h3></div>
+        </a>
+        <a class="video-card panel" href="https://youtu.be/g7hVDZTYmq0" target="_blank" rel="noopener" aria-label="Watch Fresher's Introduction 2024 on YouTube">
+          <figure class="video-thumb"><img src="https://i.ytimg.com/vi/g7hVDZTYmq0/hq720.jpg" alt="Fresher's Introduction 2024 thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5-9-5.5Z"></path></svg></span></figure>
+          <div class="video-body"><p class="video-meta">FPS / Campus content</p><h3>Fresher's Introduction 2024</h3></div>
+        </a>
+        <a class="video-card panel" href="https://youtu.be/HAzgRXeCtuI" target="_blank" rel="noopener" aria-label="Watch ASYNC on YouTube">
+          <figure class="video-thumb"><img src="https://i.ytimg.com/vi/HAzgRXeCtuI/hq720.jpg" alt="ASYNC Backrooms lore short film thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5-9-5.5Z"></path></svg></span></figure>
+          <div class="video-body"><p class="video-meta">Short film / made in approximately four hours</p><h3>ASYNC</h3></div>
+        </a>
+        <a class="video-card panel" href="https://youtu.be/ZOxLzjBaoKc" target="_blank" rel="noopener" aria-label="Watch A Successful Failure on YouTube">
+          <figure class="video-thumb"><img src="https://i.ytimg.com/vi/ZOxLzjBaoKc/hq720.jpg" alt="A Successful Failure thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5-9-5.5Z"></path></svg></span></figure>
+          <div class="video-body"><p class="video-meta">Personal narrative / video essay</p><h3>A Successful Failure</h3></div>
+        </a>
+        <a class="video-card panel" href="https://youtu.be/qLJkAH8nXMg" target="_blank" rel="noopener" aria-label="Watch Core Memories on YouTube">
+          <figure class="video-thumb"><img src="https://i.ytimg.com/vi/qLJkAH8nXMg/hq720.jpg" alt="Core Memories thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5-9-5.5Z"></path></svg></span></figure>
+          <div class="video-body"><p class="video-meta">Visual experiment</p><h3>Core Memories</h3></div>
+        </a>
+        <a class="video-card panel" href="https://youtu.be/9foVftC4LJs" target="_blank" rel="noopener" aria-label="Watch MUDANE on YouTube">
+          <figure class="video-thumb"><img src="https://i.ytimg.com/vi/9foVftC4LJs/hq720.jpg" alt="MUDANE Sony FX30 experiment thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5-9-5.5Z"></path></svg></span></figure>
+          <div class="video-body"><p class="video-meta">Camera experiment / Sony FX30</p><h3>MUDANE</h3></div>
+        </a>
+        <a class="video-card panel" href="https://youtu.be/XAaaViNTpWc" target="_blank" rel="noopener" aria-label="Watch TRIP on YouTube">
+          <figure class="video-thumb"><img src="https://i.ytimg.com/vi/XAaaViNTpWc/hq720.jpg" alt="TRIP Fuji XT3 thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5-9-5.5Z"></path></svg></span></figure>
+          <div class="video-body"><p class="video-meta">Camera experiment / Fuji XT3</p><h3>TRIP</h3></div>
+        </a>
+        <a class="video-card panel" href="https://youtu.be/ONRd5ax9iXw" target="_blank" rel="noopener" aria-label="Watch Animal Succession edit on YouTube">
+          <figure class="video-thumb"><img src="https://i.ytimg.com/vi/ONRd5ax9iXw/hq720.jpg" alt="Animal Succession edit thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5-9-5.5Z"></path></svg></span></figure>
+          <div class="video-body"><p class="video-meta">Editing experiment</p><h3>Animal Succession edit</h3></div>
+        </a>
+        <a class="video-card panel" href="https://youtu.be/66JtvPzybow" target="_blank" rel="noopener" aria-label="Watch LOSERS on YouTube">
+          <figure class="video-thumb"><img src="https://i.ytimg.com/vi/66JtvPzybow/hq720.jpg" alt="LOSERS Fuji XT3 thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5-9-5.5Z"></path></svg></span></figure>
+          <div class="video-body"><p class="video-meta">Short film / Fuji XT3</p><h3>LOSERS</h3></div>
+        </a>
+      </div>
+    </section>
+
+    <section id="film-process" class="section narrow reveal">
+      <p class="section-label">Process</p>
+      <h2>I can take a project from first idea to final publish.</h2>
+      <div class="film-process-grid">
+        <div class="film-process-step"><strong>01 / Story</strong><span>Idea, script, structure, and visual references.</span></div>
+        <div class="film-process-step"><strong>02 / Production</strong><span>Shot planning, direction, camera, actors, and crew.</span></div>
+        <div class="film-process-step"><strong>03 / Post</strong><span>Editing, sound, visual polish, and fast-turnaround finishing.</span></div>
+        <div class="film-process-step"><strong>04 / Release</strong><span>Social-first cuts, product storytelling, and final publishing.</span></div>
+      </div>
+      <p class="prose film-technical-note">My technical background in AI/ML, computer vision, robotics, GPU systems, and full-stack software gives me an extra edge with cameras, digital tools, visual effects, interactive media, and technical products.</p>
+    </section>
+
+    <section id="film-links" class="section contact-section reveal">
+      <p class="section-label">Links</p>
+      <h2>Available for stories, products, and visual experiments.</h2>
+      <p class="contact-copy">For narrative work, music videos, startup content, social-first reels, and unusual projects that need both visual instinct and technical fluency.</p>
+      <div class="contact-actions">
+        <a class="btn primary" href="mailto:galabavamsi12@gmail.com">Email Me</a>
+        <a class="btn" href="https://www.instagram.com/galaba_vamsi/" target="_blank" rel="noopener">Instagram</a>
+        <a class="btn" href="https://www.youtube.com/@galabavamsi12" target="_blank" rel="noopener">Personal YouTube</a>
+        <a class="btn" href="https://www.youtube.com/@fps_iitbh" target="_blank" rel="noopener">FPS Channel</a>
+        <a class="btn" href="https://x.com/Galaba_Vamsi" target="_blank" rel="noopener">Twitter/X</a>
+        <a class="btn" href="https://www.linkedin.com/in/galabavamsi/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <p class="contact-note">galabavamsi12@gmail.com / +91 7483047846</p>
+    </section>
+  </main>
+
   <footer>
     <p>(c) 2026 Galaba Vamsi. Built with care, pixels, and plain language.</p>
   </footer>
 
-  <script src="config.js?v=chat-2"></script>
-  <script src="script.js?v=chat-2"></script>
-  <script src="pet.js?v=chat-2"></script>
+  <script src="config.js?v=chat-3"></script>
+  <script src="script.js?v=chat-3"></script>
+  <script src="pet.js?v=chat-3"></script>
 </body>
 </html>
