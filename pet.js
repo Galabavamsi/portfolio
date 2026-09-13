@@ -151,8 +151,32 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, tech profile ${LINKS.
     return words.some(word => text.includes(word));
   }
 
+  const CHAT_REFUSAL = 'I can only help with Galaba Vamsi\'s portfolio, projects, research, skills, film work, links, or contact details.';
+  const PORTFOLIO_TERMS = [
+    'vamsi', 'galaba', 'portfolio', 'profile', 'project', 'experience', 'research', 'scholar',
+    'film', 'filmmak', 'gray aura', 'fps', 'youtube', 'instagram', 'twitter', 'linkedin',
+    'github', 'resume', 'skill', 'hflow', 'hebbian', 'ris', 'wireless', 'human slop',
+    'charter', 'robocurve', 'open-pyfx', 'contact', 'email', 'hire', 'publication', 'paper',
+  ];
+  const BLOCKED_QUESTION_PATTERNS = [
+    /\b(?:ignore|disregard|forget|override|bypass|reveal|expose)\b[\s\S]{0,100}\b(?:previous|system|developer|prompt|instruction|rule)s?\b/i,
+    /\b(?:system prompt|developer message|prompt injection|jailbreak|dan mode|uncensored mode|roleplay as)\b/i,
+    /\b(?:write|give|generate|provide|show|create|solve|implement|debug|fix|teach|explain)\b[\s\S]{0,100}\b(?:code|c\+\+|python|javascript|typescript|java|rust|golang|sql|algorithm|array|leetcode|program|function|script)\b/i,
+    /\b(?:c\+\+|python|javascript|typescript|java|rust|golang|sql|leetcode|programming)\b[\s\S]{0,100}\b(?:code|solution|algorithm|function|script|program)\b/i,
+  ];
+
+  function isBlockedQuestion(question) {
+    const q = String(question || '').trim().toLowerCase();
+    if (!q || q.length > 500) return true;
+    if (BLOCKED_QUESTION_PATTERNS.some(pattern => pattern.test(q))) return true;
+    if (!PORTFOLIO_TERMS.some(term => q.includes(term)) && !/^(?:hi|hello|hey|who are you|what can you help with)\b/i.test(q)) return true;
+    return false;
+  }
+
   function localAnswer(question) {
     const q = question.toLowerCase();
+
+    if (isBlockedQuestion(q)) return CHAT_REFUSAL;
 
     if (includesAny(q, ['switch profile', 'switch profiles', 'tech profile', 'film profile', 'two profile', 'two profiles', 'which profile'])) {
       return FACTS.profileSwitch;
@@ -502,6 +526,7 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, tech profile ${LINKS.
   });
 
   async function askRemote(text) {
+    if (isBlockedQuestion(text)) return '';
     const direct = !!CFG.devKey;
     if (!direct && LOCAL_ORIGIN && !CFG.useRemoteLocally) return '';
     if (!direct && !CFG.endpoint) return '';
@@ -521,7 +546,7 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, tech profile ${LINKS.
     const msgs = [{ role: 'system', content: SYSTEM }, ...history.slice(-12)];
     const body = direct
       ? { model: 'deepseek-v4-flash', messages: msgs, stream: true, max_tokens: 500, temperature: 0.5, thinking: { type: 'disabled' } }
-      : { messages: msgs };
+      : { messages: history.slice(-12), context: SYSTEM };
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), direct ? 15000 : 8500);
