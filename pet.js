@@ -151,32 +151,39 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, tech profile ${LINKS.
     return words.some(word => text.includes(word));
   }
 
-  const CHAT_REFUSAL = 'I can only help with Galaba Vamsi\'s portfolio, projects, research, skills, film work, links, or contact details.';
+  const CHAT_REDIRECT = 'I\'m focused on Vamsi\'s portfolio. Ask me about his projects, film and video editing, research, skills, links, or contact details.';
+  const CHAT_GUARDRAIL = 'I can\'t change BIT\'s role or provide general coding/tutorial answers, but I can help with Vamsi\'s projects, film work, research, skills, links, or contact details.';
   const PORTFOLIO_TERMS = [
     'vamsi', 'galaba', 'portfolio', 'profile', 'project', 'experience', 'research', 'scholar',
     'film', 'filmmak', 'gray aura', 'fps', 'youtube', 'instagram', 'twitter', 'linkedin',
     'github', 'resume', 'skill', 'hflow', 'hebbian', 'ris', 'wireless', 'human slop',
     'charter', 'robocurve', 'open-pyfx', 'contact', 'email', 'hire', 'publication', 'paper',
+    'video', 'editing', 'editor', 'director', 'cinematography', 'creative', 'visual', 'short film', 'reel', 'media',
   ];
-  const BLOCKED_QUESTION_PATTERNS = [
+  const INJECTION_PATTERNS = [
     /\b(?:ignore|disregard|forget|override|bypass|reveal|expose)\b[\s\S]{0,100}\b(?:previous|system|developer|prompt|instruction|rule)s?\b/i,
     /\b(?:system prompt|developer message|prompt injection|jailbreak|dan mode|uncensored mode|roleplay as)\b/i,
+  ];
+  const UNSAFE_PATTERNS = [
     /\b(?:write|give|generate|provide|show|create|solve|implement|debug|fix|teach|explain)\b[\s\S]{0,100}\b(?:code|c\+\+|python|javascript|typescript|java|rust|golang|sql|algorithm|array|leetcode|program|function|script)\b/i,
     /\b(?:c\+\+|python|javascript|typescript|java|rust|golang|sql|leetcode|programming)\b[\s\S]{0,100}\b(?:code|solution|algorithm|function|script|program)\b/i,
   ];
 
-  function isBlockedQuestion(question) {
+  function classifyQuestion(question) {
     const q = String(question || '').trim().toLowerCase();
-    if (!q || q.length > 500) return true;
-    if (BLOCKED_QUESTION_PATTERNS.some(pattern => pattern.test(q))) return true;
-    if (!PORTFOLIO_TERMS.some(term => q.includes(term)) && !/^(?:hi|hello|hey|who are you|what can you help with)\b/i.test(q)) return true;
-    return false;
+    if (!q || q.length > 500) return 'off-topic';
+    if (INJECTION_PATTERNS.some(pattern => pattern.test(q))) return 'injection';
+    if (UNSAFE_PATTERNS.some(pattern => pattern.test(q))) return 'unsafe';
+    if (!PORTFOLIO_TERMS.some(term => q.includes(term)) && !/^(?:hi|hello|hey|who are you|what can you help with)\b/i.test(q)) return 'off-topic';
+    return 'allowed';
   }
 
   function localAnswer(question) {
     const q = question.toLowerCase();
+    const classification = classifyQuestion(q);
 
-    if (isBlockedQuestion(q)) return CHAT_REFUSAL;
+    if (classification === 'injection' || classification === 'unsafe') return CHAT_GUARDRAIL;
+    if (classification === 'off-topic') return CHAT_REDIRECT;
 
     if (includesAny(q, ['switch profile', 'switch profiles', 'tech profile', 'film profile', 'two profile', 'two profiles', 'which profile'])) {
       return FACTS.profileSwitch;
@@ -187,7 +194,7 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, tech profile ${LINKS.
     if (includesAny(q, ['fps', 'inter-iit', '51-hour', '51 hour', 'गोद', 'reverie', 'lottery', 'tohfa', 'fresher'])) {
       return FACTS.fpsFilms;
     }
-    if (includesAny(q, ['film', 'filmmak', 'film work', 'film credits', 'director', 'editor', 'cinematograph', 'writer', 'short film', 'visual experiment', 'creative work'])) {
+    if (includesAny(q, ['film', 'filmmak', 'film work', 'film credits', 'director', 'editor', 'editing', 'video', 'cinematograph', 'writer', 'short film', 'visual experiment', 'creative work'])) {
       return `${FACTS.filmSummary} ${FACTS.filmWorkflow}`;
     }
     if (includesAny(q, ['async', 'animal succession', 'successful failure', 'core memories', 'mudane', 'trip', 'losers', 'innocence', 'film archive', 'film links'])) {
@@ -526,7 +533,7 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, tech profile ${LINKS.
   });
 
   async function askRemote(text) {
-    if (isBlockedQuestion(text)) return '';
+    if (classifyQuestion(text) !== 'allowed') return '';
     const direct = !!CFG.devKey;
     if (!direct && LOCAL_ORIGIN && !CFG.useRemoteLocally) return '';
     if (!direct && !CFG.endpoint) return '';
