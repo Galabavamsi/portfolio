@@ -40,17 +40,23 @@
     resume: 'resume_vamsi.pdf',
     ris: 'https://github.com/Galabavamsi/RIS-SIM',
     hflow: 'https://github.com/Hebbian-Robotics/hflow',
+    hflowContributions: 'https://github.com/Hebbian-Robotics/hflow/pulls?q=is%3Apr+state%3Aclosed+author%3AGalabavamsi',
     hflowPr350: 'https://github.com/Hebbian-Robotics/hflow/pull/350',
     hflowPr353: 'https://github.com/Hebbian-Robotics/hflow/pull/353',
     hflowPr360: 'https://github.com/Hebbian-Robotics/hflow/pull/360',
     hflowPr362: 'https://github.com/Hebbian-Robotics/hflow/pull/362',
     hflowPr367: 'https://github.com/Hebbian-Robotics/hflow/pull/367',
     hflowPr400: 'https://github.com/Hebbian-Robotics/hflow/pull/400',
+    hflowPr598: 'https://github.com/Hebbian-Robotics/hflow/pull/598',
+    hflowIssue597: 'https://github.com/Hebbian-Robotics/hflow/issues/597',
     hflowIssue365: 'https://github.com/Hebbian-Robotics/hflow/issues/365',
     hflowIssue399: 'https://github.com/Hebbian-Robotics/hflow/issues/399',
     robocurve: 'https://robocurve.org/',
     robocurveYc: 'https://www.ycombinator.com/companies/robocurve',
     inspectRobots: 'https://github.com/robocurve/inspect-robots',
+    inspectRobotsContributions: 'https://github.com/robocurve/inspect-robots/pulls?q=is%3Apr+state%3Aopen+author%3AGalabavamsi',
+    inspectRobotsPr476: 'https://github.com/robocurve/inspect-robots/pull/476',
+    inspectRobotsPr475: 'https://github.com/robocurve/inspect-robots/pull/475',
     inspectRobotsPr434: 'https://github.com/robocurve/inspect-robots/pull/434',
     humanSlop: 'https://humanslop.in/',
     humanSlopApp: 'https://play.google.com/store/apps/details?id=com.humanslop.app',
@@ -109,10 +115,10 @@
     profileSwitch: 'The portfolio has separate Tech and Film profiles. Tech covers software engineering, AI/ML, projects, experience, publications, and skills. Film covers direction, writing, editing, cinematography, music videos, campus films, startup content, and visual experiments. Use the Tech and Film buttons in the header, or open ' + LINKS.filmProfile + ' for the film profile.',
     experience: 'Research Intern at IIT Bhilai from May to Aug 2025 under Dr. Arzad Alam. He built an open-source 6G RIS simulator, emulated USRP workflows for LoS/NLoS environments, reduced hardware costs, and designed a two-layer RIS PCB workflow for RF energy harvesting research.',
     swiggy: 'Vamsi was a Marketing Intern at Swiggy Ltd for the Campus CEO project from May to July 2024. He managed a campaign with 15 social media posts and contributed to campus marketing initiatives and execution.',
-    hflow: 'Hebbian Robotics (YC S26) is the organization behind HFlow, an open-source robotics data processing and evaluation framework. In 2026, Vamsi contributed 6 maintainer-reviewed and merged pull requests: #350, #353, #360, #362, #367, and #400. PR #400 resolved HFlow issue #399 by refusing LeRobot depth videos before conversion when depth markers are present, preserving the existing RGB path and preventing loss of 12-bit depth semantics. PR #367 resolved HFlow issue #365 by adding a reproducible cold camera_frame_stats evidence benchmark covering 3 cold 1080p30 checks with 900 decoded frames each and a 4.897 s median; it separated transform timing and provenance and documented that no repeatable semantics-preserving speedup was demonstrated, without changing the shipped filter graph. HFlow: ' + LINKS.hflow + '. PRs: ' + LINKS.hflowPr350 + ', ' + LINKS.hflowPr353 + ', ' + LINKS.hflowPr360 + ', ' + LINKS.hflowPr362 + ', ' + LINKS.hflowPr367 + ', ' + LINKS.hflowPr400 + '. Issues: ' + LINKS.hflowIssue365 + ', ' + LINKS.hflowIssue399 + '.',
+    hflow: 'Hebbian Robotics (YC S26) is the organization behind HFlow, an open-source robotics data processing and evaluation framework. In 2026, Vamsi contributed 7 maintainer-reviewed and merged pull requests: #350, #353, #360, #362, #367, #400, and #598. PR #598 resolved HFlow issue #597 by refusing sources with multiple channels on one topic before canonical episode creation, adding doctor diagnostics, and bumping TRANSFORM_BEHAVIOR_VERSION to 10. PR #400 resolved issue #399 by refusing LeRobot depth videos before conversion when depth markers are present, preserving the existing RGB path and preventing loss of 12-bit depth semantics. PR #367 resolved issue #365 by adding a reproducible cold camera_frame_stats evidence benchmark covering 3 cold 1080p30 checks with 900 decoded frames each and a 4.897 s median; it separated transform timing and provenance and documented that no repeatable semantics-preserving speedup was demonstrated, without changing the shipped filter graph. HFlow: ' + LINKS.hflow + '. Contributions: ' + LINKS.hflowContributions + '. PRs: ' + LINKS.hflowPr350 + ', ' + LINKS.hflowPr353 + ', ' + LINKS.hflowPr360 + ', ' + LINKS.hflowPr362 + ', ' + LINKS.hflowPr367 + ', ' + LINKS.hflowPr400 + ', ' + LINKS.hflowPr598 + '. Issues: ' + LINKS.hflowIssue365 + ', ' + LINKS.hflowIssue399 + ', ' + LINKS.hflowIssue597 + '.',
     robocurve: 'Robocurve is an active YC Summer 2026 company in San Francisco and a Public Benefit Corporation building open-source tools and independent benchmarks for physical AI. Website: ' + LINKS.robocurve + '. YC: ' + LINKS.robocurveYc + '.',
     inspectRobots: 'Inspect Robots is Robocurve\'s MIT-licensed open-source evaluation framework for physical AI. It runs policies on real or simulated embodiments with auditable logs and Rerun visualization. Repository: ' + LINKS.inspectRobots + '.',
-    inspectRobotsContribution: 'Vamsi has an open pull request awaiting approval on Inspect Robots: PR #434 adds a first-party inspect-robots-wandb plugin with a WandbSink for recording evaluation configuration and final aggregate metrics in one Weights & Biases run per evaluation. PR: ' + LINKS.inspectRobotsPr434 + '.',
+    inspectRobotsContribution: 'Vamsi has 3 open pull requests under review on Inspect Robots. PR #476 exposes configurable retry policy across agent integrations and honors valid Retry-After headers: ' + LINKS.inspectRobotsPr476 + '. PR #475 preserves unknown git provenance when working-tree status cannot be verified: ' + LINKS.inspectRobotsPr475 + '. PR #434 adds a first-party inspect-robots-wandb plugin with a WandbSink for recording evaluation configuration and final aggregate metrics per evaluation: ' + LINKS.inspectRobotsPr434 + '. Contributions: ' + LINKS.inspectRobotsContributions + '.',
     humanSlop: 'Human Slop is an anti-AI social platform Vamsi co-founded in 2026 and continues to build. It uses React, PostgreSQL, AWS, hardware-bound biometric authentication, and real-time typing forensics to defend against synthetic content.',
     arista: 'For the Arista Networks Wi-Fi Optimization challenge at Inter IIT Tech Meet 14.0, Vamsi built a client-aware Wi-Fi RRM system in NS-3 using 3 RF metrics, 5 ms / 100,000-sample I/Q captures, 16-class Dual-CNN inference, and a 5-AP / 50-client topology with IEEE 802.11k/v. The team ranked 5th. Slides: ' + LINKS.aristaSlides,
     charter: 'Charter is an agentic commerce prototype for the Razorpay AI Buildathon Track 01. Chat, voice, and MCP share a bounded commerce core with frozen Razorpay test-mode quotes, audit trails, and fail-closed payment handling. GitHub: ' + LINKS.charter + '. Evaluator: ' + LINKS.charterEvaluator + '.',
@@ -145,7 +151,7 @@ ACCURACY NOTES:
 
 FACTS:
 ${Object.values(FACTS).join('\n')}
-Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, tech profile ${LINKS.techProfile}, film profile ${LINKS.filmProfile}, blog ${LINKS.blog}, LinkedIn ${LINKS.linkedin}, GitHub ${LINKS.github}, X/Twitter ${LINKS.twitter}, Instagram ${LINKS.instagram}, personal YouTube ${LINKS.youtube}, FPS channel ${LINKS.fpsChannel}, Google Scholar ${LINKS.scholar}, ResearchGate ${LINKS.researchgate}, IEEE author ${LINKS.ieeeAuthor}, resume ${LINKS.resume}, Gray Aura ${LINKS.grayAura}, Asita Productions ${LINKS.asita}, HFlow ${LINKS.hflow}, HFlow PRs ${LINKS.hflowPr350}, ${LINKS.hflowPr353}, ${LINKS.hflowPr360}, ${LINKS.hflowPr362}, ${LINKS.hflowPr367}, ${LINKS.hflowPr400}, HFlow issues ${LINKS.hflowIssue365}, ${LINKS.hflowIssue399}, Robocurve ${LINKS.robocurve}, Robocurve YC ${LINKS.robocurveYc}, inspect-robots ${LINKS.inspectRobots}, inspect-robots PR ${LINKS.inspectRobotsPr434}, RIS ${LINKS.ris}, Human Slop ${LINKS.humanSlop}, Human Slop app ${LINKS.humanSlopApp}, Human Slop GitHub ${LINKS.humanSlopGithub}, Charter ${LINKS.charter}, Charter evaluator ${LINKS.charterEvaluator}, digital twin ${LINKS.digitalTwin}, HeatCast ${LINKS.heatcast}, HeatCast demo ${LINKS.heatcastDemo}, pond planning ${LINKS.pondPlanning}, Arista slides ${LINKS.aristaSlides}, Electron-GNN ${LINKS.electronGnn}, Open-PyFX ${LINKS.openPyfx}, Lunar Crater Detection ${LINKS.crater}, AntennaNet ${LINKS.antenna}, Serenity ${LINKS.serenity}, publications ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
+Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, tech profile ${LINKS.techProfile}, film profile ${LINKS.filmProfile}, blog ${LINKS.blog}, LinkedIn ${LINKS.linkedin}, GitHub ${LINKS.github}, X/Twitter ${LINKS.twitter}, Instagram ${LINKS.instagram}, personal YouTube ${LINKS.youtube}, FPS channel ${LINKS.fpsChannel}, Google Scholar ${LINKS.scholar}, ResearchGate ${LINKS.researchgate}, IEEE author ${LINKS.ieeeAuthor}, resume ${LINKS.resume}, Gray Aura ${LINKS.grayAura}, Asita Productions ${LINKS.asita}, HFlow ${LINKS.hflow}, HFlow contributions ${LINKS.hflowContributions}, HFlow PRs ${LINKS.hflowPr350}, ${LINKS.hflowPr353}, ${LINKS.hflowPr360}, ${LINKS.hflowPr362}, ${LINKS.hflowPr367}, ${LINKS.hflowPr400}, ${LINKS.hflowPr598}, HFlow issues ${LINKS.hflowIssue365}, ${LINKS.hflowIssue399}, ${LINKS.hflowIssue597}, Robocurve ${LINKS.robocurve}, Robocurve YC ${LINKS.robocurveYc}, inspect-robots ${LINKS.inspectRobots}, inspect-robots contributions ${LINKS.inspectRobotsContributions}, inspect-robots PRs ${LINKS.inspectRobotsPr476}, ${LINKS.inspectRobotsPr475}, ${LINKS.inspectRobotsPr434}, RIS ${LINKS.ris}, Human Slop ${LINKS.humanSlop}, Human Slop app ${LINKS.humanSlopApp}, Human Slop GitHub ${LINKS.humanSlopGithub}, Charter ${LINKS.charter}, Charter evaluator ${LINKS.charterEvaluator}, digital twin ${LINKS.digitalTwin}, HeatCast ${LINKS.heatcast}, HeatCast demo ${LINKS.heatcastDemo}, pond planning ${LINKS.pondPlanning}, Arista slides ${LINKS.aristaSlides}, Electron-GNN ${LINKS.electronGnn}, Open-PyFX ${LINKS.openPyfx}, Lunar Crater Detection ${LINKS.crater}, AntennaNet ${LINKS.antenna}, Serenity ${LINKS.serenity}, publications ${LINKS.openEmulator}, ${LINKS.risEnergy}, ${LINKS.risReview}.`;
 
   function includesAny(text, words) {
     return words.some(word => text.includes(word));
@@ -157,7 +163,7 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, tech profile ${LINKS.
     'vamsi', 'galaba', 'portfolio', 'profile', 'project', 'experience', 'research', 'scholar',
     'film', 'filmmak', 'gray aura', 'fps', 'youtube', 'instagram', 'twitter', 'linkedin',
     'github', 'resume', 'skill', 'hflow', 'hebbian', 'ris', 'wireless', 'human slop',
-    'charter', 'robocurve', 'open-pyfx', 'contact', 'email', 'hire', 'publication', 'paper',
+    'charter', 'robocurve', 'inspect robots', 'inspect-robots', 'contribution', 'pull request', 'open-pyfx', 'contact', 'email', 'hire', 'publication', 'paper',
     'video', 'editing', 'editor', 'director', 'cinematography', 'creative', 'visual', 'short film', 'reel', 'media',
   ];
   const INJECTION_PATTERNS = [
@@ -206,7 +212,7 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, tech profile ${LINKS.
     if (includesAny(q, ['instagram', 'youtube', 'twitter', 'x.com', 'social link', 'social media'])) {
       return FACTS.socialLinks;
     }
-    if (includesAny(q, ['hflow', 'hebbian robotics', '#350', '#353', '#360', '#362', '#365', '#367', '#399', '#400']) || (q.includes('hebbian') && !q.includes('learning'))) {
+    if (includesAny(q, ['hflow', 'hebbian robotics', 'hflow contributions', '#350', '#353', '#360', '#362', '#365', '#367', '#399', '#400', '#597', '#598']) || (q.includes('hebbian') && !q.includes('learning'))) {
       return `If you mean Hebbian Robotics: ${FACTS.hflow}`;
     }
     if (includesAny(q, ['charter', 'razorpay', 'agentic commerce', 'mcp'])) {
@@ -222,7 +228,7 @@ Links: email ${LINKS.email}, portfolio ${LINKS.portfolio}, tech profile ${LINKS.
       return FACTS.pondPlanning;
     }
     if (includesAny(q, ['robocurve', 'yc summer 2026', 'public benefit'])) {
-      return `${FACTS.robocurve} ${FACTS.inspectRobots} PR #434: ${LINKS.inspectRobotsPr434}`;
+      return `${FACTS.robocurve} ${FACTS.inspectRobots} ${FACTS.inspectRobotsContribution}`;
     }
     if (includesAny(q, ['inspect-robots', 'inspect robots', '#434', 'wandb', 'weights & biases', 'weights and biases'])) {
       return `${FACTS.inspectRobots} ${FACTS.inspectRobotsContribution}`;

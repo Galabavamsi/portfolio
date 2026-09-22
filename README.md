@@ -20,11 +20,18 @@ and for keeping the AI chat's API key server-side.
 
 ### [HFlow](https://github.com/Hebbian-Robotics/hflow) · [Hebbian Robotics (YC S26)](https://www.ycombinator.com/companies/hebbian-robotics)
 
+- [PR #598 · merged](https://github.com/Hebbian-Robotics/hflow/pull/598) · [issue #597](https://github.com/Hebbian-Robotics/hflow/issues/597) — Refused sources with multiple channels on one topic before canonical episode creation, added `hflow doctor` diagnostics, and bumped `TRANSFORM_BEHAVIOR_VERSION` to 10.
 - [PR #350 · merged](https://github.com/Hebbian-Robotics/hflow/pull/350) · [issue #296](https://github.com/Hebbian-Robotics/hflow/issues/296) — LeRobot’s Hugging Face tree discovery stopped after the first API page; added paginated traversal via `Link: rel="next"`, preserved request headers, deduplicated paths, rejected unsafe cross-origin links, and prevented pagination loops.
 - [PR #353 · merged](https://github.com/Hebbian-Robotics/hflow/pull/353) · [issue #292](https://github.com/Hebbian-Robotics/hflow/issues/292) — LeRobot video-cache filenames omitted the video file index; included the camera key, video chunk index, and video file index in cache identity and bumped the converter version to invalidate stale outputs.
 - [PR #360 · merged](https://github.com/Hebbian-Robotics/hflow/pull/360) · [issue #314](https://github.com/Hebbian-Robotics/hflow/issues/314) — Centralized ingest URI parsing across the CLI, server, and SDK with shared trimming and safety checks; normalized safe relative URIs and rejected blank, absolute, and parent-escaping paths.
 
 Open-source SDK for scalable multimodal data pipelines in robotics and Physical AI.
+
+### [Inspect Robots](https://github.com/robocurve/inspect-robots) · [Robocurve (YC Summer 2026)](https://www.ycombinator.com/companies/robocurve)
+
+- [PR #476 · open](https://github.com/robocurve/inspect-robots/pull/476) — Exposes configurable retry policy across agent integrations and honors valid `Retry-After` headers.
+- [PR #475 · open](https://github.com/robocurve/inspect-robots/pull/475) — Preserves unknown git provenance when working-tree status cannot be verified.
+- [PR #434 · open](https://github.com/robocurve/inspect-robots/pull/434) — Adds a first-party `inspect-robots-wandb` plugin with a `WandbSink` for per-evaluation configuration and aggregate metrics.
 
 ## DEPLOY
 

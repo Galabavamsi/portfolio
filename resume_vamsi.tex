@@ -2,7 +2,7 @@
 
 \usepackage[a4paper,left=0.30in,right=0.30in,top=0.27in,bottom=0.27in]{geometry}
 \usepackage{fontspec}
-\setmainfont{Noto Sans}
+\setmainfont{Arial}
 \usepackage[english]{babel}
 \usepackage{enumitem}
 \usepackage{xcolor}
@@ -19,7 +19,7 @@
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0pt}
-\linespread{0.88}
+\linespread{0.78}
 \urlstyle{same}
 
 \titleformat{\section}
@@ -77,11 +77,17 @@ Mechatronics undergraduate at IIT Bhilai focused on software engineering, AI/ML,
 
 \entry{Open-Source Contributor - HFlow}{Hebbian Robotics (YC S26) | \href{https://github.com/Hebbian-Robotics/hflow}{HFlow repository}}{2026}
 \begin{itemize}
-  \item Delivered 6 maintainer-reviewed merged PRs addressing 6 tracked issues in HFlow's robotics and Physical AI SDK.
+  \item Delivered 7 maintainer-reviewed merged PRs addressing 7 tracked issues in HFlow's robotics and Physical AI SDK.
+  \item \href{https://github.com/Hebbian-Robotics/hflow/pull/598}{PR \#598} / \href{https://github.com/Hebbian-Robotics/hflow/issues/597}{issue \#597}: refused sources with multiple channels on one topic before canonical episode creation, added doctor diagnostics, and bumped \texttt{TRANSFORM\_BEHAVIOR\_VERSION} to 10.
   \item \href{https://github.com/Hebbian-Robotics/hflow/pull/350}{PR \#350} / \href{https://github.com/Hebbian-Robotics/hflow/issues/296}{issue \#296}: implemented paginated LeRobot tree traversal using \texttt{Link: rel="next"} headers, preserved request headers, deduplicated paths, rejected unsafe cross-origin URLs, and prevented pagination loops.
   \item \href{https://github.com/Hebbian-Robotics/hflow/pull/353}{PR \#353} / \href{https://github.com/Hebbian-Robotics/hflow/issues/292}{issue \#292}: resolved LeRobot video-cache collisions by including camera, chunk, and file indexes in cache identity and bumping the converter version.
   \item \href{https://github.com/Hebbian-Robotics/hflow/pull/360}{PR \#360} / \href{https://github.com/Hebbian-Robotics/hflow/issues/314}{issue \#314}: centralized safe ingest URI parsing across the CLI, server, and SDK and added validation for blank, absolute, and parent-escaping paths.
   \item \href{https://github.com/Hebbian-Robotics/hflow/pull/367}{PR \#367} / \href{https://github.com/Hebbian-Robotics/hflow/issues/365}{issue \#365}: benchmarked 3 cold 1080p30 checks (900 frames/check; 4.897 s median) and separated transform timing/provenance; \href{https://github.com/Hebbian-Robotics/hflow/pull/400}{PR \#400} / \href{https://github.com/Hebbian-Robotics/hflow/issues/399}{issue \#399}: refused LeRobot depth videos before conversion to preserve 12-bit depth semantics.
+\end{itemize}
+
+\entry{Open-Source Contributor - Inspect Robots}{Robocurve (YC Summer 2026) | \href{https://github.com/robocurve/inspect-robots}{Inspect Robots repository}}{Sep 2026 - Present}
+\begin{itemize}
+  \item Opened 3 PRs under review: configurable retry policy across agent integrations (\href{https://github.com/robocurve/inspect-robots/pull/476}{\#476}), preservation of unknown git provenance (\href{https://github.com/robocurve/inspect-robots/pull/475}{\#475}), and a first-party W\&B logging sink plugin (\href{https://github.com/robocurve/inspect-robots/pull/434}{\#434}).
 \end{itemize}
 
 \entry{Research Intern - 6G RIS Simulator}{IIT Bhilai | Advisor: Dr. Arzad Alam}{May 2025 - Aug 2025}

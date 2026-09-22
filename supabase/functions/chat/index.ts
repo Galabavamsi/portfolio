@@ -18,7 +18,7 @@ const PORTFOLIO_TERMS = [
   'vamsi', 'galaba', 'portfolio', 'profile', 'project', 'experience', 'research', 'scholar',
   'film', 'filmmak', 'gray aura', 'fps', 'youtube', 'instagram', 'twitter', 'linkedin',
   'github', 'resume', 'skill', 'hflow', 'hebbian', 'ris', 'wireless', 'human slop',
-  'charter', 'robocurve', 'open-pyfx', 'contact', 'email', 'hire', 'publication', 'paper',
+  'charter', 'robocurve', 'inspect robots', 'inspect-robots', 'contribution', 'pull request', 'open-pyfx', 'contact', 'email', 'hire', 'publication', 'paper',
   'video', 'editing', 'editor', 'director', 'cinematography', 'creative', 'visual', 'short film', 'reel', 'media',
 ];
 const INJECTION_PATTERNS = [
