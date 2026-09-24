@@ -29,6 +29,8 @@ Open-source SDK for scalable multimodal data pipelines in robotics and Physical 
 
 ### [Inspect Robots](https://github.com/robocurve/inspect-robots) · [Robocurve (YC Summer 2026)](https://www.ycombinator.com/companies/robocurve)
 
+Accepted an invitation to co-author the forthcoming arXiv paper describing the Inspect Robots framework; manuscript preparation is underway.
+
 - [PR #476 · merged](https://github.com/robocurve/inspect-robots/pull/476) — Exposes configurable retry policy across agent integrations and honors valid `Retry-After` headers.
 - [PR #475 · merged](https://github.com/robocurve/inspect-robots/pull/475) — Preserves unknown git provenance when working-tree status cannot be verified.
 - [PR #434 · open](https://github.com/robocurve/inspect-robots/pull/434) — Adds a first-party `inspect-robots-wandb` plugin with a `WandbSink` for per-evaluation configuration and aggregate metrics.
