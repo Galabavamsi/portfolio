@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I shipped a Weights & Biases sink for robot evals | Galaba Vamsi</title>
+  <meta name="description" content="inspect-robots-wandb puts every Inspect Robots evaluation into one Weights &amp; Biases run. What the plugin logs, how it hooks into the framework, and the design choices behind a small package with a strict quality bar.">
+  <link rel="canonical" href="https://galabavamsi.github.io/portfolio/blog/inspect-robots-wandb.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="I shipped a Weights &amp; Biases sink for robot evals. Here is how it works.">
+  <meta property="og:description" content="inspect-robots-wandb v0.1.0 is on PyPI: one W&amp;B run per Inspect Robots evaluation, with the full eval spec as config and every aggregate metric.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2315110d'/%3E%3Crect x='3' y='3' width='10' height='10' fill='%23d98938'/%3E%3Crect x='5' y='5' width='6' height='6' fill='%23f5e7d0'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css?v=chat-1">
+  <link rel="stylesheet" href="blog.css?v=chat-1">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html" aria-label="Galaba Vamsi home">GV</a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#projects">Projects</a>
+      <a href="index.html" class="active">Blog</a>
+      <a href="../index.html#skills">Skills</a>
+      <a href="../index.html#contact">Contact</a>
+    </nav>
+    <a class="header-link" href="../resume_vamsi.pdf" target="_blank" rel="noopener">Resume</a>
+  </header>
+
+  <div class="read-bar" aria-hidden="true"><span id="read-progress"></span></div>
+
+  <main>
+    <article>
+      <header class="post-head">
+        <a class="back-link" href="index.html">&lt;- All posts</a>
+        <p class="section-label">Open Source / inspect-robots-wandb</p>
+        <h1 class="post-title">I shipped a Weights &amp; Biases sink for robot evals. Here is how it works.</h1>
+        <p class="standfirst">
+          Inspect Robots writes a complete, permanent score sheet for every evaluation.
+          What it did not have was a league table. <code>inspect-robots-wandb</code> is a
+          small plugin that puts each evaluation into its own Weights &amp; Biases run, and
+          it is on PyPI now.
+        </p>
+        <ul class="post-meta">
+          <li>Oct 4, 2026</li>
+          <li>6 min read</li>
+          <li><span class="tag">Open Source</span></li>
+          <li><span class="tag">Python</span></li>
+          <li><span class="tag">Physical AI</span></li>
+        </ul>
+      </header>
+
+      <div class="post-layout">
+        <aside class="post-toc" aria-label="Table of contents">
+          <p>On this page</p>
+          <ol>
+            <li><a href="#context">What Inspect Robots is</a></li>
+            <li><a href="#gap">The missing league table</a></li>
+            <li><a href="#use">Using it</a></li>
+            <li><a href="#logged">What gets logged</a></li>
+            <li><a href="#design">Design choices</a></li>
+            <li><a href="#journey">From PR #434 to a package</a></li>
+            <li><a href="#status">Status of the related PRs</a></li>
+          </ol>
+        </aside>
+
+        <div class="post-body">
+          <p class="lede">
+            I just published <code>inspect-robots-wandb</code> v0.1.0, a Weights &amp; Biases
+            logging sink for Inspect Robots, the open-source evaluation framework from
+            Robocurve. This post covers what it does, how it plugs in, and the few decisions
+            that mattered in a package this small.
+          </p>
+
+          <div class="stat-grid">
+            <div class="stat"><b>v0.1.0</b><span>on PyPI, Oct 3 2026</span></div>
+            <div class="stat"><b>100%</b><span>test coverage</span></div>
+            <div class="stat"><b>3.10-3.13</b><span>Python in CI</span></div>
+            <div class="stat"><b>0</b><span>API tokens to publish</span></div>
+          </div>
+
+          <h2 id="context">What Inspect Robots is</h2>
+
+          <p>
+            <a href="https://github.com/robocurve/inspect-robots" target="_blank" rel="noopener">Inspect Robots</a>
+            is "Inspect AI for robotics". It evaluates vision-language-action policies on real
+            and simulated robots. You plug in a policy (the model) and an embodiment (the
+            robot or simulator), pick a task, and the framework runs closed-loop trials,
+            scores them, and writes an immutable evaluation log.
+          </p>
+
+          <p>
+            Think of a driving test. The policy is the student driver, the embodiment is the
+            car, and the task is the test route. The JSON log is the examiner's signed score
+            sheet: complete, permanent, and stored on your machine.
+          </p>
+
+          <h2 id="gap">The missing league table</h2>
+
+          <p>
+            A signed score sheet is the right primitive for one evaluation. Once you are
+            running dozens of them across checkpoints, seeds, and robots, you want every
+            result in one place, side by side, with charts you can share with a team. That
+            is what Weights &amp; Biases is for, and that is the gap this plugin fills.
+          </p>
+
+          <h2 id="use">Using it</h2>
+
+          <pre><code>pip install inspect-robots-wandb
+wandb login</code></pre>
+
+          <p>
+            The package registers a <code>wandb</code> sink in the
+            <code>inspect_robots.sinks</code> entry-point group. After installing it, the
+            sink shows up in <code>inspect-robots list</code> with no change to the core.
+            From Python:
+          </p>
+
+          <pre><code>from inspect_robots import eval
+from inspect_robots.logging import JsonLogSink
+from inspect_robots_wandb import WandbSink
+
+logs = eval(
+    "cubepick-reach",
+    "scripted",
+    "cubepick",
+    sinks=[
+        JsonLogSink("logs"),
+        WandbSink(project="robot-evals", tags=("cubepick", "nightly")),
+    ],
+)</code></pre>
+
+          <div class="callout">
+            <span class="callout-label">A sharp edge worth knowing</span>
+            <p>
+              Passing <code>sinks=</code> replaces the default JSON sink. If you want the
+              local immutable log and the W&amp;B summary, list both, as above.
+            </p>
+          </div>
+
+          <h2 id="logged">What gets logged</h2>
+
+          <p>
+            <code>WandbSink</code> creates one W&amp;B run per evaluation. The full evaluation
+            specification is stored as run config. When the evaluation ends, the run gets:
+          </p>
+
+          <ul>
+            <li>final status, scene count, trial count, and errored trials,</li>
+            <li>total steps and duration in seconds,</li>
+            <li>every aggregate result metric, under a <code>metric/</code> prefix.</li>
+          </ul>
+
+          <p>
+            The same sink instance can be reused by <code>eval_set()</code>, and each task
+            gets its own run. Options mirror W&amp;B's: <code>project</code>,
+            <code>entity</code>, <code>name</code>, <code>group</code>, <code>tags</code>,
+            <code>mode</code> (including <code>offline</code> and <code>disabled</code>), and
+            <code>dir</code>.
+          </p>
+
+          <h2 id="design">Design choices</h2>
+
+          <p>
+            <strong>The core stays NumPy-only.</strong> The maintainers' bar is a
+            dependency-light core, so W&amp;B support lives in its own package. The
+            <code>wandb</code> SDK is imported lazily, only when a run is actually
+            requested, and a missing SDK raises a clear install hint rather than an
+            obscure import error.
+          </p>
+
+          <p>
+            <strong>Run lifecycle is explicit.</strong> If a new evaluation starts while a
+            previous run is still open, the old run is finished with a failure exit code
+            instead of being silently abandoned. On a normal end, the exit code reflects the
+            evaluation status, and the run is finished even if logging itself raises.
+          </p>
+
+          <p>
+            <strong>Aborted evaluations get cleaned up.</strong> If an evaluation dies with
+            an exception, the sink logs <code>eval/status: error</code> with the exception
+            text and finishes the run with exit code 1. That relies on a small optional hook,
+            <code>on_eval_error</code>, which I added to the core in a separate PR. With an
+            older core the sink still works, but an aborted run is left for the W&amp;B SDK
+            to close when the process exits.
+          </p>
+
+          <div class="callout">
+            <span class="callout-label">Security note</span>
+            <p>
+              The evaluation spec is uploaded as W&amp;B run config. Keep credentials and
+              other secrets out of policy and embodiment configuration.
+            </p>
+          </div>
+
+          <p>
+            <strong>Tests need no network.</strong> The test suite replaces the W&amp;B SDK
+            with an in-process double, so it runs without an account or a connection, and
+            the project holds 100% coverage with strict mypy and ruff. Releases go out
+            through PyPI trusted publishing, so there are no API tokens to leak.
+          </p>
+
+          <h2 id="journey">From PR #434 to a package</h2>
+
+          <p>
+            This started as
+            <a href="https://github.com/robocurve/inspect-robots/pull/434" target="_blank" rel="noopener">PR #434</a>
+            inside the main repository. The review was kind ("well put together"), and the
+            maintainers asked for W&amp;B support to live outside the repo so the core would
+            not take on the dependency. That was the right call. The work split into three
+            pieces: this package, the core hook
+            (<a href="https://github.com/robocurve/inspect-robots/pull/550" target="_blank" rel="noopener">PR #550</a>),
+            and a community-plugins section in the docs
+            (<a href="https://github.com/robocurve/inspect-robots/pull/551" target="_blank" rel="noopener">PR #551</a>).
+          </p>
+
+          <h2 id="status">Status of the related PRs</h2>
+
+          <p>
+            I would rather be exact than optimistic, so here is where things stand as of
+            Oct 4, 2026.
+          </p>
+
+          <ul>
+            <li>The package itself is published: <a href="https://pypi.org/project/inspect-robots-wandb/" target="_blank" rel="noopener">PyPI</a> and <a href="https://github.com/Galabavamsi/inspect-robots-wandb" target="_blank" rel="noopener">source</a>.</li>
+            <li>PR #550 (the <code>on_eval_error</code> hook) is open, approved by the automated reviewer, and awaiting a maintainer merge.</li>
+            <li>PR #551 (docs) is open and awaiting review.</li>
+            <li>PR #434 is closed by agreement, superseded by the split above.</li>
+          </ul>
+
+          <div class="post-end">
+            <h2>Try it</h2>
+            <p>
+              <code>pip install inspect-robots-wandb</code>, then point a <code>WandbSink</code>
+              at a project. Issues and ideas are welcome on the repository.
+            </p>
+            <div class="hero-actions">
+              <a class="btn primary" href="https://pypi.org/project/inspect-robots-wandb/" target="_blank" rel="noopener">PyPI</a>
+              <a class="btn" href="https://github.com/Galabavamsi/inspect-robots-wandb" target="_blank" rel="noopener">Source</a>
+              <a class="btn" href="index.html">More build logs</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <p>(c) 2026 Galaba Vamsi. Built with care, pixels, and plain language.</p>
+  </footer>
+
+  <script src="../config.js?v=chat-1"></script>
+  <script src="../script.js?v=chat-1"></script>
+  <script src="blog.js?v=chat-1"></script>
+  <script src="../pet.js?v=chat-3"></script>
+</body>
+</html>

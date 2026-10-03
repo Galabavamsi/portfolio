@@ -75,19 +75,28 @@ Mechatronics undergraduate at IIT Bhilai focused on software engineering, AI/ML,
 
 \section*{Experience}
 
+\entry{Open-Source Contributor - Inspect Robots}{Robocurve (YC Summer 2026) | \href{https://github.com/robocurve/inspect-robots}{Repository} | \href{https://pypi.org/project/inspect-robots-wandb/}{inspect-robots-wandb on PyPI}}{2026}
+\begin{itemize}
+  \item Shipped \href{https://pypi.org/project/inspect-robots-wandb/}{inspect-robots-wandb} v0.1.0, a Weights \& Biases logging sink (100\% coverage, CI on Python 3.10-3.13, PyPI trusted publishing).
+  \item 2 merged PRs: \href{https://github.com/robocurve/inspect-robots/pull/476}{\#476} configurable LLM retry policy over 5 wire protocols; \href{https://github.com/robocurve/inspect-robots/pull/475}{\#475} unknown git state no longer logged as clean.
+  \item 3 open PRs awaiting merge: \href{https://github.com/robocurve/inspect-robots/pull/514}{\#514} crash-safe checkpoint/resume for robot eval sets; \href{https://github.com/robocurve/inspect-robots/pull/550}{\#550} \texttt{on\_eval\_error} sink hook; \href{https://github.com/robocurve/inspect-robots/pull/551}{\#551} plugin docs.
+\end{itemize}
+
+\entry{Open-Source Contributor - Cerulion}{Rust robotics middleware | \href{https://github.com/cerulion-inc/cerulion}{Repository}}{2026}
+\begin{itemize}
+  \item 3 merged PRs (\href{https://github.com/cerulion-inc/cerulion/pull/220}{\#220}, \href{https://github.com/cerulion-inc/cerulion/pull/222}{\#222}, \href{https://github.com/cerulion-inc/cerulion/pull/224}{\#224}); 2 open PRs awaiting merge: \href{https://github.com/cerulion-inc/cerulion/pull/216}{\#216} \texttt{ros2 attach --dry-run} without a workspace (exclusive temp root, RAII cleanup) and \href{https://github.com/cerulion-inc/cerulion/pull/226}{\#226} fail-closed \texttt{CERULION\_NETWORK} docs.
+\end{itemize}
+
 \entry{Open-Source Contributor - HFlow}{Hebbian Robotics (YC S26) | \href{https://github.com/Hebbian-Robotics/hflow}{HFlow repository}}{2026}
 \begin{itemize}
-  \item Delivered 6 maintainer-reviewed merged PRs addressing 6 tracked issues in HFlow's robotics and Physical AI SDK.
-  \item \href{https://github.com/Hebbian-Robotics/hflow/pull/350}{PR \#350} / \href{https://github.com/Hebbian-Robotics/hflow/issues/296}{issue \#296}: implemented paginated LeRobot tree traversal using \texttt{Link: rel="next"} headers, preserved request headers, deduplicated paths, rejected unsafe cross-origin URLs, and prevented pagination loops.
-  \item \href{https://github.com/Hebbian-Robotics/hflow/pull/353}{PR \#353} / \href{https://github.com/Hebbian-Robotics/hflow/issues/292}{issue \#292}: resolved LeRobot video-cache collisions by including camera, chunk, and file indexes in cache identity and bumping the converter version.
-  \item \href{https://github.com/Hebbian-Robotics/hflow/pull/360}{PR \#360} / \href{https://github.com/Hebbian-Robotics/hflow/issues/314}{issue \#314}: centralized safe ingest URI parsing across the CLI, server, and SDK and added validation for blank, absolute, and parent-escaping paths.
-  \item \href{https://github.com/Hebbian-Robotics/hflow/pull/367}{PR \#367} / \href{https://github.com/Hebbian-Robotics/hflow/issues/365}{issue \#365}: benchmarked 3 cold 1080p30 checks (900 frames/check; 4.897 s median) and separated transform timing/provenance; \href{https://github.com/Hebbian-Robotics/hflow/pull/400}{PR \#400} / \href{https://github.com/Hebbian-Robotics/hflow/issues/399}{issue \#399}: refused LeRobot depth videos before conversion to preserve 12-bit depth semantics.
+  \item 6 merged, maintainer-reviewed PRs for 6 tracked issues: \href{https://github.com/Hebbian-Robotics/hflow/pull/350}{\#350} paginated LeRobot tree traversal with cross-origin and loop guards; \href{https://github.com/Hebbian-Robotics/hflow/pull/353}{\#353} fixed video-cache collisions; \href{https://github.com/Hebbian-Robotics/hflow/pull/360}{\#360} centralized safe ingest URI parsing.
+  \item \href{https://github.com/Hebbian-Robotics/hflow/pull/367}{\#367} benchmarked 3 cold 1080p30 checks (900 frames each; 4.897 s median); \href{https://github.com/Hebbian-Robotics/hflow/pull/400}{\#400} refused LeRobot depth videos to preserve 12-bit depth.
 \end{itemize}
 
 \entry{Research Intern - 6G RIS Simulator}{IIT Bhilai | Advisor: Dr. Arzad Alam}{May 2025 - Aug 2025}
 \begin{itemize}
-  \item Built a zero-budget, open-source Python simulator with USRP-style interfaces for line-of-sight and non-line-of-sight wireless environments; RIM-SIM v2 includes 6 paper-grounded scenarios, a 20 Hz WebSocket feed, and 103 passing tests. \href{https://github.com/Galabavamsi/RIM-SIM-V2}{[GitHub]}
-  \item Designed and validated a 2-layer reconfigurable intelligent surface (RIS) PCB workflow for self-powered RF energy harvesting; contributed to 3 related publications (1 as first author and 2 as co-author).
+  \item Built a zero-budget open-source Python RIS simulator with USRP-style interfaces for LoS/NLoS environments (RIM-SIM v2: 6 scenarios, 20 Hz WebSocket feed, 103 tests). \href{https://github.com/Galabavamsi/RIM-SIM-V2}{[GitHub]}
+  \item Designed a 2-layer RIS PCB workflow for RF energy harvesting; contributed to 3 publications (1 first author, 2 co-author).
 \end{itemize}
 
 \entry{Marketing Intern - Campus CEO Project}{Swiggy Ltd}{May 2024 - Jul 2024}
@@ -99,19 +108,19 @@ Mechatronics undergraduate at IIT Bhilai focused on software engineering, AI/ML,
 
 \project{Human Slop - Co-Founder}{Built and deployed an anti-AI web and Android platform with React, PostgreSQL, and AWS; implemented hardware-bound biometric authentication and real-time typing forensics. \href{https://humanslop.in}{[Website]} | \href{https://play.google.com/store/apps/details?id=com.humanslop.app}{[App]} | \href{https://github.com/Galabavamsi/human-slop}{[GitHub]}}{2026 - Present}
 
-\project{Charter - Agentic Commerce}{Built a TypeScript/Fastify/Postgres/Vite + React agentic-commerce platform with 3 interfaces (chat, Vapi voice, MCP/HTTP) and 10 MCP tools over a shared commerce core; implemented grounded catalog and policy tools, frozen INR quote state, tenant-scoped orders, and RLS. \href{https://github.com/Galabavamsi/charter}{[GitHub]}}{}
+\project{Charter - Agentic Commerce}{Agentic-commerce platform (TypeScript, Fastify, Postgres, React) with chat, voice, and MCP interfaces, 10 MCP tools over a shared core, frozen INR quotes, and RLS. \href{https://github.com/Galabavamsi/charter}{[GitHub]}}{}
 
 \project{Pneumatic Sorting Digital Twin}{Built an open-source Unity digital twin for modular electropneumatic automation with offline sorting and stamping kits, HMI flows, telemetry, and replay. \href{https://github.com/Galabavamsi/pneumatic-sorting-digital-twin}{[GitHub]}}{}
 
-\project{Arista Networks Wi-Fi Optimization System - Inter IIT 5th Rank}{Built a client-aware Wi-Fi RRM system in NS-3 using 3 RF metrics; classified 100,000 I/Q samples from 5 ms captures into 16 classes with STFT, DBSCAN, and Dual-CNN inference; simulated 5 access points and 50 client stations using IEEE 802.11k/v. \href{https://canva.link/puoqbe4okoid8rb}{[Slides]}}{2025}
+\project{Arista Networks Wi-Fi Optimization System - Inter IIT 5th Rank}{Client-aware Wi-Fi RRM in NS-3: 3 RF metrics, 100,000 I/Q samples into 16 classes (STFT, DBSCAN, Dual-CNN), 5 APs and 50 clients with IEEE 802.11k/v. \href{https://canva.link/puoqbe4okoid8rb}{[Slides]}}{2025}
 
-\project{Electron-GNN - ML-Accelerated Quantum Spectroscopy}{Built a V3 two-tower GATv2 model to predict molecular absorption spectra from geometry; evaluated on 2 molecules with 39 and 55 target peaks. \href{https://github.com/Galabavamsi/Electron-GNN}{[GitHub]}. Faculty advisor: \href{https://www.iitbhilai.ac.in/index.php?pid=soumajit}{Dr. Soumajit Pramanik}.}{2026}
+\project{Electron-GNN - ML-Accelerated Quantum Spectroscopy}{V3 two-tower GATv2 predicting molecular absorption spectra from geometry; 2 molecules, 39 and 55 target peaks. \href{https://github.com/Galabavamsi/Electron-GNN}{[GitHub]}. Faculty advisor: \href{https://www.iitbhilai.ac.in/index.php?pid=soumajit}{Dr. Soumajit Pramanik}.}{2026}
 
-\project{Open-PyFX - GPU-Accelerated Video Effects}{Built a Python and GLSL video effects suite with GPU rendering for CRT emulation, ASCII edge detection, retro graphics, and 3D LUT pipelines; supports 3840x2160 export and up to 16x zoom. \href{https://github.com/Galabavamsi/open-pyfx}{[GitHub]}}{2025}
+\project{Open-PyFX - GPU-Accelerated Video Effects}{Python and GLSL GPU video effects suite: CRT emulation, ASCII edge detection, 3D LUTs, 3840x2160 export. \href{https://github.com/Galabavamsi/open-pyfx}{[GitHub]}}{2025}
 
-\project{Lunar Crater Detection - DEM Terrain Analysis}{Built a computer vision pipeline for crater extraction from Digital Elevation Models; achieved an F1 score of 0.839 and approximately 4x preprocessing speedup using CuPy/CUDA; the repository includes 77 tests. \href{https://github.com/Galabavamsi/Moon-Crater-Detection-using-DEM}{[GitHub]}}{2025}
+\project{Lunar Crater Detection - DEM Terrain Analysis}{Crater extraction from DEMs: F1 0.839, about 4x preprocessing speedup with CuPy/CUDA, 77 tests. \href{https://github.com/Galabavamsi/Moon-Crater-Detection-using-DEM}{[GitHub]}}{2025}
 
-\project{AntennaNet - Inverse Electromagnetic Design}{Developed KD-tree nearest-neighbour spectral anchoring for inverse electromagnetic design across 144D search spaces using Python, MEEP, and OpenMPI; indexed approximately 2,000 spectra and a 1,200-sample, 12x12-pixel dataset. \href{https://github.com/Galabavamsi/Antenna-Net}{[GitHub]}}{2025}
+\project{AntennaNet - Inverse Electromagnetic Design}{KD-tree spectral anchoring for inverse EM design over 144D search spaces (Python, MEEP, OpenMPI); about 2,000 indexed spectra. \href{https://github.com/Galabavamsi/Antenna-Net}{[GitHub]}}{2025}
 
 \project{Amazon ML Challenge - Top 3.5\%}{Multimodal price prediction with Qwen 2-VL 7B and a ViT/RoBERTa two-tower model; 75,000 data pairs; SMAPE 49.0.}{2025}
 
@@ -123,10 +132,10 @@ Mechatronics undergraduate at IIT Bhilai focused on software engineering, AI/ML,
 
 \section*{Skills}
 {\color{textdark}
-\textbf{Languages:} Python, C/C++, TypeScript, JavaScript, SQL, GLSL, CUDA.\par
+\textbf{Languages:} Python, Rust, C/C++, TypeScript, JavaScript, SQL, GLSL, CUDA.\par
 \textbf{AI/ML:} PyTorch, Graph Neural Networks (GATv2), Safe Reinforcement Learning, Transformers, OpenCV, CuPy, NumPy.\par
 \textbf{Software and Systems:} React, React Native, Flutter, FastAPI, Node.js, REST APIs, WebSockets, PostgreSQL, AWS, Supabase, Docker, ROS 2, Gazebo, MEEP, OpenMPI, SDR/USRP.\par
-\textbf{Developer Tools:} Git, Linux, GitHub Actions, CI/CD, pytest, Ruff, ty, static analysis, regression testing.
+\textbf{Developer Tools:} Git, Linux, GitHub Actions, CI/CD, pytest, Ruff, mypy, clippy, PyPI publishing, static analysis, regression testing.
 }
 
 \section*{Education}
@@ -137,7 +146,8 @@ Mechatronics undergraduate at IIT Bhilai focused on software engineering, AI/ML,
 {\color{textdark}
 \textbf{First author:} \textit{An Open Emulator for Smart Radio Environments}. \href{https://drive.google.com/file/d/12oDPsflaUXKnSjfA3247HgFDDf4bJkCP/view?usp=drive_link}{[Link]}\par
 \textbf{Co-author:} \textit{Experience with RF Energy Harvesting-Driven Self-Powered RIS}, IEEE INDICON 2025. \href{https://ieeexplore.ieee.org/abstract/document/11392908/}{[Link]}\par
-\textbf{Co-author:} \textit{A systematic literature review on simulation models and deployments for reconfigurable intelligent surfaces}. \href{https://www.sciencedirect.com/science/article/pii/S1570870526001964}{[Link]}
+\textbf{Co-author:} \textit{A systematic literature review on simulation models and deployments for reconfigurable intelligent surfaces}. \href{https://www.sciencedirect.com/science/article/pii/S1570870526001964}{[Link]}\par
+\textbf{Co-author (submitted):} \textit{Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI}, CoRL 2026 Workshop SPAIS, under review.
 }
 
 \section*{Achievements}
