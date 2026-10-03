@@ -16,6 +16,20 @@
   --sprite-owlet-idle: url("spirte resources/craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Monster/Owlet_Monster_Idle_4.png");
 }
 
+body.profile-film {
+  --accent: #df765b;
+  --accent-2: #a9434e;
+  --muted: #c6a29b;
+  --faint: #70474a;
+  --line: #633238;
+  --panel: #26171a;
+  --panel-2: #342025;
+  background:
+    radial-gradient(circle at 78% 12%, rgba(169, 67, 78, 0.2), transparent 26rem),
+    radial-gradient(circle at 10% 0%, rgba(223, 118, 91, 0.14), transparent 24rem),
+    linear-gradient(180deg, #18100f 0%, #150e0e 44%, #100a0b 100%);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -126,6 +140,48 @@ h3,
   border: 1px solid var(--line);
   padding: 8px 11px;
   background: rgba(38, 27, 19, 0.6);
+}
+
+.profile-switcher {
+  display: inline-flex;
+  flex: 0 0 auto;
+  padding: 2px;
+  background: rgba(38, 27, 19, 0.72);
+  border: 1px solid var(--line);
+}
+
+.profile-tab {
+  padding: 7px 9px;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  cursor: pointer;
+}
+
+.profile-tab.is-active,
+.profile-tab:hover {
+  color: #170f09;
+  background: var(--accent);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.profile-panel {
+  width: min(1120px, calc(100vw - 36px));
+  margin: 0 auto;
+}
+
+.profile-panel:not(.is-active) {
+  display: none;
+}
+
+.profile-anchor {
+  display: block;
+  height: 0;
 }
 
 main {
@@ -239,6 +295,247 @@ h3 {
 
 .prose p {
   margin: 0 0 18px;
+}
+
+.section-intro-row {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 30px;
+}
+
+.section-intro-row h2 {
+  margin-bottom: 14px;
+}
+
+.section-intro-row .prose {
+  margin: 0;
+  font-size: 16px;
+}
+
+.video-grid,
+.research-links {
+  display: grid;
+  gap: 18px;
+}
+
+.video-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.video-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  color: inherit;
+}
+
+.video-card:hover {
+  color: inherit;
+  border-color: rgba(217, 137, 56, 0.7);
+}
+
+.video-thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  margin: 0;
+  overflow: hidden;
+  background: #100c09;
+  border-bottom: 1px solid rgba(217, 137, 56, 0.26);
+}
+
+.video-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 180ms steps(4);
+}
+
+.video-card:hover .video-thumb img {
+  transform: scale(1.04);
+}
+
+.video-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: #170f09;
+  background: var(--accent);
+  border: 2px solid #ffe0af;
+  box-shadow: 4px 4px 0 rgba(7, 5, 4, 0.8);
+  transform: translate(-50%, -50%);
+}
+
+.video-play svg {
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+}
+
+.video-body {
+  padding: 18px 20px 20px;
+}
+
+.video-body h3 {
+  margin: 0;
+  color: #ffe0af;
+}
+
+.video-meta {
+  margin: 0 0 10px;
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.research-links {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.research-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 110px;
+  color: inherit;
+}
+
+.research-link:hover {
+  color: inherit;
+  border-color: rgba(217, 137, 56, 0.7);
+}
+
+.research-mark {
+  display: grid;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  color: #170f09;
+  background: var(--accent);
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  line-height: 1;
+}
+
+.research-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.research-copy h3 {
+  margin-bottom: 5px;
+}
+
+.research-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.research-arrow {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  color: var(--accent);
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  stroke-width: 2;
+}
+
+.film-hero .hero-lead {
+  max-width: 700px;
+}
+
+.film-profile-card figcaption {
+  padding: 13px 16px 15px;
+  color: var(--muted);
+  background: var(--panel-2);
+  border-top: 1px solid rgba(223, 118, 91, 0.28);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.film-credit-grid,
+.film-archive-grid,
+.film-process-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.film-credit-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.film-credit {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.film-credit-thumb {
+  aspect-ratio: 16 / 9;
+  margin: 0;
+  overflow: hidden;
+  background: #100a0b;
+  border: 1px solid rgba(223, 118, 91, 0.24);
+}
+
+.film-credit-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.film-credit h3 {
+  margin-bottom: 12px;
+}
+
+.film-credit p:not(.video-meta) {
+  margin: 0;
+  color: var(--text);
+}
+
+.film-archive-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.film-process-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 30px 0;
+}
+
+.film-process-step {
+  display: grid;
+  gap: 7px;
+  padding: 18px;
+  background: rgba(52, 32, 37, 0.72);
+  border-left: 4px solid var(--accent);
+}
+
+.film-process-step strong {
+  color: #ffe0af;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+}
+
+.film-process-step span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.film-technical-note {
+  margin-top: 24px;
 }
 
 .timeline,
@@ -688,13 +985,29 @@ footer {
   }
 
   .project-grid,
-  .skills-list {
+  .skills-list,
+  .video-grid,
+  .film-credit-grid,
+  .film-archive-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .research-links {
     grid-template-columns: 1fr;
   }
 
   .highlight {
     grid-template-columns: 1fr;
     gap: 4px;
+  }
+
+  .section-intro-row {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .film-process-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -711,6 +1024,11 @@ footer {
   .site-header {
     height: 60px;
     padding: 0 14px;
+  }
+
+  .profile-tab {
+    padding-inline: 7px;
+    font-size: 7px;
   }
 
   .header-link {

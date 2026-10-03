@@ -78,6 +78,69 @@
 
   initLoader();
 
+  const profileTabs = $$('.profile-tab');
+  const profilePanels = $$('[data-profile-panel]');
+  const profileNavs = $$('[data-profile-nav]');
+  const profileHeaderLinks = $$('.tech-header-link, .film-header-link');
+  const profileDescription = $('meta[name="description"]');
+
+  function profileFromHash() {
+    return location.hash === '#film' || location.hash.startsWith('#film-') ? 'film' : 'tech';
+  }
+
+  function setProfile(profile, updateHash = true) {
+    const isFilm = profile === 'film';
+    document.body.classList.toggle('profile-film', isFilm);
+
+    profilePanels.forEach(panel => {
+      const active = panel.dataset.profilePanel === profile;
+      panel.classList.toggle('is-active', active);
+      panel.hidden = !active;
+    });
+
+    profileTabs.forEach(tab => {
+      const active = tab.dataset.profile === profile;
+      tab.classList.toggle('is-active', active);
+      tab.setAttribute('aria-pressed', String(active));
+    });
+
+    profileNavs.forEach(nav => {
+      nav.hidden = nav.dataset.profileNav !== profile;
+      $$('a', nav).forEach(link => link.classList.remove('active'));
+    });
+
+    profileHeaderLinks.forEach(link => {
+      link.hidden = (isFilm ? 'film' : 'tech') !== (link.classList.contains('film-header-link') ? 'film' : 'tech');
+    });
+
+    document.title = isFilm
+      ? 'Galaba Vamsi | Filmmaker, Editor & Director'
+      : 'Galaba Vamsi | Software Engineer & AI/ML Researcher';
+    if (profileDescription) {
+      profileDescription.setAttribute('content', isFilm
+        ? 'Film portfolio of Galaba Vamsi, a filmmaker, editor, director, writer, and Mechatronics student at IIT Bhilai.'
+        : 'Portfolio of Galaba Vamsi, a software engineer and AI/ML researcher at IIT Bhilai.');
+    }
+
+    if (updateHash) {
+      const nextHash = isFilm ? '#film' : '#home';
+      if (location.hash !== nextHash) history.replaceState(null, '', nextHash);
+      window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+    }
+  }
+
+  const initialProfile = profileFromHash();
+  setProfile(initialProfile, false);
+  if (initialProfile === 'film' && location.hash === '#film') {
+    const resetFilmScroll = () => window.scrollTo(0, 0);
+    resetFilmScroll();
+    window.addEventListener('load', () => window.setTimeout(resetFilmScroll, 0), { once: true });
+    window.setTimeout(resetFilmScroll, 180);
+  }
+  profileTabs.forEach(tab => tab.addEventListener('click', () => setProfile(tab.dataset.profile)));
+  const brand = $('.brand');
+  if (brand) brand.addEventListener('click', () => setProfile('tech'));
+
   const revealItems = $$('.reveal');
   if (reducedMotion || !('IntersectionObserver' in window)) {
     revealItems.forEach(el => el.classList.add('on'));
@@ -103,11 +166,12 @@
   if ('IntersectionObserver' in window) {
     const navObserver = new IntersectionObserver(entries => {
       const visible = entries
-        .filter(entry => entry.isIntersecting)
+        .filter(entry => entry.isIntersecting && entry.target.closest('.profile-panel.is-active'))
         .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
       if (!visible) return;
       navLinks.forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === `#${visible.target.id}`);
+        const inActiveNav = !link.closest('.site-nav')?.hidden;
+        link.classList.toggle('active', inActiveNav && link.getAttribute('href') === `#${visible.target.id}`);
       });
     }, { threshold: [0.25, 0.5, 0.75] });
     sections.forEach(section => navObserver.observe(section));
