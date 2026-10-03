@@ -64,6 +64,11 @@
   box-shadow: 6px 6px 0 var(--shadow);
 }
 
+/* Cards without a thumbnail use the full width instead of an empty 168px column. */
+.post-card:not(:has(.card-thumb)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .post-card:hover {
   color: inherit;
   transform: translate(-2px, -2px);
