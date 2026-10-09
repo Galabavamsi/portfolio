@@ -1,20 +1,16 @@
-# PORTFOLIO.ROM
+# Galaba Vamsi — portfolio
 
-Interactive 8-bit portfolio of **Galaba Vamsi** — software engineering, full-stack & AI/ML.
+Personal site of **Galaba Vamsi**, Mechatronics at IIT Bhilai: open-source robotics infrastructure, RIS emulator research, projects, writing, and film.
 
-**Live:** [galabavamsi.github.io/portfolio](https://galabavamsi.github.io/portfolio)
+**Live:** [galabavamsi.github.io/portfolio](https://galabavamsi.github.io/portfolio/)
 
-Pure HTML/CSS/JS frontend. Zero build step. Supabase backend for the leaderboard
-and for keeping the AI chat's API key server-side.
+Plain HTML, CSS, and JavaScript with no build step. GitHub Pages serves `main`; a Supabase edge function keeps the chat model's API key off the client.
 
-## Features
+## What's on the site
 
-- Boot sequence, HUD with score + XP scroll bar, sections as game levels
-- **BIT.EXE** — an animated pixel cat (wanders, sleeps, blinks, tracks your cursor)
-  that comments as you scroll and answers questions via **DeepSeek v4 Flash**
-- Hidden **snake game** with a global leaderboard (enter your pilot name, compete)
-- Working terminal (`/`), konami code, coins, idle invader, 10 achievements
-- Chiptune WebAudio sound effects, all motion in `steps()` easing
+- **Two profiles in one page.** *Tech* (experience, open source, projects, writing, research, resume) and *Film* (credits, archive, process). The header switch toggles them; `#film` deep-links to the film profile.
+- **Blog** under `blog/`: one post per experiment, with exact numbers and what did not work.
+- **BIT**, a small pixel assistant (`pet.js`). It answers questions about Vamsi's work from a curated fact list, through the Supabase chat proxy when deployed and a local keyword fallback otherwise.
 
 ## Open source
 
@@ -55,58 +51,65 @@ Open-source robot runtime for real-time robotics, with ROS 2 interoperability ·
 - [PR #224 · merged](https://github.com/cerulion-inc/cerulion/pull/224) — Fixed 21 stale `USER_API.md` references across 11 files.
 - [PR #222 · merged](https://github.com/cerulion-inc/cerulion/pull/222) — ASCII punctuation in shipped doc comments (26 em dashes).
 - [PR #220 · merged](https://github.com/cerulion-inc/cerulion/pull/220) — Corrected misleading workspace-root comments in `cerulion_cli_engine`.
+
+## Research
+
+- Co-author, *Experience with RF Energy Harvesting-Driven Self-Powered RIS*, IEEE INDICON 2025.
+- Co-author, *A systematic literature review on simulation models and deployments for reconfigurable intelligent surfaces*, Ad Hoc Networks (Elsevier), 2026.
 - Co-author, submitted and under review: *Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI* (CoRL 2026 Workshop SPAIS).
+- First author, manuscript: *An Open Emulator for Smart Radio Environments*; arXiv preprint in preparation.
 
-## DEPLOY
+## Keeping content in sync
 
-### 1. Supabase (backend — free tier)
+The same facts appear in several places. When one changes, update all of them:
+
+| Where | What |
+|---|---|
+| `index.html` | Tech and Film profile content |
+| `pet.js` | BIT's `LINKS` and `FACTS` (a separate copy of the content) |
+| `blog/` | posts, plus the cards in `index.html#blog` |
+| `resume_vamsi.tex` → `resume_vamsi.pdf` | one-page resume, built with `xelatex` (fontspec, Arial) |
+| `README.md` | the open-source and research lists above |
+| [Galabavamsi/Galabavamsi](https://github.com/Galabavamsi/Galabavamsi) | GitHub profile README |
+
+Bump the `?v=` query strings on `style.css`, `config.js`, `script.js`, and `pet.js` (in `index.html` and the blog pages) after changing them, so browsers pick up the new files.
+
+## Deploy
+
+### Chat proxy (Supabase, free tier)
 
 1. Create a project at [supabase.com](https://supabase.com).
-2. **Leaderboard:** Dashboard → SQL Editor → run `supabase/schema.sql`.
-3. **Chat proxy** (protects the DeepSeek key) — with the [Supabase CLI](https://supabase.com/docs/guides/cli):
+2. Deploy the edge function with the [Supabase CLI](https://supabase.com/docs/guides/cli):
    ```sh
    supabase login
    supabase link --project-ref YOUR-PROJECT-REF
    supabase functions deploy chat --no-verify-jwt
    supabase secrets set DEEPSEEK_KEY=sk-your-deepseek-key
    ```
-4. Fill in `config.js` with your project URL, anon key (Dashboard → Settings → API),
-   and the function URL `https://YOUR-PROJECT-REF.supabase.co/functions/v1/chat`.
+3. Fill in `config.js` with the project URL, the anon key (Dashboard → Settings → API), and `https://YOUR-PROJECT-REF.supabase.co/functions/v1/chat`.
 
-> The anon key is **public by design** — the database is protected by Row Level
-> Security (read + insert only, values capped). The DeepSeek key lives only in
-> the edge function secret, never in this repo.
-> After testing, tighten `ALLOWED_ORIGIN` in `supabase/functions/chat/index.ts`
-> to your Pages origin.
+> The anon key is public by design. The DeepSeek key lives only in the edge function's secrets, never in this repo. Keep `ALLOWED_ORIGIN` in `supabase/functions/chat/index.ts` set to the Pages origin.
 
-### 2. GitHub Pages
+`supabase/schema.sql` creates the leaderboard table for the retired snake game; the current site does not use it.
 
-1. Push to GitHub (make sure `DEV_DEEPSEEK_KEY` in `config.js` is `''`).
-2. Repo → Settings → Pages → Source: **Deploy from a branch** → `main` / root.
-3. Site appears at `https://<user>.github.io/<repo>/`.
+### GitHub Pages
+
+Pushing to `main` runs `.github/workflows/static.yml`, which publishes the repo root. Keep `DEV_DEEPSEEK_KEY` in `config.js` empty.
 
 ### Local dev
 
-Open `index.html`, or `python -m http.server 8000`. To test chat without the
-edge function, temporarily set `DEV_DEEPSEEK_KEY` in `config.js` — **revert
-before committing**.
+Run `python -m http.server 8000` and open `http://localhost:8000/`. Locally, BIT uses its keyword fallback unless `USE_REMOTE_CHAT_LOCALLY` is set in `config.js`.
 
-## Stack
+## Files
 
 | File | Purpose |
 |---|---|
-| `index.html` | content & structure |
-| `style.css` | phosphor-CRT theme |
-| `script.js` | audio, boot, snake, terminal, achievements |
-| `pet.js` | BIT the pixel cat + DeepSeek chat |
-| `blog/` | build-log posts (`index.html` listing, `blog.css`, `blog.js`, `figures/`) |
-| `leaderboard.js` | pilot names + Supabase high scores |
+| `index.html` | content and structure for both profiles |
+| `style.css` | site theme |
+| `script.js` | profile switcher, reveal-on-scroll, nav highlighting |
+| `pet.js` | BIT assistant and chat |
+| `blog/` | posts (`index.html` listing, `blog.css`, `blog.js`, `figures/`) |
 | `config.js` | deployment config (public values only) |
-| `supabase/` | DB schema + chat proxy edge function |
-
-## Secrets
-
-There are 10 achievements hidden on this cartridge. A few hints: the oldest
-cheat code in the book still works · the cartridge library has a dusty
-unlabeled slot · arcade machines run on coins · try pressing `/` · going AFK
-has consequences · the corner critter knows things.
+| `assets/` | portrait (`profile.webp`) and social preview card (`og-card.jpg`) |
+| `resume_vamsi.tex`, `resume_vamsi.pdf` | resume source and build |
+| `supabase/` | chat proxy edge function (and the legacy leaderboard schema) |

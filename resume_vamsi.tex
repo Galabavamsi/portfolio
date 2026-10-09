@@ -49,6 +49,10 @@
   \noindent\begingroup\small\color{textdark}#2\par\endgroup
 }
 
+% Arial maps ";" and U+037E to one glyph, so the PDF text layer reported Greek question
+% marks. ActualText keeps copy/paste and ATS parsing faithful to the source characters.
+\XeTeXgenerateactualtext=1
+
 \begin{document}
 
 % Full-width header and summary keep the reading order clear for ATS parsers.
@@ -96,7 +100,7 @@ Mechatronics undergraduate at IIT Bhilai focused on software engineering, AI/ML,
 \entry{Research Intern - 6G RIS Simulator}{IIT Bhilai | Advisor: Dr. Arzad Alam}{May 2025 - Aug 2025}
 \begin{itemize}
   \item Built a zero-budget open-source Python RIS simulator with USRP-style interfaces for LoS/NLoS environments (RIM-SIM v2: 6 scenarios, 20 Hz WebSocket feed, 103 tests). \href{https://github.com/Galabavamsi/RIM-SIM-V2}{[GitHub]}
-  \item Designed a 2-layer RIS PCB workflow for RF energy harvesting; contributed to 3 publications (1 first author, 2 co-author).
+  \item Designed a 2-layer RIS PCB workflow for RF energy harvesting; co-authored 2 papers (INDICON 2025, Ad Hoc Networks 2026); first-author manuscript in preparation.
 \end{itemize}
 
 \entry{Marketing Intern - Campus CEO Project}{Swiggy Ltd}{May 2024 - Jul 2024}
@@ -106,11 +110,15 @@ Mechatronics undergraduate at IIT Bhilai focused on software engineering, AI/ML,
 
 \section*{Projects}
 
-\project{Human Slop - Co-Founder}{Built and deployed an anti-AI web and Android platform with React, PostgreSQL, and AWS; implemented hardware-bound biometric authentication and real-time typing forensics. \href{https://humanslop.in}{[Website]} | \href{https://play.google.com/store/apps/details?id=com.humanslop.app}{[App]} | \href{https://github.com/Galabavamsi/human-slop}{[GitHub]}}{2026 - Present}
+\project{Human Slop - Co-Founder}{Built and deployed an anti-AI web and Android platform with React, PostgreSQL, and AWS; implemented hardware-bound biometric authentication and real-time typing forensics. \href{https://humanslop.in}{[Website]} | \href{https://play.google.com/store/apps/details?id=com.humanslop.app}{[App]}}{2026 - Present}
 
 \project{Charter - Agentic Commerce}{Agentic-commerce platform (TypeScript, Fastify, Postgres, React) with chat, voice, and MCP interfaces, 10 MCP tools over a shared core, frozen INR quotes, and RLS. \href{https://github.com/Galabavamsi/charter}{[GitHub]}}{}
 
 \project{Pneumatic Sorting Digital Twin}{Built an open-source Unity digital twin for modular electropneumatic automation with offline sorting and stamping kits, HMI flows, telemetry, and replay. \href{https://github.com/Galabavamsi/pneumatic-sorting-digital-twin}{[GitHub]}}{}
+
+\project{Quarter-Car Active Suspension - Paper Reproduction}{Reproduced an IEEE TSMC 2022 approximation-free suspension controller in MATLAB within 7\% of the paper's Case-10 result; stress-tested it with stability analysis, LQR/skyhook baselines, a hold-out test, and an anti-windup extension. \href{https://quarter-car-afc.vercel.app}{[Site]} | \href{https://github.com/Galabavamsi/quarter-car-afc-replication}{[GitHub]}}{2026}
+
+\project{Whiteboard Cleaning Robot - ROS 2}{3-DOF Cartesian robot in ROS 2 Jazzy and Gazebo Harmonic: custom URDF, ros2\_control, raster coverage path with 10 cm overlap, and logged coverage analysis. \href{https://github.com/Galabavamsi/whiteboard_robot}{[GitHub]}}{2025}
 
 \project{Arista Networks Wi-Fi Optimization System - Inter IIT 5th Rank}{Client-aware Wi-Fi RRM in NS-3: 3 RF metrics, 100,000 I/Q samples into 16 classes (STFT, DBSCAN, Dual-CNN), 5 APs and 50 clients with IEEE 802.11k/v. \href{https://canva.link/puoqbe4okoid8rb}{[Slides]}}{2025}
 
@@ -134,7 +142,7 @@ Mechatronics undergraduate at IIT Bhilai focused on software engineering, AI/ML,
 {\color{textdark}
 \textbf{Languages:} Python, Rust, C/C++, TypeScript, JavaScript, SQL, GLSL, CUDA.\par
 \textbf{AI/ML:} PyTorch, Graph Neural Networks (GATv2), Safe Reinforcement Learning, Transformers, OpenCV, CuPy, NumPy.\par
-\textbf{Software and Systems:} React, React Native, Flutter, FastAPI, Node.js, REST APIs, WebSockets, PostgreSQL, AWS, Supabase, Docker, ROS 2, Gazebo, MEEP, OpenMPI, SDR/USRP.\par
+\textbf{Software and Systems:} React, React Native, Flutter, FastAPI, Node.js, REST APIs, WebSockets, PostgreSQL, AWS, Supabase, Docker, ROS 2, Gazebo, MuJoCo, MATLAB, MEEP, OpenMPI, SDR/USRP.\par
 \textbf{Developer Tools:} Git, Linux, GitHub Actions, CI/CD, pytest, Ruff, mypy, clippy, PyPI publishing, static analysis, regression testing.
 }
 
@@ -144,9 +152,9 @@ Mechatronics undergraduate at IIT Bhilai focused on software engineering, AI/ML,
 
 \section*{Publications}
 {\color{textdark}
-\textbf{First author:} \textit{An Open Emulator for Smart Radio Environments}. \href{https://drive.google.com/file/d/12oDPsflaUXKnSjfA3247HgFDDf4bJkCP/view?usp=drive_link}{[Link]}\par
 \textbf{Co-author:} \textit{Experience with RF Energy Harvesting-Driven Self-Powered RIS}, IEEE INDICON 2025. \href{https://ieeexplore.ieee.org/abstract/document/11392908/}{[Link]}\par
-\textbf{Co-author:} \textit{A systematic literature review on simulation models and deployments for reconfigurable intelligent surfaces}. \href{https://www.sciencedirect.com/science/article/pii/S1570870526001964}{[Link]}
+\textbf{Co-author:} \textit{A systematic literature review on simulation models and deployments for reconfigurable intelligent surfaces}, Ad Hoc Networks (Elsevier), 2026. \href{https://www.sciencedirect.com/science/article/pii/S1570870526001964}{[Link]}\par
+\textbf{First author (manuscript, arXiv preprint in preparation):} \textit{An Open Emulator for Smart Radio Environments}. \href{https://drive.google.com/file/d/12oDPsflaUXKnSjfA3247HgFDDf4bJkCP/view?usp=drive_link}{[Draft]}
 \par
 \textbf{Co-author (submitted, under review):} \textit{Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI}, CoRL 2026 Workshop SPAIS. \href{https://github.com/robocurve/inspect-robots}{[Framework]}
 }
@@ -155,7 +163,7 @@ Mechatronics undergraduate at IIT Bhilai focused on software engineering, AI/ML,
 {\color{textdark}
 \textbf{1st Place:} IIT Bhilai Web Development Competition.\par
 \textbf{5th Rank:} Arista Networks Wi-Fi Challenge, Inter IIT Tech Meet 14.0.\par
-\textbf{Top 3.5\%:} Amazon ML Challenge.\par
+\textbf{AIR 200:} Amazon ML Challenge 2026 (top 3.5\% in 2025).\par
 \textbf{YC Startup School:} Human Slop accepted.\par
 \textbf{Top 10 Finalist:} Toyota Hackathon.
 }

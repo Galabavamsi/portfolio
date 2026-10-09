@@ -18,66 +18,6 @@
 
   window.GV = { unlock, addScore, audio };
 
-  function initLoader() {
-    const loader = $('#loading-screen');
-    if (!loader) return;
-
-    const bar = $('#loader-progress');
-    const percent = $('#loader-percent');
-    const status = $('#loader-status');
-    const labels = [
-      [0, 'Preparing portfolio'],
-      [28, 'Loading resume links'],
-      [55, 'Loading projects'],
-      [78, 'Starting BIT'],
-      [96, 'Ready'],
-    ];
-
-    let pageReady = document.readyState === 'complete';
-    const startedAt = performance.now();
-    const minTime = reducedMotion ? 240 : 1150;
-    const maxTime = reducedMotion ? 420 : 3200;
-
-    window.addEventListener('load', () => { pageReady = true; }, { once: true });
-
-    function setProgress(value) {
-      const safeValue = Math.max(0, Math.min(100, Math.round(value)));
-      if (bar) bar.style.width = safeValue + '%';
-      if (percent) percent.textContent = safeValue + '%';
-      if (status) {
-        const label = labels.reduce((current, item) => safeValue >= item[0] ? item[1] : current, labels[0][1]);
-        status.textContent = label;
-      }
-    }
-
-    function finish() {
-      setProgress(100);
-      window.setTimeout(() => {
-        loader.classList.add('is-done');
-        loader.addEventListener('transitionend', () => loader.remove(), { once: true });
-        window.setTimeout(() => loader.remove(), 900);
-      }, reducedMotion ? 80 : 220);
-    }
-
-    function tick(now) {
-      const elapsed = now - startedAt;
-      const base = Math.min(96, (elapsed / minTime) * 96);
-      const done = (pageReady && elapsed >= minTime) || elapsed >= maxTime;
-
-      if (done) {
-        finish();
-        return;
-      }
-
-      setProgress(base);
-      window.requestAnimationFrame(tick);
-    }
-
-    window.requestAnimationFrame(tick);
-  }
-
-  initLoader();
-
   const profileTabs = $$('.profile-tab');
   const profilePanels = $$('[data-profile-panel]');
   const profileNavs = $$('[data-profile-nav]');
@@ -113,13 +53,16 @@
       link.hidden = (isFilm ? 'film' : 'tech') !== (link.classList.contains('film-header-link') ? 'film' : 'tech');
     });
 
-    document.title = isFilm
-      ? 'Galaba Vamsi | Filmmaker, Editor & Director'
-      : 'Galaba Vamsi | Software Engineer & AI/ML Researcher';
-    if (profileDescription) {
-      profileDescription.setAttribute('content', isFilm
-        ? 'Film portfolio of Galaba Vamsi, a filmmaker, editor, director, writer, and Mechatronics student at IIT Bhilai.'
-        : 'Portfolio of Galaba Vamsi, a software engineer and AI/ML researcher at IIT Bhilai.');
+    // Blog pages load this script too; leave their own titles and descriptions alone.
+    if (profilePanels.length) {
+      document.title = isFilm
+        ? 'Galaba Vamsi | Filmmaker, Editor & Director'
+        : 'Galaba Vamsi | Software Engineer & AI/ML Researcher';
+      if (profileDescription) {
+        profileDescription.setAttribute('content', isFilm
+          ? 'Film portfolio of Galaba Vamsi, a filmmaker, editor, director, writer, and Mechatronics student at IIT Bhilai.'
+          : 'Portfolio of Galaba Vamsi, a software engineer and AI/ML researcher at IIT Bhilai.');
+      }
     }
 
     if (updateHash) {
