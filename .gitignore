@@ -16,3 +16,6 @@ spirte resources/craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Mo
 !spirte resources/craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Monster/Owlet_Monster_Walk_6.png
 !spirte resources/craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Monster/Owlet_Monster_Hurt_4.png
 !spirte resources/craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Monster/Owlet_Monster_Attack1_4.png
+
+# Crash dumps from Git Bash tools
+*.stackdump
