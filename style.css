@@ -1263,3 +1263,12 @@ footer {
     animation: none;
   }
 }
+
+/* Certificates gallery: letters are portrait, so show their top. */
+.cert-thumb {
+  background: #f4efe6;
+}
+
+.cert-thumb img {
+  object-position: top center;
+}
