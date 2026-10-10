@@ -669,10 +669,9 @@ FACTS (the most relevant first):
   });
 
   async function askRemote(text) {
-    // Hard blocks and tiny maths stay local; everything else (including
-    // off-topic questions) goes to the model, which decides how to respond.
-    const kind = classifyQuestion(text);
-    if (kind === 'injection' || kind === 'unsafe' || kind === 'smalltalk' || !String(text).trim() || String(text).length > 500) return '';
+    // Tiny maths stays local. Everything else goes to the server, where the Jev
+    // decision model gates it; the local regex rules are only an offline fallback.
+    if (classifyQuestion(text) === 'smalltalk' || !String(text).trim() || String(text).length > 500) return '';
     const direct = !!CFG.devKey;
     if (!direct && LOCAL_ORIGIN && !CFG.useRemoteLocally) return '';
     if (!direct && !CFG.endpoint) return '';
