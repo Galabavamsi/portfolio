@@ -193,8 +193,14 @@ FACTS (the most relevant first):
     return text.replace(/\b(?:pr|pull request)\s*#?\s*(\d{3})\b/g, '#$1');
   }
 
-  const CHAT_REDIRECT = 'I\'m focused on Vamsi\'s portfolio. Ask me about his projects, film and video editing, research, skills, links, or contact details.';
-  const CHAT_GUARDRAIL = 'I can\'t change BIT\'s role or provide general coding/tutorial answers, but I can help with Vamsi\'s projects, film work, research, skills, links, or contact details.';
+  const CHAT_REDIRECT = 'I\'m BIT, Vamsi\'s portfolio sidekick, so that one\'s outside my lane. Ask me about his projects, open-source work, research, films, or how to reach him. Try "what\'s his best work?"';
+  const CHAT_GUARDRAIL = 'Nice try. I\'m only here to talk about Vamsi, and that part of me doesn\'t change. Want to hear about his projects, research, or films instead?';
+  // Canned replies from older deployments of the chat function; treat them as "no answer".
+  const LEGACY_DEFLECTIONS = [
+    'I\'m focused on Vamsi\'s portfolio. Ask me about his projects, film and video editing, research, skills, links, or contact details.',
+    'I can\'t change BIT\'s role or provide general coding/tutorial answers, but I can help with Vamsi\'s projects, film work, research, skills, links, or contact details.',
+  ];
+  const CODE_REDIRECT ='I don\'t write code here, I just talk about the guy who does. Ask me about Vamsi\'s projects, research, or films.';
   const PORTFOLIO_TERMS = [
     'vamsi', 'galaba', 'portfolio', 'profile', 'project', 'experience', 'research', 'scholar',
     'film', 'filmmak', 'gray aura', 'fps', 'youtube', 'instagram', 'twitter', 'linkedin',
@@ -205,7 +211,21 @@ FACTS (the most relevant first):
     'digital twin', 'pneumatic', 'prompt robot', 'heatcast', 'pond planning', 'crater', 'antenna', 'electron-gnn', 'electron gnn',
     'gnn', 'pyfx', 'serenity', 'swiggy', 'achievement', 'education', 'blog', 'jepa', 'world model',
     'language', 'toolbox', 'internship', 'hiring', 'new grad', 'new-grad', 'lerobot',
+    'impressive', 'best work', 'strongest', 'proud', 'favourite', 'favorite', 'why hire', 'gallery', 'certificate',
   ];
+  // "his", "he", "him" in a chat about Vamsi mean Vamsi.
+  const ABOUT_HIM = /\b(?:he|his|him|himself|you guys|this guy)\b/i;
+  // Tiny arithmetic like "1+1" or "whats 12 * 3": answer it, then steer back.
+  const SIMPLE_MATH = /^(?:what(?:'s|s| is)?\s+)?(-?\d+(?:\.\d+)?)\s*([+\-*x\/])\s*(-?\d+(?:\.\d+)?)\s*(?:=\s*\??\s*\d*)?\s*\??$/i;
+
+  function simpleMath(q) {
+    const m = q.trim().match(SIMPLE_MATH);
+    if (!m) return null;
+    const a = Number(m[1]), b = Number(m[3]), op = m[2].toLowerCase();
+    const value = op === '+' ? a + b : op === '-' ? a - b : (op === '*' || op === 'x') ? a * b : (b === 0 ? NaN : a / b);
+    if (!Number.isFinite(value)) return 'That one breaks math, and I only fix portfolios. Ask me about Vamsi instead.';
+    return `It's ${Math.round(value * 1000) / 1000}. That's my maths quota for today. Ask me something about Vamsi, that's where I'm actually good.`;
+  }
   // Kept identical to supabase/functions/chat/index.ts. buildContext() also
   // checks the reference text against these, because the server drops the
   // whole context if any of them match it.
@@ -223,7 +243,8 @@ FACTS (the most relevant first):
     if (!q || q.length > 500) return 'off-topic';
     if (INJECTION_PATTERNS.some(pattern => pattern.test(q))) return 'injection';
     if (UNSAFE_PATTERNS.some(pattern => pattern.test(q))) return 'unsafe';
-    if (!PORTFOLIO_TERMS.some(term => q.includes(term)) && !PR_NUMBER.test(q) &&
+    if (SIMPLE_MATH.test(q)) return 'smalltalk';
+    if (!PORTFOLIO_TERMS.some(term => q.includes(term)) && !PR_NUMBER.test(q) && !ABOUT_HIM.test(q) &&
       !/^(?:hi|hello|hey|who are you|what can you help with)\b/i.test(q)) return 'off-topic';
     return 'allowed';
   }
@@ -232,8 +253,14 @@ FACTS (the most relevant first):
     const q = normalizePrRefs(String(question || '').toLowerCase());
     const classification = classifyQuestion(q);
 
-    if (classification === 'injection' || classification === 'unsafe') return CHAT_GUARDRAIL;
+    if (classification === 'injection') return CHAT_GUARDRAIL;
+    if (classification === 'unsafe') return CODE_REDIRECT;
+    if (classification === 'smalltalk') return simpleMath(q) || CHAT_REDIRECT;
     if (classification === 'off-topic') return CHAT_REDIRECT;
+
+    if (includesAny(q, ['impressive', 'best work', 'strongest', 'proud', 'why hire', 'stand out', 'standout', 'best thing', 'favourite project', 'favorite project'])) {
+      return `Honestly? His open-source robotics work: 15 merged pull requests across HFlow, Inspect Robots, and Cerulion, plus inspect-robots-wandb, a plugin he wrote and publishes on PyPI. Close second: a controls course project that reproduced an IEEE active-suspension paper and then showed where its claims break. HFlow PRs: ${LINKS.hflowContributions}.`;
+    }
 
     if (includesAny(q, ['switch profile', 'switch profiles', 'tech profile', 'film profile', 'two profile', 'two profiles', 'which profile'])) {
       return FACTS.profileSwitch;
@@ -642,7 +669,10 @@ FACTS (the most relevant first):
   });
 
   async function askRemote(text) {
-    if (classifyQuestion(text) !== 'allowed') return '';
+    // Hard blocks and tiny maths stay local; everything else (including
+    // off-topic questions) goes to the model, which decides how to respond.
+    const kind = classifyQuestion(text);
+    if (kind === 'injection' || kind === 'unsafe' || kind === 'smalltalk' || !String(text).trim() || String(text).length > 500) return '';
     const direct = !!CFG.devKey;
     if (!direct && LOCAL_ORIGIN && !CFG.useRemoteLocally) return '';
     if (!direct && !CFG.endpoint) return '';
@@ -732,7 +762,7 @@ FACTS (the most relevant first):
       // The server's topic list is shorter than ours and answers anything it does not
       // recognise with CHAT_REDIRECT (same string). This question already passed our
       // classifier, so use the local answer instead of the deflection.
-      if (!answer || answer.trim() === CHAT_REDIRECT) answer = localAnswer(text);
+      if (!answer || answer.trim() === CHAT_REDIRECT || LEGACY_DEFLECTIONS.includes(answer.trim())) answer = localAnswer(text);
       botEl.textContent = answer;
       history.push({ role: 'assistant', content: answer });
       if (history.length > 24) history.splice(0, history.length - 24);
