@@ -70,11 +70,23 @@ const JEV_QUESTIONS = {
   },
 };
 
-async function classifyWithJev(question: string): Promise<QueryClass | null> {
+type Decision = {
+  gate: 'jev' | 'rules';
+  outcome: QueryClass;
+  intent?: string;
+  intent_confidence?: number;
+  intent_probs?: Record<string, number>;
+  jailbreak?: number;
+  jev_ms?: number;
+  jev_input_tokens?: number;
+};
+
+async function classifyWithJev(question: string): Promise<Decision | null> {
   const key = Deno.env.get('TYPESAFE_API_KEY');
   if (!key) return null;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), JEV_TIMEOUT_MS);
+  const started = performance.now();
   try {
     const res = await fetch('https://api.typesafe.ai/v1/systemone', {
       method: 'POST',
@@ -86,11 +98,20 @@ async function classifyWithJev(question: string): Promise<QueryClass | null> {
     const data = await res.json();
     const intent = data?.answers?.intent;
     const jailbreak = Number(data?.answers?.jailbreak?.noul ?? 0);
-    if (jailbreak >= 0.7 || intent?.choice === 'manipulation') return 'injection';
-    if (intent?.choice === 'code_request' && intent.confidence >= 0.5) return 'unsafe';
-    if (intent?.choice === 'off_topic_task' && intent.confidence >= 0.6) return 'off-topic';
-    // about_vamsi, small_talk, or uncertain: let the LLM answer under SERVER_POLICY.
-    return 'allowed';
+    let outcome: QueryClass = 'allowed'; // about_vamsi, small_talk, or uncertain: the LLM answers
+    if (jailbreak >= 0.7 || intent?.choice === 'manipulation') outcome = 'injection';
+    else if (intent?.choice === 'code_request' && intent.confidence >= 0.5) outcome = 'unsafe';
+    else if (intent?.choice === 'off_topic_task' && intent.confidence >= 0.6) outcome = 'off-topic';
+    return {
+      gate: 'jev',
+      outcome,
+      intent: intent?.choice,
+      intent_confidence: intent?.confidence,
+      intent_probs: intent?.probabilities,
+      jailbreak,
+      jev_ms: Math.round(performance.now() - started),
+      jev_input_tokens: data?.usage?.input_tokens,
+    };
   } catch {
     return null;
   } finally {
@@ -98,8 +119,23 @@ async function classifyWithJev(question: string): Promise<QueryClass | null> {
   }
 }
 
-async function classifyQuery(question: string): Promise<QueryClass> {
-  return (await classifyWithJev(question)) ?? classifyByRules(question);
+async function classifyQuery(question: string): Promise<Decision> {
+  return (await classifyWithJev(question)) ?? { gate: 'rules', outcome: classifyByRules(question) };
+}
+
+// Log the decision (never the message) with the service role. Best effort only.
+function logDecision(decision: Decision, llmCalled: boolean, totalMs: number, evalLabel: string | null) {
+  const url = Deno.env.get('SUPABASE_URL');
+  const key = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  if (!url || !key) return;
+  const write = fetch(`${url}/rest/v1/chat_decisions`, {
+    method: 'POST',
+    headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+    body: JSON.stringify({ ...decision, llm_called: llmCalled, total_ms: totalMs, eval_label: evalLabel }),
+  }).catch(() => {});
+  // deno-lint-ignore no-explicit-any
+  const runtime = (globalThis as any).EdgeRuntime;
+  if (runtime?.waitUntil) runtime.waitUntil(write);
 }
 
 function jsonResponse(answer: string, status: number, headers: Record<string, string>) {
@@ -134,13 +170,16 @@ function corsHeaders(req: Request) {
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-bit-eval',
     Vary: 'Origin',
   };
 }
 
 Deno.serve(async (req) => {
   const CORS = corsHeaders(req);
+  const started = performance.now();
+  // Optional label for labelled evaluation runs; stored with the decision, never the text.
+  const evalLabel = (req.headers.get('x-bit-eval') || '').slice(0, 60) || null;
 
   if (req.method === 'OPTIONS') {
     return new Response(null, { status: 204, headers: CORS });
@@ -174,9 +213,11 @@ Deno.serve(async (req) => {
   if (!question) {
     return new Response('no messages', { status: 400, headers: CORS });
   }
-  const queryClass = await classifyQuery(question);
+  const decision = await classifyQuery(question);
+  const queryClass = decision.outcome;
   if (queryClass !== 'allowed') {
     const reply = queryClass === 'unsafe' ? CODE_REDIRECT : queryClass === 'off-topic' ? CHAT_REDIRECT : CHAT_GUARDRAIL;
+    logDecision(decision, false, Math.round(performance.now() - started), evalLabel);
     return jsonResponse(reply, 200, CORS);
   }
 
@@ -208,6 +249,7 @@ Deno.serve(async (req) => {
     }),
   });
 
+  logDecision(decision, true, Math.round(performance.now() - started), evalLabel);
   return new Response(upstream.body, {
     status: upstream.status,
     headers: {

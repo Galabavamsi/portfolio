@@ -273,4 +273,39 @@
   navLinks.forEach(link => {
     link.addEventListener('click', () => markActive(link.getAttribute('href').slice(1)));
   });
+
+  /* ---------- Page views ---------- */
+  // One count per page per browser session, stored as a daily counter in Supabase
+  // (no IPs, no identities). Local dev reads the count without adding to it.
+  (async function pageViews() {
+    const cfg = window.GV_CONFIG || {};
+    const footer = $('footer');
+    if (!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY || !footer) return;
+    const path = location.pathname.replace(/index\.html$/, '') || '/';
+    const local = ['localhost', '127.0.0.1'].includes(location.hostname) || location.protocol === 'file:';
+    let counted = false;
+    try { counted = sessionStorage.getItem('gv-viewed:' + path) === '1'; } catch { /* storage blocked */ }
+    const fn = local || counted ? 'view_count' : 'track_view';
+    try {
+      const res = await fetch(`${cfg.SUPABASE_URL}/rest/v1/rpc/${fn}`, {
+        method: 'POST',
+        headers: {
+          apikey: cfg.SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${cfg.SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ p_path: path }),
+      });
+      if (!res.ok) return;
+      const total = Number(await res.json());
+      if (fn === 'track_view') {
+        try { sessionStorage.setItem('gv-viewed:' + path, '1'); } catch { /* storage blocked */ }
+      }
+      if (!Number.isFinite(total) || total < 1) return;
+      const note = document.createElement('p');
+      note.className = 'view-count';
+      note.textContent = `${total.toLocaleString('en-IN')} ${total === 1 ? 'view' : 'views'} on this page`;
+      footer.append(note);
+    } catch { /* offline or blocked: show nothing */ }
+  })();
 })();
