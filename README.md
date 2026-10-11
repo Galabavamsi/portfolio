@@ -1,6 +1,6 @@
 # Galaba Vamsi — portfolio
 
-Personal site of **Galaba Vamsi**. Mechatronics at IIT Bhilai. Open-source contributor to robotics tools. The site covers his open-source contributions, RIS emulator research, projects, writing, and film.
+Personal site of **Galaba Vamsi**. Mechatronics at IIT Bhilai. Builds full-stack apps, AI agents, and ML models, and contributes to open-source robotics tools. The site covers his open-source contributions, RIS emulator research, projects, writing, and film.
 
 **Live:** [galabavamsi.github.io/portfolio](https://galabavamsi.github.io/portfolio/)
 
@@ -72,7 +72,7 @@ The same facts appear in several places. When one changes, update all of them:
 | `README.md` | the open-source and research lists above |
 | [Galabavamsi/Galabavamsi](https://github.com/Galabavamsi/Galabavamsi) | GitHub profile README |
 
-The positioning line, "Mechatronics at IIT Bhilai. Open-source contributor to robotics tools.", is the same string everywhere: the first two sentences of the site hero, the resume headline, the profile header (`TAGLINE` in `tools/paint.mjs` and the header image's alt text), and the start of BIT's `FACTS.summary`.
+The positioning line, "Mechatronics at IIT Bhilai. Full-stack, AI/ML, and open-source robotics.", is the same string in the resume headline, the profile header (`TAGLINE` in `tools/paint.mjs` and the header image's alt text), and the start of BIT's `FACTS.summary`. The site hero expands on it in prose.
 
 Bump the `?v=` query strings on `style.css`, `config.js`, `script.js`, and `pet.js` (in `index.html` and the blog pages) after changing them, so browsers pick up the new files.
 

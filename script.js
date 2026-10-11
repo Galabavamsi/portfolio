@@ -18,8 +18,8 @@
 
   window.GV = { unlock, addScore, audio };
 
-  const TECH_TITLE = 'Galaba Vamsi | Mechatronics, IIT Bhilai | Robotics software';
-  const TECH_DESCRIPTION = 'Mechatronics at IIT Bhilai. Open-source contributor to robotics tools (HFlow, Inspect Robots, Cerulion). ROS 2 and MuJoCo simulations. Co-author, 2 RIS papers.';
+  const TECH_TITLE = 'Galaba Vamsi | Mechatronics, IIT Bhilai | Software, AI and robotics';
+  const TECH_DESCRIPTION = 'Mechatronics at IIT Bhilai. Full-stack apps, AI agents, and ML models, plus open-source robotics tools (HFlow, Inspect Robots, Cerulion). Co-founder, Human Slop. Co-author, 2 RIS papers.';
   const FILM_TITLE = 'Galaba Vamsi | Filmmaker, Editor & Director';
   const FILM_DESCRIPTION = 'Film portfolio of Galaba Vamsi, a filmmaker, editor, director, writer, and Mechatronics student at IIT Bhilai.';
 
