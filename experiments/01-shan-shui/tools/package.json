@@ -1,0 +1,14 @@
+{
+  "name": "shan-shui-scroll-tools",
+  "private": true,
+  "description": "Offline painter for experiments/01-shan-shui: runs the vendored {Shan, Shui}* generator and rasterizes the scroll into tiles.",
+  "scripts": {
+    "paint": "node paint.js",
+    "rasterize": "node rasterize.js",
+    "build": "node paint.js && node rasterize.js"
+  },
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "sharp": "^0.33.5"
+  }
+}

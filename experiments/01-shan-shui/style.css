@@ -1,0 +1,135 @@
+/* Shan Shui scroll — experiment 01 */
+:root {
+  --ink: 52, 44, 38;
+  --paper: 243, 233, 212;
+  --red: 178, 44, 38;
+  --progress: 0;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  overflow: hidden;
+  background: rgb(var(--paper)) url("paper.png");
+  color: rgb(var(--ink));
+  font-family: 'Cormorant Garamond', 'EB Garamond', Georgia, 'Times New Roman', serif;
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+body:not(.ready) #stage, body:not(.ready) #painting, body:not(.ready) #boat { opacity: 0; }
+#stage, #painting, #boat { transition: opacity .9s ease; }
+
+/* the painting is drawn on a fixed canvas; the stage is a native horizontal scroller on top */
+#painting { position: fixed; inset: 0; width: 100vw; height: 100vh; mix-blend-mode: multiply; pointer-events: none; z-index: 1; }
+#stage { position: fixed; inset: 0; overflow-x: auto; overflow-y: hidden; z-index: 2; cursor: grab; scrollbar-width: none; overscroll-behavior: contain; }
+#stage::-webkit-scrollbar { display: none; }
+#stage.dragging { cursor: grabbing; user-select: none; }
+#spacer { position: relative; }
+#stations { position: absolute; inset: 0; }
+
+/* ---- text stations ---- */
+.station {
+  position: absolute;
+  display: flex;
+  gap: 18px;
+  padding: 44px 48px 52px 36px;
+  background: radial-gradient(ellipse 60% 62% at 50% 50%, rgba(var(--paper), .97) 0%, rgba(var(--paper), .94) 50%, rgba(var(--paper), .6) 68%, rgba(var(--paper), 0) 84%);
+}
+.station .body { flex: 1; min-width: 0; max-width: 620px; position: relative; }
+.mark {
+  flex: 0 0 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 6px;
+  writing-mode: vertical-rl;
+}
+.mark .num { font-size: 24px; line-height: 1; text-orientation: upright; font-family: 'Noto Serif SC', 'Songti SC', 'SimSun', serif; }
+.mark .label { margin-top: 14px; font-size: 11px; letter-spacing: .32em; text-transform: uppercase; opacity: .6; }
+
+.eyebrow { margin: 0 0 10px; font-size: 12px; letter-spacing: .26em; text-transform: uppercase; opacity: .68; }
+h1 { margin: 0 0 18px; font-size: 64px; font-weight: 500; line-height: .98; letter-spacing: -.012em; }
+h2 { margin: 0 0 16px; font-size: 30px; font-weight: 500; line-height: 1.15; letter-spacing: -.005em; }
+h3 { margin: 0 0 2px; font-size: 18px; font-weight: 600; line-height: 1.25; }
+p { margin: 0 0 12px; }
+.station.small p { font-size: 15px; }
+.meta { font-size: 13.5px; letter-spacing: .02em; opacity: .62; margin-bottom: 0; }
+.meta code { font-family: Consolas, Menlo, monospace; font-size: 12px; }
+.hint { margin-top: 26px; font-size: 14px; font-style: italic; opacity: .55; }
+a { color: inherit; text-decoration: none; border-bottom: 1px solid rgba(var(--ink), .35); transition: border-color .2s; }
+a:hover { border-color: rgba(var(--red), .9); color: rgb(var(--red)); }
+.links { margin-top: 18px; }
+.links a { display: inline-block; margin: 0 18px 6px 0; font-size: 15px; letter-spacing: .04em; }
+
+.items { display: grid; gap: 16px; margin-top: 4px; }
+.item p { margin-bottom: 4px; font-size: 16px; }
+.item h3 a { border-bottom-color: rgba(var(--ink), .25); }
+.two-col .items { grid-template-columns: 1fr 1fr; gap: 12px 26px; }
+.two-col .item p { font-size: 15px; }
+.two-col .body { max-width: none; }
+
+.seal { position: absolute; top: 28px; right: -8px; width: 66px; height: 66px; transform: rotate(-3deg); }
+#home .eyebrow, #home h1 { padding-right: 76px; }
+
+.load-error { position: fixed; left: 24px; right: 24px; top: 40%; text-align: center; }
+
+/* ---- chrome ---- */
+.edge { position: fixed; left: 0; right: 0; height: 7px; background: rgba(140, 52, 44, .2); z-index: 5; pointer-events: none; }
+.edge.top { top: 0; border-bottom: 1px solid rgba(60, 30, 26, .45); }
+.edge.bottom { bottom: 0; border-top: 1px solid rgba(60, 30, 26, .45); }
+
+.corner { position: fixed; bottom: 30px; margin: 0; z-index: 6; font-size: 11.5px; letter-spacing: .22em; text-transform: uppercase; opacity: .6; }
+.corner.left { left: 24px; }
+.corner.right { right: 24px; }
+.corner a { border: 0; }
+.corner a:hover { opacity: 1; }
+
+#nav {
+  position: fixed; left: 24px; right: 24px; top: 16px;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 0 6px; z-index: 6; pointer-events: none;
+}
+#nav button {
+  pointer-events: auto; flex: 0 0 auto; background: none; border: 0; padding: 6px 8px; cursor: pointer;
+  font: inherit; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: rgb(var(--ink)); opacity: .45;
+  transition: opacity .25s;
+}
+#nav button:hover { opacity: .85; }
+#nav button.active { opacity: 1; position: relative; }
+#nav button.active::after {
+  content: ''; position: absolute; left: 50%; bottom: 0; width: 5px; height: 5px; margin-left: -2.5px;
+  background: rgb(var(--red)); border-radius: 50%;
+}
+#progress { position: fixed; left: 28px; right: 28px; bottom: 18px; height: 1px; background: rgba(var(--ink), .16); z-index: 6; }
+#progress::after { content: ''; position: absolute; left: 0; top: 0; height: 1px; width: calc(var(--progress) * 100%); background: rgba(var(--ink), .6); }
+
+#boat { position: fixed; left: 24vw; z-index: 3; pointer-events: none; mix-blend-mode: multiply; transition: transform .7s ease, opacity .9s ease; animation: bob 4.2s ease-in-out infinite; }
+#boat.west { transform: scaleX(-1); }
+@keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 2px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  #boat { animation: none; }
+  #stage, #painting, #boat { transition: none; }
+}
+@media (max-width: 1000px) {
+  /* not enough room for labels: show dots, name only the active one */
+  #nav { gap: 2px; top: 14px; }
+  #nav button { font-size: 0; width: 18px; height: 18px; padding: 0; position: relative; }
+  #nav button::before { content: ''; position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; border-radius: 50%; background: rgba(var(--ink), .55); }
+  #nav button.active::before { background: rgb(var(--red)); }
+  #nav button.active::after { content: attr(data-label); font-size: 10.5px; letter-spacing: .2em; position: absolute; left: 50%; top: 16px; bottom: auto; transform: translateX(-50%); width: auto; height: auto; margin: 0; background: none; white-space: nowrap; }
+}
+@media (max-width: 720px) {
+  body { font-size: 16px; }
+  /* the words run on below the painted band, so give them solid paper to sit on */
+  .station { padding: 24px 18px 36px 12px; gap: 10px; background: rgba(var(--paper), .96); box-shadow: 0 0 28px 24px rgba(var(--paper), .96); }
+  h1 { font-size: 42px; }
+  h2 { font-size: 24px; }
+  .two-col .items { grid-template-columns: 1fr; }
+  .items { gap: 12px; }
+  .seal { width: 52px; height: 52px; right: -4px; }
+  .corner.left { display: none; }
+  .corner.right { right: 16px; bottom: 28px; }
+  .hint { display: none; }
+  #home .eyebrow { font-size: 10.5px; letter-spacing: .18em; }
+  #boat { left: 14vw; }
+}

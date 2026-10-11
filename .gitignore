@@ -19,3 +19,6 @@ spirte resources/craftpix-net-622999-free-pixel-art-tiny-hero-sprites/2 Owlet_Mo
 
 # Crash dumps from Git Bash tools
 *.stackdump
+
+# Intermediate SVG tiles for the Shan Shui scroll experiment (regenerate with tools/paint.js)
+experiments/01-shan-shui/build/

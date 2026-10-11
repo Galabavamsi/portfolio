@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Galaba Vamsi · a scroll</title>
+  <meta name="description" content="Experiment 01: a portfolio laid out as a Chinese landscape handscroll, painted once by the {Shan, Shui}* generator and read by scrolling sideways.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+SC:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="edge top" aria-hidden="true"></div>
+  <div class="edge bottom" aria-hidden="true"></div>
+
+  <canvas id="painting" aria-hidden="true"></canvas>
+  <img id="boat" src="boat.svg" alt="" aria-hidden="true">
+
+  <div id="stage">
+    <div id="spacer">
+      <div id="stations"></div>
+    </div>
+  </div>
+
+  <p class="corner left">Experiment 01 · Shan Shui scroll</p>
+  <p class="corner right"><a href="../../">Main site</a></p>
+  <nav id="nav" aria-label="Sections"></nav>
+  <div id="progress" aria-hidden="true"></div>
+
+  <noscript><p class="load-error">This scroll needs JavaScript. The plain version of the portfolio is at <a href="../../">the main site</a>.</p></noscript>
+
+  <script src="scroll.js"></script>
+</body>
+</html>

@@ -96,7 +96,7 @@ Bump the `?v=` query strings on `style.css`, `config.js`, `script.js`, and `pet.
 
 ### GitHub Pages
 
-Pushing to `main` runs `.github/workflows/static.yml`, which publishes the repo root. Keep `DEV_DEEPSEEK_KEY` in `config.js` empty.
+Pushing to `main` runs `.github/workflows/static.yml`, which publishes the repo root except `experiments/`. Keep `DEV_DEEPSEEK_KEY` in `config.js` empty.
 
 ### Local dev
 
@@ -115,3 +115,4 @@ Run `python -m http.server 8000` and open `http://localhost:8000/`. Locally, BIT
 | `assets/` | portrait (`profile.webp`) and social preview card (`og-card.jpg`) |
 | `resume_vamsi.tex`, `resume_vamsi.pdf` | resume source and build |
 | `supabase/` | chat proxy edge function (and the legacy leaderboard schema) |
+| `experiments/` | design experiments, run locally only; excluded from the Pages build (see `experiments/README.md`) |
