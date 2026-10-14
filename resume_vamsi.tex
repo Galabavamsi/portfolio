@@ -117,7 +117,7 @@ Graduating May 2027. 15 merged pull requests to open-source robotics tools: HFlo
 \entry{Research Intern}{IIT Bhilai\sep Advisor: Dr. Arzad Alam Kherani\sep\href{https://github.com/Galabavamsi/RIM-SIM-V2}{RIS-SIM v2}\sep\href{https://github.com/Galabavamsi/RIS-SIM}{v1}}{May 2025 -- Jul 2025}
 \begin{itemize}
   \item Built RIS-SIM, an open-source Python emulator for RIS-assisted radio links in LoS/NLoS scenarios with USRP-style SDR interfaces; designed RIS unit cells in CST Studio Suite for RF energy harvesting (IEEE INDICON 2025, co-author).
-  \item Rebuilt in 2026 as RIS-SIM v2: six paper-grounded scenarios, a 20 Hz WebSocket dashboard, a ZeroMQ server, and 103 tests.
+  \item Rebuilt it in 2026 as RIS-SIM v2 (6 scenarios, 103 tests), then from scratch as sremu (Projects).
 \end{itemize}
 
 \entry{Co-founder, Human Slop}{Anti-AI social app\sep YC Startup School, Bengaluru\sep\href{https://humanslop.in/}{Web app}\sep\href{https://play.google.com/store/apps/details?id=com.humanslop.app}{Play Store}}{2026 -- Present}
@@ -127,6 +127,8 @@ Graduating May 2027. 15 merged pull requests to open-source robotics tools: HFlo
 \end{itemize}
 
 \section*{Projects}
+\project{sremu -- Timed RIS Control Emulator}{2026, MIT}{IQ-level RIS emulator: timestamped RIS commands act on an exact, logged sample; deterministic and real-time controller-in-the-loop modes; runs unmodified GNU Radio 3.10; \textasciitilde2,100 tests; benchmarked on AWS. \href{https://github.com/Galabavamsi/sremu}{GitHub}}
+
 \project{Quarter-Car Active Suspension Study}{course project, simulation only, 2026}{Reproduced Na et al. (IEEE TSMC 2022) in MATLAB/Simulink: after fitting two plant parameters to its Case-10 experiment, the unchanged controller lands within about 6\% of its error indices. The paper's Case-B gains fail a hold-out test, and LQR and skyhook match or beat it at equal effort. \href{https://quarter-car-afc.vercel.app}{Site}\sep\href{https://github.com/Galabavamsi/quarter-car-afc-replication}{GitHub}}
 
 \project{Whiteboard Cleaning Robot}{2025, with Gajanand Kumawat}{3-DOF Cartesian gantry for a 90\,\texttimes\,90 cm whiteboard, simulated in ROS~2 Jazzy and Gazebo Harmonic: URDF/Xacro, ros2\_control, 10 cm-overlap raster path, and logged coverage analysis. \href{https://github.com/Galabavamsi/whiteboard_robot}{GitHub}}
@@ -138,24 +140,19 @@ Graduating May 2027. 15 merged pull requests to open-source robotics tools: HFlo
 \project{Arista Wi-Fi RRM}{team; Inter IIT Tech Meet 14.0, 5th place, Dec 2025}{Client-aware radio resource management in NS-3 with I/Q-based interference classification (STFT, DBSCAN, Dual-CNN; 16 classes) on a 5-AP, 50-client 802.11k/v topology. \href{https://canva.link/puoqbe4okoid8rb}{Slides}}
 
 \project{AntennaNet}{2026}{Inverse antenna design: surrogate network plus KD-tree anchoring over about 2,000 simulated patch-antenna S11 spectra, extended to 12\,\texttimes\,12-pixel layouts checked by a method-of-moments solver; MEEP dataset scripts. \href{https://github.com/Galabavamsi/Antenna-Net}{GitHub}}
-
-\project{Lunar Crater Detection}{2026}{Crater extraction from lunar DEMs, reproducing Zhou et al. (2018): F1 0.839 on a 16-crater labelled region in Mare Serenitatis; an optional CuPy path makes preprocessing about 4\texttimes{} faster. \href{https://github.com/Galabavamsi/Moon-Crater-Detection-using-DEM}{GitHub}}
-
-\project{Prompt Robot Arm}{2026}{Kinematic MuJoCo simulation: a prompt such as ``sort red, blue, green'' is parsed (rule-based for now) into a pick-and-place plan, moving from a kinematic gripper to a SCARA arm with analytic inverse kinematics. \href{https://github.com/Galabavamsi/prompt-robot-arm}{GitHub}}
-
 \section*{Publications}
 \begin{itemize}
   \item \textbf{Co-author}~--- \href{https://ieeexplore.ieee.org/abstract/document/11392908/}{\textit{Experience with RF Energy Harvesting-Driven Self-Powered RIS}}, IEEE INDICON 2025.
   \item \textbf{Co-author}~--- \href{https://www.sciencedirect.com/science/article/pii/S1570870526001964}{\textit{A systematic literature review on simulation models and deployments for reconfigurable intelligent surfaces}}, Ad Hoc Networks (Elsevier), 2026.
   \item \textbf{Co-author (preprint)}~--- \textit{Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI}, arXiv:2610.06306, 2026; submitted to CoRL 2026 SPAIS workshop. \href{https://arxiv.org/abs/2610.06306}{arXiv}
-  \item \textbf{First author (manuscript in preparation)}~--- sample-accurate IQ-level emulator for timed RIS control with controllers in the loop.
+  \item \textbf{Sole author (preprint draft, arXiv submission pending)}~--- \textit{Timed RIS Control in the Loop: A Sample-Accurate IQ-Level Emulator with Characterized Timing}, 2026. \href{https://github.com/Galabavamsi/sremu-paper/blob/master/preprint/sremu-preprint-draft.pdf}{Draft}
 \end{itemize}
 
 \section*{Skills}
 {\raggedright\linepenalty=1000
 \textbf{Robotics, simulation, and controls:} ROS~2 (rclpy, ros2\_control, URDF/Xacro), Gazebo Harmonic, MuJoCo, Unity (C\#), MATLAB/Simulink, LQR and Kalman filter design, LeRobot datasets\par
 \textbf{Languages:} Python, TypeScript/JavaScript, C/C++, Rust (open-source contributions), SQL, GLSL\par
-\textbf{ML, data, and scientific computing:} PyTorch, PyTorch Geometric, OpenCV, NumPy, CuPy, Apache Arrow, Weights \& Biases, MEEP (FDTD), CST Studio Suite, NS-3\par
+\textbf{ML, data, and scientific computing:} PyTorch, PyTorch Geometric, OpenCV, NumPy, CuPy, Apache Arrow, Weights \& Biases, MEEP (FDTD), CST Studio Suite, NS-3, GNU Radio\par
 \textbf{Software, cloud, and tooling:} FastAPI, Node.js (Fastify), React, React Native (Expo), Flutter, PostgreSQL, Supabase, WebSockets, Docker, AWS (CDK, Lambda, Step Functions, Bedrock), Git, Linux, GitHub Actions, pytest, Ruff, mypy, PyPI trusted publishing\par}
 
 \section*{Achievements}

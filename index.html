@@ -157,19 +157,22 @@
         </article>
 
         <article class="panel feature-card">
-          <p class="feature-kicker">Research software · RF</p>
-          <h3>RIS-SIM v2 emulator</h3>
+          <p class="feature-kicker">Research software · RF · MIT</p>
+          <h3>sremu: timed RIS control in the loop</h3>
           <p>
-            Open-source Python emulator for RIS-assisted radio links, with USRP-style SDR
-            interfaces so experiments can be prototyped before touching radio hardware.
-            I built v1 during my 2025 research internship and rebuilt it in 2026 with six
-            paper-grounded scenarios, a 20 Hz WebSocket dashboard, a ZeroMQ server, and
-            Monte Carlo runs.
+            An open-source, sample-accurate IQ-level emulator for reconfigurable intelligent
+            surfaces: timestamped RIS commands take effect on an exact, logged sample, and
+            controllers run in the loop, deterministically or in real time. Unmodified GNU Radio
+            3.10 runs through it with bit-for-bit repeatable output. On an AWS c7i host, timed
+            commands with at least 4 ms lead landed on their exact sample in at least 99.8% of
+            cases at 10&ndash;100 commands per second. It grew out of the RIS-SIM emulator from my
+            2025 internship, and was built with Claude Code under my direction.
           </p>
-          <p class="feature-facts">Python · 103 tests · 6 scenarios · ZeroMQ · WebSockets</p>
+          <p class="feature-facts">Python · ~2,100 tests · GNU Radio · ZeroMQ · sole-author preprint draft</p>
           <div class="panel-actions">
-            <a class="text-link" href="https://github.com/Galabavamsi/RIM-SIM-V2" target="_blank" rel="noopener">GitHub</a>
-            <a class="text-link" href="https://github.com/Galabavamsi/RIS-SIM" target="_blank" rel="noopener">v1 (RIS-SIM)</a>
+            <a class="text-link" href="https://github.com/Galabavamsi/sremu" target="_blank" rel="noopener">GitHub</a>
+            <a class="text-link" href="https://github.com/Galabavamsi/sremu-paper/blob/master/preprint/sremu-preprint-draft.pdf" target="_blank" rel="noopener">Preprint draft (PDF)</a>
+            <a class="text-link" href="https://github.com/Galabavamsi/RIM-SIM-V2" target="_blank" rel="noopener">Earlier: RIS-SIM v2</a>
           </div>
         </article>
       </div>
@@ -254,9 +257,10 @@
           <ul>
             <li>Built RIS-SIM, an open-source Python emulator for RIS-assisted radio links in LoS/NLoS scenarios, with USRP-style SDR interfaces so experiments can be prototyped before touching radio hardware.</li>
             <li>Designed RIS unit cells in CST Studio Suite for the lab's RF energy-harvesting work, reported in IEEE INDICON 2025 (co-author).</li>
-            <li>In 2026, rebuilt the emulator as RIS-SIM v2: six paper-grounded scenarios, a 20 Hz WebSocket dashboard, a ZeroMQ server, and 103 tests.</li>
+            <li>In 2026, rebuilt the emulator as RIS-SIM v2 (six paper-grounded scenarios, a 20 Hz WebSocket dashboard, 103 tests), then from scratch as sremu, a sample-accurate emulator for timed RIS control (see Featured).</li>
           </ul>
           <div class="panel-actions">
+            <a class="text-link" href="https://github.com/Galabavamsi/sremu" target="_blank" rel="noopener">sremu</a>
             <a class="text-link" href="https://github.com/Galabavamsi/RIM-SIM-V2" target="_blank" rel="noopener">RIS-SIM v2</a>
             <a class="text-link" href="https://github.com/Galabavamsi/RIS-SIM" target="_blank" rel="noopener">v1</a>
           </div>
@@ -470,7 +474,9 @@
             <a class="text-link inline" href="https://arxiv.org/abs/2610.06306" target="_blank" rel="noopener"><em>Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI</em></a>, arXiv:2610.06306 (2026); submitted to the CoRL 2026 SPAIS workshop.
           </li>
           <li>
-            <b>First author (manuscript in preparation)</b> — a sample-accurate, IQ-level emulator for timed RIS control with controllers in the loop (successor to the earlier Open Emulator draft).
+            <b>Sole author (preprint draft, arXiv submission pending)</b> —
+            <a class="text-link inline" href="https://github.com/Galabavamsi/sremu-paper/blob/master/preprint/sremu-preprint-draft.pdf" target="_blank" rel="noopener"><em>Timed RIS Control in the Loop: A Sample-Accurate IQ-Level Emulator with Characterized Timing</em></a>, 2026.
+            Code: <a class="text-link inline" href="https://github.com/Galabavamsi/sremu" target="_blank" rel="noopener">sremu</a> (MIT). Successor to the earlier Open Emulator draft.
           </li>
         </ul>
       </article>
@@ -655,7 +661,7 @@
         </article>
         <article class="panel">
           <h3>ML, data, and scientific computing</h3>
-          <p>PyTorch, PyTorch Geometric, OpenCV, NumPy, CuPy, Apache Arrow, Weights &amp; Biases, MEEP (FDTD), CST Studio Suite, NS-3</p>
+          <p>PyTorch, PyTorch Geometric, OpenCV, NumPy, CuPy, Apache Arrow, Weights &amp; Biases, MEEP (FDTD), CST Studio Suite, NS-3, GNU Radio</p>
         </article>
         <article class="panel">
           <h3>Software, cloud, and tooling</h3>
@@ -905,6 +911,6 @@
 
   <script src="config.js?v=refresh-6"></script>
   <script src="script.js?v=refresh-6"></script>
-  <script src="pet.js?v=refresh-9"></script>
+  <script src="pet.js?v=refresh-10"></script>
 </body>
 </html>

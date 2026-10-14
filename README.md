@@ -57,7 +57,7 @@ Open-source Rust robot runtime that records a run and re-executes it against new
 - Co-author — *Experience with RF Energy Harvesting-Driven Self-Powered RIS*, IEEE INDICON 2025. [IEEE Xplore](https://ieeexplore.ieee.org/abstract/document/11392908/)
 - Co-author — *A systematic literature review on simulation models and deployments for reconfigurable intelligent surfaces*, Ad Hoc Networks (Elsevier), 2026. [ScienceDirect](https://www.sciencedirect.com/science/article/pii/S1570870526001964)
 - Co-author (preprint) — *Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI*, [arXiv:2610.06306](https://arxiv.org/abs/2610.06306) (2026); submitted to the CoRL 2026 SPAIS workshop.
-- First author (manuscript in preparation) — a sample-accurate, IQ-level emulator for timed RIS control with controllers in the loop (successor to the earlier Open Emulator draft).
+- Sole author (preprint draft, arXiv submission pending) — [*Timed RIS Control in the Loop: A Sample-Accurate IQ-Level Emulator with Characterized Timing*](https://github.com/Galabavamsi/sremu-paper/blob/master/preprint/sremu-preprint-draft.pdf), 2026. Code: [sremu](https://github.com/Galabavamsi/sremu) (MIT). Successor to the earlier Open Emulator draft.
 
 ## Keeping content in sync
 
