@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Galaba Vamsi · wave field</title>
+  <meta name="description" content="Experiment 02: Galaba Vamsi's portfolio printed on a live wave field. Every ripple is the 2D wave equation, stepped on your GPU.">
+  <meta name="theme-color" content="#030507">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23030507'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23f0a63c'/%3E%3Ccircle cx='16' cy='16' r='8' fill='none' stroke='%23f0a63c' stroke-opacity='.55' stroke-width='1.5'/%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23f0a63c' stroke-opacity='.25' stroke-width='1.5'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="modulepreload" href="vendor/three/three.webgpu.min.js">
+  <link rel="modulepreload" href="vendor/three/three.core.min.js">
+  <script>document.documentElement.classList.replace('no-js', 'js');</script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/three.webgpu.min.js",
+      "three/webgpu": "./vendor/three/three.webgpu.min.js",
+      "three/tsl": "./vendor/three/three.tsl.min.js",
+      "three/addons/loaders/GLTFLoader.js": "./vendor/three/GLTFLoader.min.js",
+      "lenis": "./vendor/lenis/lenis.min.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#home">Skip to content</a>
+
+  <canvas id="field" aria-hidden="true"></canvas>
+
+  <header class="bar">
+    <a class="mark" href="#home" aria-label="Galaba Vamsi, back to top"><span class="mark-dot" aria-hidden="true"></span>Galaba Vamsi</a>
+    <p class="bar-exp">Experiment 02 · Wave field</p>
+    <nav class="bar-links" aria-label="Elsewhere">
+      <button type="button" class="motion-toggle" data-motion aria-pressed="false">Pause motion</button>
+      <a href="../../resume_vamsi.pdf">Resume</a>
+      <a href="../../">Main site</a>
+    </nav>
+  </header>
+
+  <nav class="dial" aria-label="Sections">
+    <ol>
+      <li><a href="#home" data-label="Hello">00</a></li>
+      <li><a href="#about" data-label="About">01</a></li>
+      <li><a href="#work" data-label="Work">02</a></li>
+      <li><a href="#open-source" data-label="Open source">03</a></li>
+      <li><a href="#experience" data-label="Experience">04</a></li>
+      <li><a href="#research" data-label="Research">05</a></li>
+      <li><a href="#projects" data-label="Projects">06</a></li>
+      <li><a href="#film" data-label="Film">07</a></li>
+      <li><a href="#writing" data-label="Writing">08</a></li>
+      <li><a href="#skills" data-label="Skills">09</a></li>
+      <li><a href="#contact" data-label="Contact">10</a></li>
+    </ol>
+    <span class="dial-needle" aria-hidden="true"></span>
+  </nav>
+
+  <main>
+    <!-- 00 · hello -->
+    <section id="home" class="hero" aria-labelledby="name">
+      <p class="eyebrow">Software, AI &amp; robotics · Graduating May 2027</p>
+      <h1 id="name" class="hero-name"><span class="hero-name-text">Galaba Vamsi</span></h1>
+      <div class="hero-copy" data-absorb>
+        <p class="lead">Mechatronics at IIT Bhilai. I build full-stack apps, AI agents, and ML models, and co-founded Human Slop. I also contribute to open-source robotics tools: 15 merged pull requests across HFlow, Inspect Robots, and Cerulion, plus inspect-robots-wandb, a plugin I wrote and publish on PyPI.</p>
+        <p class="actions">
+          <a class="btn" href="../../resume_vamsi.pdf">Resume</a>
+          <a class="btn" href="https://github.com/Galabavamsi" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn" href="https://www.linkedin.com/in/galabavamsi/" target="_blank" rel="noopener">LinkedIn</a>
+          <a class="btn" href="mailto:galabavamsi12@gmail.com">Email</a>
+        </p>
+      </div>
+      <p class="hint" aria-hidden="true" data-absorb><span class="hint-dot"></span><span class="hint-text">Move to make waves. Click to send a pulse.</span></p>
+    </section>
+
+    <!-- 01 · about -->
+    <section id="about" class="sec about" aria-labelledby="about-h">
+      <header class="sec-head" data-absorb>
+        <p class="sec-num">01 <span>About</span></p>
+        <h2 id="about-h">Jack of all trades, master of none <span class="soft">(working on it).</span></h2>
+      </header>
+      <div class="about-grid">
+        <div class="prose" data-absorb>
+          <p>Hi, I'm Vamsi. I study Mechatronics at IIT Bhilai, which officially makes me a bit of everything: part mechanical, part electrical, part "can you fix my laptop". I took that personally.</p>
+          <p>On any given week I'm training a model, shipping a full-stack app, sending a pull request to some robot's software, or arguing with a simulator about physics. Then I close the laptop and go shoot and edit a short film. My browser has too many tabs and I regret none of them.</p>
+          <p>The full quote goes "jack of all trades, master of none, but oftentimes better than a master of one." I'm betting on the second half. Scroll down for the receipts.</p>
+        </div>
+        <figure class="trades" aria-label="Five sources at five wavelengths on one surface">
+          <div class="trades-stage" data-trades>
+            <span class="trade" style="--x:.18;--y:.22" data-lambda="13">full-stack</span>
+            <span class="trade" style="--x:.78;--y:.16" data-lambda="17">ML</span>
+            <span class="trade" style="--x:.52;--y:.52" data-lambda="22">robotics</span>
+            <span class="trade" style="--x:.16;--y:.8" data-lambda="28">RF</span>
+            <span class="trade" style="--x:.84;--y:.78" data-lambda="10">film</span>
+          </div>
+          <figcaption><em>Same equations, different wavelengths.</em> Five sources, one surface.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 02 · work -->
+    <section id="work" class="sec" aria-labelledby="work-h">
+      <header class="sec-head" data-absorb>
+        <p class="sec-num">02 <span>Work</span></p>
+        <h2 id="work-h">Work I can point to</h2>
+      </header>
+      <div class="cards cards-2">
+        <article class="card" data-absorb="plate">
+          <p class="kicker">Open source · Hebbian Robotics, YC S26</p>
+          <h3>HFlow contributions</h3>
+          <p>HFlow is an open-source SDK for verifying the quality of robot training data. Eight of my pull requests merged between September and October 2026, mostly making robot-log and LeRobot conversion keep data whole or refuse it with a clear reason. The benchmark PR (<a href="https://github.com/Hebbian-Robotics/hflow/pull/367" target="_blank" rel="noopener">#367</a>) reported no safe speedup and left the filter graph unchanged.</p>
+          <p class="facts">8 merged PRs · Sep–Oct 2026 · Python, LeRobot, Apache Arrow</p>
+          <p class="links"><a href="https://github.com/Hebbian-Robotics/hflow/pulls?q=is%3Apr+author%3AGalabavamsi" target="_blank" rel="noopener">My PRs</a><a href="https://github.com/Hebbian-Robotics/hflow" target="_blank" rel="noopener">Repository</a></p>
+        </article>
+        <article class="card" data-absorb="plate">
+          <p class="kicker">Package I maintain · Robocurve, YC S26</p>
+          <h3>inspect-robots-wandb + Inspect Robots</h3>
+          <p>Inspect Robots is Robocurve's open-source evaluation framework for physical AI. Its maintainers asked for my Weights &amp; Biases sink to live outside the core, so I published it on PyPI as inspect-robots-wandb, with a 100% coverage gate, CI on Python 3.10–3.13, and trusted publishing. Upstream, 2 of my PRs have merged and 3 are open.</p>
+          <p class="facts">PyPI v0.1.0 · 2 merged PRs · 3 open</p>
+          <p class="links"><a href="https://pypi.org/project/inspect-robots-wandb/" target="_blank" rel="noopener">PyPI</a><a href="https://github.com/Galabavamsi/inspect-robots-wandb" target="_blank" rel="noopener">Source</a><a href="../../blog/inspect-robots-wandb.html">Article</a></p>
+        </article>
+        <article class="card" data-absorb="plate">
+          <p class="kicker">Course project · Control theory</p>
+          <h3>Quarter-car active suspension study</h3>
+          <p>Advanced Control Theory course project, simulation only. It reproduces Na et al. (IEEE TSMC 2022) approximation-free active suspension control in MATLAB/Simulink: after fitting two plant parameters to the paper's Case-10 experiment, the unchanged controller lands within about 6% of its error indices (IAE 0.129 vs 0.122). It then tests the claims: the paper's Case-B gains fail a hold-out test, LQR and skyhook baselines match or beat it at equal effort, and an anti-windup extension keeps the wheel on the road over a 50 mm bump.</p>
+          <p class="facts">MATLAB · Simulink · C port timed for a Cortex-M4 · FreeCAD rig · browser lab</p>
+          <p class="links"><a href="https://quarter-car-afc.vercel.app" target="_blank" rel="noopener">Site</a><a href="https://github.com/Galabavamsi/quarter-car-afc-replication" target="_blank" rel="noopener">GitHub</a></p>
+        </article>
+        <article class="card" data-absorb="plate">
+          <p class="kicker">Research software · RF</p>
+          <h3>RIS-SIM v2 emulator</h3>
+          <p>Open-source Python emulator for RIS-assisted radio links, with USRP-style SDR interfaces so experiments can be prototyped before touching radio hardware. I built v1 during my 2025 research internship and rebuilt it in 2026 with six paper-grounded scenarios, a 20 Hz WebSocket dashboard, a ZeroMQ server, and Monte Carlo runs.</p>
+          <p class="facts">Python · 103 tests · 6 scenarios · ZeroMQ · WebSockets</p>
+          <p class="links"><a href="https://github.com/Galabavamsi/RIM-SIM-V2" target="_blank" rel="noopener">GitHub</a><a href="https://github.com/Galabavamsi/RIS-SIM" target="_blank" rel="noopener">v1 (RIS-SIM)</a></p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 03 · open source + replay -->
+    <section id="open-source" class="sec" aria-labelledby="os-h">
+      <header class="sec-head" data-absorb>
+        <p class="sec-num">03 <span>Open source</span></p>
+        <h2 id="os-h">Keep the data whole, or refuse it.</h2>
+        <p class="sec-lede">Other teams build and maintain these robotics tools; I send pull requests. Most of my HFlow ones are about one idea: a recording is only useful if nothing was silently lost on the way in.</p>
+      </header>
+
+      <figure class="instrument" id="replay" data-instrument="replay">
+        <p class="sr-only" aria-live="polite" data-out="live"></p>
+        <div class="vf">
+          <canvas class="vf-canvas" aria-hidden="true"></canvas>
+          <img class="vf-poster" src="assets/poster-replay.webp" alt="" loading="lazy" onerror="this.remove()">
+          <p class="vf-tl">Replay</p>
+          <p class="vf-tr"><span data-out="clock">t 0000</span></p>
+          <p class="vf-bl"><span class="rec" data-out="rec">● rec</span></p>
+          <p class="vf-br" data-out="readout"></p>
+          <p class="vf-hint" data-out="hint">Click inside to drop a pulse.</p>
+        </div>
+        <figcaption data-absorb>
+          <p class="instr-lede"><b>Play a wave backwards and it comes home.</b> The wave equation is reversible: swap "now" and "a moment ago" and every ripple retraces its path to the exact point it started from. Lose one frame and repeat the last one in its place: the wave forgets which way it was moving, and only about half of it comes home.</p>
+          <p class="instr-controls">
+            <button type="button" data-act="pulse">Drop a pulse</button>
+            <button type="button" data-act="replay" disabled>Replay</button>
+            <button type="button" data-act="drop" disabled>Replay with a dropped frame</button>
+          </p>
+          <p class="instr-note">Simulated live on your GPU: the same solver as the rest of the page, in a closed box with reflecting walls.</p>
+        </figcaption>
+      </figure>
+
+      <div class="oss">
+        <article class="oss-item" data-absorb>
+          <header>
+            <h3><a href="https://github.com/Hebbian-Robotics/hflow" target="_blank" rel="noopener">HFlow</a></h3>
+            <p class="facts">Hebbian Robotics (YC S26) · 8 merged PRs · 2026</p>
+          </header>
+          <p>Open-source SDK for verifying the quality of robot training data. Most of my PRs make robot-log and LeRobot conversion keep data whole or refuse it with a clear reason.</p>
+          <details>
+            <summary>Contribution log</summary>
+            <ul>
+              <li><a href="https://github.com/Hebbian-Robotics/hflow/pull/657" target="_blank" rel="noopener">#657 · merged</a> Types Arrow columns from every message, preserving fields introduced after startup and reporting incompatible shapes with topic and field context.</li>
+              <li><a href="https://github.com/Hebbian-Robotics/hflow/pull/598" target="_blank" rel="noopener">#598 · merged</a> Refused sources with multiple channels on one topic before canonical episode creation, added doctor diagnostics, and bumped <code>TRANSFORM_BEHAVIOR_VERSION</code> to 10.</li>
+              <li><a href="https://github.com/Hebbian-Robotics/hflow/pull/400" target="_blank" rel="noopener">#400 · merged</a> Refused LeRobot depth videos before conversion when depth markers were present, so the RGB H.264 path cannot silently lose 12-bit depth semantics.</li>
+              <li><a href="https://github.com/Hebbian-Robotics/hflow/pull/367" target="_blank" rel="noopener">#367 · merged</a> A reproducible cold <code>camera_frame_stats</code> benchmark (3 cold 1080p30 checks, 900 decoded frames each, 4.897 s median); no repeatable semantics-preserving speedup, so the shipped filter graph stayed unchanged.</li>
+              <li><a href="https://github.com/Hebbian-Robotics/hflow/pull/362" target="_blank" rel="noopener">#362 · merged</a> Matched saved EgoSuite labels by HFlow source provenance instead of basenames, rejecting ambiguous matches.</li>
+              <li><a href="https://github.com/Hebbian-Robotics/hflow/pull/360" target="_blank" rel="noopener">#360 · merged</a> Centralized ingest URI parsing across the CLI, server, and SDK; rejected blank, absolute, and parent-escaping paths.</li>
+              <li><a href="https://github.com/Hebbian-Robotics/hflow/pull/353" target="_blank" rel="noopener">#353 · merged</a> LeRobot video-cache filenames omitted the video file index; cache identity now includes camera key, chunk index, and file index.</li>
+              <li><a href="https://github.com/Hebbian-Robotics/hflow/pull/350" target="_blank" rel="noopener">#350 · merged</a> Hugging Face tree discovery stopped after the first API page; added paginated traversal via <code>Link: rel="next"</code>, deduplicated paths, rejected unsafe cross-origin links, prevented loops.</li>
+            </ul>
+          </details>
+        </article>
+        <article class="oss-item" data-absorb>
+          <header>
+            <h3><a href="https://github.com/robocurve/inspect-robots" target="_blank" rel="noopener">Inspect Robots</a></h3>
+            <p class="facts">Robocurve (YC S26) · 2 merged · 3 open · author of inspect-robots-wandb</p>
+          </header>
+          <p>Robocurve's MIT-licensed evaluation framework for physical AI; its CI gates merges on 100% core test coverage, strict mypy, and ruff.</p>
+          <details>
+            <summary>Contribution log</summary>
+            <ul>
+              <li><a href="https://pypi.org/project/inspect-robots-wandb/" target="_blank" rel="noopener">inspect-robots-wandb v0.1.0 · PyPI</a> Weights &amp; Biases sink shipped as a standalone package after the maintainers asked for W&amp;B support to live outside the core: one W&amp;B run per evaluation, plugin entry points, 100% coverage, CI on Python 3.10 to 3.13, trusted publishing.</li>
+              <li><a href="https://github.com/robocurve/inspect-robots/pull/476" target="_blank" rel="noopener">#476 · merged</a> Exposed <code>max_retries</code> and <code>backoff_s</code> on the LLM agent policy across five wire protocols; retries honor <code>Retry-After</code> with exponential backoff fallback.</li>
+              <li><a href="https://github.com/robocurve/inspect-robots/pull/475" target="_blank" rel="noopener">#475 · merged</a> Eval logs recorded a bare commit SHA when <code>git status</code> failed, making an unknown working tree look clean; now records unknown provenance.</li>
+              <li><a href="https://github.com/robocurve/inspect-robots/pull/514" target="_blank" rel="noopener">#514 · open, in review</a> Checkpoint and resume for long eval sets on robot hardware: single-writer manifest, immutable per-attempt logs, in-flight markers, safety aborts never auto-retried.</li>
+              <li><a href="https://github.com/robocurve/inspect-robots/pull/550" target="_blank" rel="noopener">#550 · open</a> Optional <code>on_eval_error</code> sink hook for sinks holding remote state.</li>
+              <li><a href="https://github.com/robocurve/inspect-robots/pull/551" target="_blank" rel="noopener">#551 · open</a> Community plugins section in the plugin guide.</li>
+            </ul>
+          </details>
+        </article>
+        <article class="oss-item" data-absorb>
+          <header>
+            <h3><a href="https://github.com/cerulion-inc/cerulion" target="_blank" rel="noopener">Cerulion</a></h3>
+            <p class="facts">5 merged PRs · one CLI fix, four documentation and comment corrections · 2026</p>
+          </header>
+          <p>Open-source Rust robot runtime that records a run and re-executes it against new code (iceoryx2 shared memory, ROS 2 interop).</p>
+          <details>
+            <summary>Contribution log</summary>
+            <ul>
+              <li><a href="https://github.com/cerulion-inc/cerulion/pull/216" target="_blank" rel="noopener">#216 · merged</a> <code>cerulion ros2 attach --dry-run</code> no longer needs a throwaway workspace: an exclusively created temp root, so a pre-planted directory can never be read as a schema store, with RAII cleanup on every exit path.</li>
+              <li><a href="https://github.com/cerulion-inc/cerulion/pull/226" target="_blank" rel="noopener">#226 · merged</a> Documented the fail-closed arm of the <code>CERULION_NETWORK</code> kill-switch, verified against source.</li>
+              <li><a href="https://github.com/cerulion-inc/cerulion/pull/224" target="_blank" rel="noopener">#224 · merged</a> Fixed 21 stale <code>USER_API.md</code> references across 11 files.</li>
+              <li><a href="https://github.com/cerulion-inc/cerulion/pull/222" target="_blank" rel="noopener">#222 · merged</a> Replaced 26 em dashes in test comments so the file passes the repo's ASCII-only public-surface check.</li>
+              <li><a href="https://github.com/cerulion-inc/cerulion/pull/220" target="_blank" rel="noopener">#220 · merged</a> Corrected misleading <code>CARGO_MANIFEST_DIR</code> comments in <code>cerulion_cli_engine</code>.</li>
+            </ul>
+          </details>
+        </article>
+      </div>
+    </section>
+
+    <!-- 04 · experience -->
+    <section id="experience" class="sec" aria-labelledby="exp-h">
+      <header class="sec-head" data-absorb>
+        <p class="sec-num">04 <span>Experience</span></p>
+        <h2 id="exp-h">Experience</h2>
+      </header>
+      <ol class="timeline">
+        <li class="tl-item" data-absorb>
+          <p class="tl-when">May–Jul 2025</p>
+          <div>
+            <h3>Research Intern · IIT Bhilai</h3>
+            <p class="facts">Paid internship · Advisor: Dr. Arzad Alam Kherani · COMET Foundation-sponsored project on Smart Radio Environments</p>
+            <ul>
+              <li>Built RIS-SIM, an open-source Python emulator for RIS-assisted radio links in LoS/NLoS scenarios, with USRP-style SDR interfaces so experiments can be prototyped before touching radio hardware.</li>
+              <li>Designed RIS unit cells in CST Studio Suite for the lab's RF energy-harvesting work, reported in IEEE INDICON 2025 (co-author).</li>
+              <li>In 2026, rebuilt the emulator as RIS-SIM v2: six paper-grounded scenarios, a 20 Hz WebSocket dashboard, a ZeroMQ server, and 103 tests.</li>
+            </ul>
+          </div>
+        </li>
+        <li class="tl-item" data-absorb>
+          <p class="tl-when">2026–present</p>
+          <div>
+            <h3>Co-founder · <a href="https://humanslop.in/" target="_blank" rel="noopener">Human Slop</a></h3>
+            <p class="facts">Anti-AI social app for human-written posts</p>
+            <ul>
+              <li>Co-building it with my co-founder: an Expo (React Native) app for web and Android, a Fastify API, and PostgreSQL on Supabase, deployed on Render and Cloudflare.</li>
+              <li>Live on the web and <a href="https://play.google.com/store/apps/details?id=com.humanslop.app" target="_blank" rel="noopener">Google Play</a> (50+ downloads). Attended YC Startup School in Bengaluru.</li>
+              <li>Added a device biometric check at signup (the OS Face ID or fingerprint prompt, tied to a registered device) and a keystroke-timing score in the editor (typing variance, pauses, paste attempts). Both are heuristics, not proof of authorship.</li>
+            </ul>
+          </div>
+        </li>
+        <li class="tl-item" data-absorb>
+          <p class="tl-when">Apr–Jul 2024</p>
+          <div>
+            <h3>Marketing Intern · Swiggy Campus CEO</h3>
+            <ul><li>Executed a campus campaign of 15 social media posts.</li></ul>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- 05 · research + steer -->
+    <section id="research" class="sec" aria-labelledby="res-h">
+      <header class="sec-head" data-absorb>
+        <p class="sec-num">05 <span>Research</span></p>
+        <h2 id="res-h">Smart radio environments.</h2>
+        <p class="sec-lede">My research is on reconfigurable intelligent surfaces (RIS): walls covered in tiny switchable reflectors that a controller programs to send radio signals where they are needed.</p>
+      </header>
+
+      <figure class="instrument" id="steer" data-instrument="steer">
+        <p class="sr-only" aria-live="polite" data-out="live"></p>
+        <div class="vf">
+          <canvas class="vf-canvas" aria-hidden="true"></canvas>
+          <img class="vf-poster" src="assets/poster-steer.webp" alt="" loading="lazy" onerror="this.remove()">
+          <p class="vf-tl">Steer</p>
+          <p class="vf-tr"><span data-out="mode">optimized</span></p>
+          <p class="vf-bl" data-out="bits" aria-hidden="true"></p>
+          <p class="vf-br" data-out="readout"></p>
+          <p class="vf-hint" data-out="hint">Move inside: you are the receiver.</p>
+        </div>
+        <figcaption data-absorb>
+          <p class="instr-lede"><b>The transmitter cannot see you. The wall can.</b> Each element of this 1-bit surface flips its reflection between +1 and −1. The controller picks the pattern that focuses the wall's echo on your pointer and re-plans as you move.</p>
+          <p class="instr-controls" role="group" aria-label="Surface mode">
+            <button type="button" data-mode="off" aria-pressed="false">Plain wall</button>
+            <button type="button" data-mode="random" aria-pressed="false">Random</button>
+            <button type="button" data-mode="opt" aria-pressed="true">Optimized</button>
+          </p>
+          <p class="instr-note">A 2D toy on your GPU, not my research emulator (that one works on IQ samples with controllers in the loop). The signal reading is measured from the simulation, relative to a plain wall.</p>
+        </figcaption>
+      </figure>
+
+      <div class="pubs" data-absorb>
+        <h3 class="pubs-h">Publications</h3>
+        <ol class="pub-list">
+          <li><span class="role">Co-author</span> <a href="https://ieeexplore.ieee.org/abstract/document/11392908/" target="_blank" rel="noopener">Experience with RF Energy Harvesting-Driven Self-Powered RIS</a>, IEEE INDICON 2025.</li>
+          <li><span class="role">Co-author</span> <a href="https://www.sciencedirect.com/science/article/pii/S1570870526001964" target="_blank" rel="noopener">A systematic literature review on simulation models and deployments for reconfigurable intelligent surfaces</a>, <i>Ad Hoc Networks</i> (Elsevier), 2026.</li>
+          <li><span class="role">Co-author · submitted, under review</span> <i>Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI</i>, CoRL 2026 Workshop SPAIS.</li>
+          <li><span class="role">First author · manuscript in preparation</span> A sample-accurate, IQ-level emulator for timed RIS control with controllers in the loop (successor to the earlier Open Emulator draft).</li>
+        </ol>
+        <p class="links"><a href="https://scholar.google.com/citations?user=UNjZa1sAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a><a href="https://www.researchgate.net/profile/Galaba-Vamsi" target="_blank" rel="noopener">ResearchGate</a><a href="https://ieeexplore.ieee.org/author/943675488152924" target="_blank" rel="noopener">IEEE Xplore</a></p>
+      </div>
+    </section>
+
+    <!-- 06 · projects -->
+    <section id="projects" class="sec" aria-labelledby="proj-h">
+      <header class="sec-head" data-absorb>
+        <p class="sec-num">06 <span>Projects</span></p>
+        <h2 id="proj-h">Projects</h2>
+      </header>
+      <div class="grid">
+        <article class="tile" data-absorb="plate" data-source>
+          <p class="tile-meta">Team · 2025</p>
+          <h3><a href="https://github.com/Galabavamsi/whiteboard_robot" target="_blank" rel="noopener">Whiteboard Cleaning Robot</a></h3>
+          <p>3-DOF Cartesian gantry that cleans a 90 × 90 cm whiteboard, simulated in ROS 2 Jazzy and Gazebo Harmonic: URDF/Xacro model, ros2_control, a raster path with 10 cm overlap, and coverage analysis from logged data. Built with Gajanand Kumawat.</p>
+          <p class="tags">ROS 2 · Gazebo · URDF · Python</p>
+        </article>
+        <article class="tile" data-absorb="plate" data-source>
+          <p class="tile-meta">2026</p>
+          <h3><a href="https://github.com/Galabavamsi/prompt-robot-arm" target="_blank" rel="noopener">Prompt Robot Arm</a></h3>
+          <p>Kinematic MuJoCo simulation where a prompt such as "sort red, blue, green" is parsed (rule-based for now) into a plan and a pick-and-place sequence, moving from a kinematic gripper to a SCARA arm with analytic inverse kinematics.</p>
+          <p class="tags">MuJoCo · Python · Inverse kinematics</p>
+        </article>
+        <article class="tile" data-absorb="plate" data-source>
+          <p class="tile-meta">2026</p>
+          <h3><a href="https://github.com/Galabavamsi/pneumatic-sorting-digital-twin" target="_blank" rel="noopener">Pneumatic Sorting Digital Twin</a></h3>
+          <p>Offline Unity simulation of three electropneumatic training kits (sorting, stamping, vacuum transfer): simulated axes, logical PLC I/O, HMI screens, and telemetry record and replay. Not yet connected to a physical PLC.</p>
+          <p class="tags">Unity · C# · Simulation</p>
+        </article>
+        <article class="tile" data-absorb="plate" data-source>
+          <p class="tile-meta">2026</p>
+          <h3><a href="https://github.com/Galabavamsi/charter" target="_blank" rel="noopener">Charter</a></h3>
+          <p>Razorpay AI Buildathon prototype: chat, voice, and MCP (10 tools) share one bounded commerce core with frozen INR quotes, Razorpay test-mode payments, audit trails, and row-level security.</p>
+          <p class="tags">TypeScript · Fastify · PostgreSQL · MCP</p>
+        </article>
+        <article class="tile" data-absorb="plate" data-source>
+          <p class="tile-meta">Team · 2026</p>
+          <h3><a href="https://github.com/Galabavamsi/heatcast" target="_blank" rel="noopener">HeatCast</a></h3>
+          <p>Hackathon team project (FortyGuard Hackathon'26, Team HumanSlop): a neighborhood heat-planning scorecard for US planners combining thermal maps, heat-exceedance and streak analysis, vulnerability data, indoor sites, and walking routes. <a href="https://web-pearl-ten-99.vercel.app" target="_blank" rel="noopener">Demo</a></p>
+          <p class="tags">Next.js · FastAPI · MapLibre · Geospatial</p>
+        </article>
+        <article class="tile" data-absorb="plate" data-source>
+          <p class="tile-meta">Team · 2025</p>
+          <h3><a href="https://canva.link/puoqbe4okoid8rb" target="_blank" rel="noopener">Arista Wi-Fi RRM</a></h3>
+          <p>Team project for Arista's problem at Inter IIT Tech Meet 14.0 (5th place, Dec 2025): client-aware Wi-Fi radio resource management in NS-3, with I/Q-based interference classification (STFT, DBSCAN, Dual-CNN; 16 classes) on a 5-AP, 50-client 802.11k/v topology.</p>
+          <p class="tags">NS-3 · STFT · DBSCAN · Dual-CNN</p>
+        </article>
+        <article class="tile" data-absorb="plate" data-source>
+          <p class="tile-meta">2026</p>
+          <h3><a href="https://github.com/Galabavamsi/Antenna-Net" target="_blank" rel="noopener">AntennaNet</a></h3>
+          <p>Inverse antenna design: a surrogate network plus KD-tree nearest-neighbour anchoring over about 2,000 simulated patch-antenna S11 spectra, extended to 12 × 12-pixel (144-dimensional) layouts with a separate method-of-moments dataset, plus MEEP scripts for dataset generation.</p>
+          <p class="tags">Python · PyTorch · MoM · MEEP</p>
+        </article>
+        <article class="tile" data-absorb="plate" data-source>
+          <p class="tile-meta">2026</p>
+          <h3><a href="https://github.com/Galabavamsi/Moon-Crater-Detection-using-DEM" target="_blank" rel="noopener">Lunar Crater Detection</a></h3>
+          <p>Crater extraction from lunar DEMs, reproducing Zhou et al. (2018): F1 0.839 on a 16-crater labelled region in Mare Serenitatis (13 true positives, 2 false positives, 3 misses); an optional CuPy path makes preprocessing about 4× faster.</p>
+          <p class="tags">Python · scikit-image · CuPy</p>
+        </article>
+        <article class="tile" data-absorb="plate" data-source>
+          <p class="tile-meta">2026</p>
+          <h3><a href="https://github.com/Galabavamsi/ai-village-pond-planning" target="_blank" rel="noopener">AI Village Pond Planning</a></h3>
+          <p>Terrain-only backend API that turns contour maps into pond-site and catchment recommendations through metric projection, elevation-grid interpolation, D8 flow routing, and GeoJSON outputs.</p>
+          <p class="tags">Python · FastAPI · Geospatial</p>
+        </article>
+        <article class="tile" data-absorb="plate" data-source>
+          <p class="tile-meta">2026</p>
+          <h3><a href="https://github.com/Galabavamsi/open-pyfx" target="_blank" rel="noopener">Open-PyFX</a></h3>
+          <p>GPU video-effects app in Python, ModernGL, and GLSL: CRT emulation using bundled CRT 3D LUT colour profiles, ASCII edge detection, and 4K export.</p>
+          <p class="tags">Python · ModernGL · GLSL</p>
+        </article>
+        <article class="tile" data-absorb="plate" data-source>
+          <p class="tile-meta">Team · in progress · 2026</p>
+          <h3><a href="https://github.com/Galabavamsi/Electron-GNN" target="_blank" rel="noopener">Electron-GNN</a></h3>
+          <p>In-progress team project (advisor: Dr. Soumajit Pramanik): a two-tower graph neural network (GATv2) that predicts absorption-spectrum peaks from molecular geometry, so far trained and checked on two small molecules (water and ammonia).</p>
+          <p class="tags">PyTorch · GATv2 · GNN</p>
+        </article>
+        <article class="tile" data-absorb="plate" data-source>
+          <p class="tile-meta">Team · 2025–2026</p>
+          <h3>Amazon ML Challenge</h3>
+          <p>Team entries. AIR 200 in 2026. In 2025, team rank 700 (20,000+ registered participants) with a Qwen2-VL 7B and ViT/RoBERTa two-tower model for product price prediction.</p>
+          <p class="tags">Qwen2-VL · ViT · RoBERTa</p>
+        </article>
+        <article class="tile" data-absorb="plate" data-source>
+          <p class="tile-meta">Team · 2024</p>
+          <h3><a href="https://github.com/Galabavamsi/Serenity" target="_blank" rel="noopener">Serenity</a></h3>
+          <p>Team project: Flutter wellness app with an on-device TFLite mood classifier from the camera, a stress questionnaire, exercises, games, and an expert-contact screen.</p>
+          <p class="tags">Flutter · TFLite · Mobile</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 07 · film + focus -->
+    <section id="film" class="sec film" aria-labelledby="film-h">
+      <header class="sec-head" data-absorb>
+        <p class="sec-num">07 <span>Film</span></p>
+        <h2 id="film-h">Stories with a pulse.</h2>
+        <p class="sec-lede">I write, direct, shoot, and edit narrative films, music videos, startup content, and social-first stories where culture, technology, and visual mood meet.</p>
+      </header>
+
+      <figure class="instrument" id="focus" data-instrument="focus">
+        <p class="sr-only" aria-live="polite" data-out="live"></p>
+        <div class="vf">
+          <canvas class="vf-canvas" aria-hidden="true"></canvas>
+          <img class="vf-poster" src="assets/poster-focus.webp" alt="" loading="lazy" onerror="this.remove()">
+          <p class="vf-tl">Focus</p>
+          <p class="vf-tr"><span data-out="state">soft</span></p>
+          <p class="vf-bl" data-out="scale"></p>
+          <p class="vf-br" data-out="readout"></p>
+          <p class="vf-hint" data-out="hint">Drag the sensor to pull focus.</p>
+        </div>
+        <figcaption data-absorb>
+          <p class="instr-lede"><b>Same equations, shorter wavelength.</b> A plane wave passes through a lens and comes to a point. Slide the sensor until the spot is smallest: that is a focus pull, done by the physics instead of a ring on a lens.</p>
+          <p class="instr-controls"><label class="range"><span>Sensor</span><input type="range" min="0" max="1000" step="10" value="800" data-sensor aria-label="Sensor distance behind the lens"></label></p>
+          <p class="instr-note">The spot width is measured from the simulated field at the sensor line.</p>
+        </figcaption>
+      </figure>
+
+      <div class="credits">
+        <article class="credit" data-absorb="plate">
+          <a class="credit-thumb" href="https://www.youtube.com/watch?v=ZRrBCcASFnA" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/ZRrBCcASFnA/hqdefault.jpg" alt="Gray Aura music video thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></a>
+          <div>
+            <p class="kicker">Music video · Asita Production</p>
+            <h3>Godchild, Thrsdae — Gray Aura</h3>
+            <p>Directed by Galaba Vamsi and Harshal Singh. Cinematography by Harshal Singh, Galaba Vamsi, and Aditya Singh. Edited by Galaba Vamsi.</p>
+            <p class="links"><a href="https://www.youtube.com/watch?v=ZRrBCcASFnA" target="_blank" rel="noopener">Watch</a><a href="https://www.instagram.com/asita_productions/" target="_blank" rel="noopener">Asita Productions</a></p>
+          </div>
+        </article>
+        <article class="credit" data-absorb="plate">
+          <a class="credit-thumb" href="https://youtu.be/-WPj4VcHnSs" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/-WPj4VcHnSs/hqdefault.jpg" alt="गोद, Inter-IIT 8.0 film thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></a>
+          <div>
+            <p class="kicker">FPS, IIT Bhilai · Inter-IIT 8.0</p>
+            <h3>FPS: 51-hour filmmaking</h3>
+            <p>Director, editor, and writer with FPS, IIT Bhilai, developing, shooting, and finishing films under extreme time constraints with a student production team.</p>
+            <p class="links"><a href="https://youtu.be/-WPj4VcHnSs" target="_blank" rel="noopener">Watch गोद</a><a href="https://www.youtube.com/@fps_iitbh" target="_blank" rel="noopener">FPS channel</a></p>
+          </div>
+        </article>
+        <article class="credit" data-absorb="plate">
+          <a class="credit-thumb" href="https://www.youtube.com/watch?v=0WVlbskpzC8" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/0WVlbskpzC8/hqdefault.jpg" alt="Launching Human Slop video thumbnail" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></a>
+          <div>
+            <p class="kicker">Startup and product storytelling</p>
+            <h3>Human Slop</h3>
+            <p>Launch and social content for the anti-AI social platform I co-founded, turning a technical product into visual stories for an internet-native audience.</p>
+            <p class="links"><a href="https://www.youtube.com/watch?v=0WVlbskpzC8" target="_blank" rel="noopener">Launch video</a><a href="https://www.youtube.com/watch?v=A95_66Rpx_o" target="_blank" rel="noopener">Alive</a></p>
+          </div>
+        </article>
+      </div>
+
+      <h3 class="strip-h">Shorts, experiments, and campus work</h3>
+      <ul class="strip">
+        <li><a href="https://youtu.be/X63npde0tC8" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/X63npde0tC8/mqdefault.jpg" alt="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span>REVERIE</span><small>Inter-IIT 7.0, 51-hour film</small></a></li>
+        <li><a href="https://youtu.be/neheCtcgAfw" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/neheCtcgAfw/mqdefault.jpg" alt="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span>Lottery</span><small>FPS campus film</small></a></li>
+        <li><a href="https://youtu.be/bAIMAUsxbjE" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/bAIMAUsxbjE/mqdefault.jpg" alt="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span>TOHFA</span><small>FPS campus film</small></a></li>
+        <li><a href="https://youtu.be/HAzgRXeCtuI" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/HAzgRXeCtuI/mqdefault.jpg" alt="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span>ASYNC</span><small>Backrooms-lore short, made in about four hours</small></a></li>
+        <li><a href="https://youtu.be/ZOxLzjBaoKc" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/ZOxLzjBaoKc/mqdefault.jpg" alt="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span>A Successful Failure</span><small>Video essay</small></a></li>
+        <li><a href="https://youtu.be/qLJkAH8nXMg" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/qLJkAH8nXMg/mqdefault.jpg" alt="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span>Core Memories</span><small>Visual experiment</small></a></li>
+        <li><a href="https://youtu.be/9foVftC4LJs" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/9foVftC4LJs/mqdefault.jpg" alt="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span>MUDANE</span><small>First time on a Sony FX30</small></a></li>
+        <li><a href="https://youtu.be/XAaaViNTpWc" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/XAaaViNTpWc/mqdefault.jpg" alt="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span>TRIP</span><small>Fuji XT3</small></a></li>
+        <li><a href="https://youtu.be/66JtvPzybow" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/66JtvPzybow/mqdefault.jpg" alt="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span>LOSERS</span><small>Short film, Fuji XT3</small></a></li>
+        <li><a href="https://youtu.be/ONRd5ax9iXw" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/ONRd5ax9iXw/mqdefault.jpg" alt="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span>Animal Succession</span><small>Editing experiment</small></a></li>
+        <li><a href="https://youtu.be/g7hVDZTYmq0" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/g7hVDZTYmq0/mqdefault.jpg" alt="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"><span>Fresher's Introduction 2024</span><small>FPS campus content</small></a></li>
+      </ul>
+      <p class="links film-links"><a href="https://www.youtube.com/@galabavamsi12" target="_blank" rel="noopener">YouTube</a><a href="https://www.youtube.com/@fps_iitbh" target="_blank" rel="noopener">FPS channel</a><a href="https://www.instagram.com/galaba_vamsi/" target="_blank" rel="noopener">Instagram</a></p>
+    </section>
+
+    <!-- 08 · writing -->
+    <section id="writing" class="sec" aria-labelledby="writing-h">
+      <header class="sec-head" data-absorb>
+        <p class="sec-num">08 <span>Writing</span></p>
+        <h2 id="writing-h">Build logs</h2>
+        <p class="sec-lede">One post per experiment: what I set out to test, the exact numbers I measured, and the parts that did not work.</p>
+      </header>
+      <div class="posts">
+        <a class="post" data-absorb="plate" href="../../blog/jev-gate-portfolio-chatbot.html">
+          <p class="post-meta">Oct 10, 2026 · 6 min · LLM, evals</p>
+          <h3>I put a decision model in front of my portfolio chatbot.</h3>
+          <p>Keyword rules blocked 12 of 20 real questions; regex let 10 of 12 jailbreaks through. A typed decision model got both to zero on the same 50 labelled messages.</p>
+        </a>
+        <a class="post" data-absorb="plate" href="../../blog/inspect-robots-wandb.html">
+          <p class="post-meta">Oct 4, 2026 · 6 min · Open source, Python</p>
+          <h3>I shipped a Weights &amp; Biases sink for robot evals. Here is how it works.</h3>
+          <p>inspect-robots-wandb v0.1.0 is on PyPI: one W&amp;B run per Inspect Robots evaluation, the full eval spec as config, and every aggregate metric.</p>
+        </a>
+        <a class="post" data-absorb="plate" href="../../blog/jepa-world-model-pusht.html">
+          <p class="post-meta">Aug 4, 2026 · 12 min · Physical AI, JEPA</p>
+          <h3>I trained a world model on my laptop. It learned physics and still could not push a block.</h3>
+          <p>A 1.9M-parameter JEPA world model on an 8 GB laptop GPU: seven minutes of training, emergent physical state, and a planner that scored exactly zero.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- 09 · skills + highlights -->
+    <section id="skills" class="sec" aria-labelledby="skills-h">
+      <header class="sec-head" data-absorb>
+        <p class="sec-num">09 <span>Skills</span></p>
+        <h2 id="skills-h">Skills</h2>
+      </header>
+      <dl class="skills" data-absorb>
+        <div><dt>Robotics, simulation, and controls</dt><dd>ROS 2 (rclpy, ros2_control, URDF/Xacro), Gazebo Harmonic, MuJoCo, Unity (C#), MATLAB/Simulink, LQR and Kalman filter design, LeRobot datasets</dd></div>
+        <div><dt>Languages</dt><dd>Python, TypeScript/JavaScript, C/C++, Rust (open-source contributions), SQL, GLSL</dd></div>
+        <div><dt>ML, data, and scientific computing</dt><dd>PyTorch, PyTorch Geometric, OpenCV, NumPy, CuPy, Apache Arrow, Weights &amp; Biases, MEEP (FDTD), CST Studio Suite, NS-3</dd></div>
+        <div><dt>Software, cloud, and tooling</dt><dd>FastAPI, Node.js (Fastify), React, React Native (Expo), Flutter, PostgreSQL, Supabase, WebSockets, Docker, AWS (CDK, Lambda, Step Functions, Bedrock), Git, Linux, GitHub Actions, pytest, Ruff, mypy, PyPI trusted publishing</dd></div>
+      </dl>
+      <h3 class="hl-h">Highlights</h3>
+      <ul class="highlights">
+        <li data-absorb="plate"><b>AIR 200</b><span>Amazon ML Challenge 2026 (team)</span></li>
+        <li data-absorb="plate"><b>5th place</b><span>Arista Networks Wi-Fi challenge, Inter IIT Tech Meet 14.0 (team, Dec 2025)</span></li>
+        <li data-absorb="plate"><b>AIR 700</b><span>Amazon ML Challenge 2025 (team; 20,000+ participants)</span></li>
+        <li data-absorb="plate"><b>1st place</b><span>IIT Bhilai Web Development Competition</span></li>
+        <li data-absorb="plate"><b>Top 10 finalist</b><span>Toyota Hackathon</span></li>
+        <li data-absorb="plate"><b>PMSS scholar</b><span>Prime Minister's Scholarship Scheme, National Defence Fund (2024)</span></li>
+        <li data-absorb="plate"><b>Top 1%</b><span>JEE Advanced</span></li>
+        <li data-absorb="plate"><b>95% · 94%</b><span>Class 12 and Class 10</span></li>
+      </ul>
+    </section>
+
+    <!-- 10 · contact -->
+    <section id="contact" class="sec contact" aria-labelledby="contact-h">
+      <header class="sec-head" data-absorb>
+        <p class="sec-num">10 <span>Contact</span></p>
+        <h2 id="contact-h">Working on robot data, evaluation, or simulation?</h2>
+      </header>
+      <div class="contact-body" data-absorb>
+        <p class="lead">Open to robotics software internships and new-grad roles (graduating May 2027), and to research collaborations. I read the code, write the tests, and say plainly what did not work.</p>
+        <p class="send-row"><a class="send" href="mailto:galabavamsi12@gmail.com" data-send><span class="send-ring" aria-hidden="true"></span>galabavamsi12@gmail.com</a></p>
+        <p class="links"><a href="https://www.linkedin.com/in/galabavamsi/" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/Galabavamsi" target="_blank" rel="noopener">GitHub</a><a href="https://x.com/Galaba_Vamsi" target="_blank" rel="noopener">X</a><a href="https://www.youtube.com/@galabavamsi12" target="_blank" rel="noopener">YouTube</a><a href="../../resume_vamsi.pdf">Resume</a></p>
+      </div>
+    </section>
+
+    <footer id="colophon" class="colophon" data-absorb>
+      <h2>How this page works</h2>
+      <p>Every ripple on this page is a solution of the 2D wave equation, <span class="eq">∂²u/∂t² = c²∇²u</span>, stepped hundreds of times a second on your GPU with a leapfrog scheme. The name is metal: the waves reflect off its footprint, which is rendered from the same 3D mesh you see. Paragraphs sit on absorber, so the field goes quiet under the words. The three instruments run the same solver: time reversal in a closed box, a 1-bit reconfigurable surface choosing between two boundary conditions, and a lens made of slower medium.</p>
+      <p class="stats" data-out="stats">Renderer: waiting for the GPU.</p>
+      <p>Built with <a href="https://threejs.org/" target="_blank" rel="noopener">three.js</a> (WebGPU, with a WebGL 2 fallback). The letters are modelled in Blender by <code>tools/blender/text_mesh.py</code>; the surface tiles, posts and lens are built in three.js at runtime. Type: Archivo, Instrument Serif, IBM Plex Mono. Content from the <a href="../../">main site</a>, as of October 2026.</p>
+      <p class="small">Experiment 02 · source in <code>experiments/02-wave-field</code> of the portfolio repository.</p>
+    </footer>
+  </main>
+
+  <noscript><p class="noscript">The wave field needs JavaScript; everything else on this page works without it.</p></noscript>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "wave-field-tools",
+  "private": true,
+  "type": "module",
+  "description": "Offline tools for experiment 02: vendor the runtime libraries, serve locally.",
+  "scripts": {
+    "vendor": "node vendor.mjs",
+    "serve": "node serve.mjs 8765"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "lenis": "1.3.26",
+    "three": "0.186.1"
+  }
+}
