@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I finished 5th of 232 on a Kaggle wearables challenge | Galaba Vamsi</title>
+  <meta name="description" content="Fifth of 232 teams on the final private leaderboard of the 3rd WEAR Dataset Challenge @HASCA 2026. What moved the score, a leak that looked like a gain, and a public-to-private drop that hit every top team.">
+  <link rel="canonical" href="https://galabavamsi.github.io/portfolio/blog/wear-hasca-kaggle-5th.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="I finished 5th of 232 on a Kaggle wearables challenge">
+  <meta property="og:description" content="0.92497 to 0.93825 on the public board, 0.93137 on the private one. What worked, what leaked, and why every top team dropped.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2315110d'/%3E%3Crect x='3' y='3' width='10' height='10' fill='%23d98938'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css?v=refresh-6">
+  <link rel="stylesheet" href="blog.css?v=chat-2">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html" aria-label="Galaba Vamsi home">GV</a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="../index.html#featured">Work</a>
+      <a href="../index.html#open-source">Open source</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#projects">Projects</a>
+      <a href="../index.html#research">Research</a>
+      <a href="index.html" class="active">Writing</a>
+      <a href="../index.html#gallery">Gallery</a>
+      <a href="../index.html#contact">Contact</a>
+    </nav>
+    <a class="header-link" href="../resume_vamsi.pdf" target="_blank" rel="noopener">Resume</a>
+  </header>
+
+  <div class="read-bar" aria-hidden="true"><span id="read-progress"></span></div>
+
+  <main>
+    <article>
+      <header class="post-head">
+        <a class="back-link" href="index.html">&lt;- All posts</a>
+        <p class="section-label">Build log / Kaggle</p>
+        <h1 class="post-title">I finished 5th of 232 on a Kaggle wearables challenge.</h1>
+        <p class="standfirst">
+          The public leaderboard said 7th. The private one said 5th, and every team near the top
+          lost points on the way. Here is what moved my score, the leak that looked like a gain,
+          and what I'd try next.
+        </p>
+        <ul class="post-meta">
+          <li>Oct 18, 2026</li>
+          <li>7 min read</li>
+          <li><span class="tag">ML</span></li>
+          <li><span class="tag">Kaggle</span></li>
+          <li><span class="tag">Wearables</span></li>
+        </ul>
+      </header>
+
+      <div class="post-layout">
+        <aside class="post-toc" aria-label="Table of contents">
+          <p>On this page</p>
+          <ol>
+            <li><a href="#task">The task</a></li>
+            <li><a href="#base">Where I started</a></li>
+            <li><a href="#moved">What moved the score</a></li>
+            <li><a href="#leak">The leak that looked like a gain</a></li>
+            <li><a href="#dead">Dead ends</a></li>
+            <li><a href="#shake">The shake-up</a></li>
+            <li><a href="#next">What I'd try next</a></li>
+          </ol>
+        </aside>
+
+        <div class="post-body">
+          <p class="lede">
+            I finished 5th of 232 teams in the 3rd WEAR Dataset Challenge @HASCA 2026 on Kaggle,
+            with a macro-F1 of 0.93137 on the final private leaderboard. Only the top three places
+            won prizes, so I didn't. There is no workshop paper or invitation either. This is a
+            write-up of the method, because the interesting parts were not the ones I expected.
+          </p>
+
+          <h2 id="task">The task</h2>
+
+          <p>
+            Four test subjects each did 18 exercises while wearing IMUs and being filmed. Their
+            recordings are cut into non-overlapping one-second tiles and shuffled. Every tile
+            carries one random limb of IMU (50 samples by 3 axes) and 15 video frames. You label
+            each tile with one of 18 exercises or "null". The metric is macro-F1 over those 19
+            classes. The private score uses about half the tiles; the public score uses the other
+            half.
+          </p>
+
+          <p>
+            The twist is that the tiles are shuffled but not independent. A tile's neighbours in
+            time are somewhere in the pile, and finding them is most of the game.
+          </p>
+
+          <h2 id="base">Where I started</h2>
+
+          <p>
+            I didn't build this from scratch. The pipeline is a fork of goodpjw2008's public
+            Kaggle notebook (public score 0.929), which builds on woominyo's Timeline+Graph
+            notebook and honghanhhh's timeline links. In outline: window models label each tile,
+            a learned scorer guesses which tile follows which, Hungarian matching turns those
+            guesses into chains, a graph propagates labels along the chains and over video
+            neighbours, and a count calibration step pushes each subject's totals towards sensible
+            numbers.
+          </p>
+
+          <p>
+            My reproduction of it scored 0.92497 on the public board. I worked through the
+            experiments in sessions with Claude on rented cloud machines. Everything below is a
+            change on top of that base.
+          </p>
+
+          <h2 id="moved">What moved the score</h2>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Change</th><th>What it does</th><th>Public LB</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Per-subject whitening of the kNN video embedding</td><td>Subject-centred, PCA-whitened embedding for the graph</td><td>+0.003</td></tr>
+                <tr><td>kNN temperature 0.5</td><td>Softer neighbour weights</td><td>+0.001</td></tr>
+                <tr><td>Whitened video-continuity link features</td><td>Per-subject-whitened cosine between the end of tile i and the start of tile j, as extra link features. Exact-successor rate 0.659 to 0.717</td><td>+0.004</td></tr>
+                <tr><td>Whitened candidate sources</td><td>More candidate pairs from whitened similarity. Recall 0.930 to 0.965, exact successor 0.737</td><td>inside the ensembles</td></tr>
+                <tr><td>ZCA video input to the window models</td><td>Per-subject ZCA of the 768-d frame features. Window F1 0.7253 to 0.7290</td><td>+0.001</td></tr>
+                <tr><td>Multi-run ensemble decode</td><td>Average log-probabilities over runs, union their matchings, decode once</td><td>+0.002</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            Together that took the public score from 0.92497 to 0.93825. The common thread: video
+            features are compared across one subject's tiles, so centring and whitening them per
+            subject (rather than across everyone) is what helped.
+          </p>
+
+          <h2 id="leak">The leak that looked like a gain</h2>
+
+          <p>
+            My first version of the whitening used a covariance fitted on all 22 training subjects.
+            It raised my out-of-fold score by 0.003 and lowered the leaderboard score by 0.003.
+          </p>
+
+          <p>
+            The out-of-fold score wasn't nested. The fold being scored had contributed to the
+            whitening, so the number was meaningless. Per-subject whitening uses no labels and is
+            allowed on test subjects, and it fixed the problem. The lesson I'm keeping: anything
+            fitted on all training subjects before out-of-fold scoring makes that score
+            untrustworthy, however good it looks.
+          </p>
+
+          <h2 id="dead">Dead ends</h2>
+
+          <p>
+            About 25 ideas were flat or worse. The ones I'd warn a friend about:
+          </p>
+
+          <ul>
+            <li>A cross-encoder link model, and second-order (trigram) link prediction.</li>
+            <li>HMM and chain decoders. Even with the true links, an HMM only reached about 0.929.</li>
+            <li>Learned kNN embeddings, and variants of the window models.</li>
+            <li>A post-decode LightGBM corrector, and count corrections.</li>
+            <li>TSP-solver links: more links, no gain in the decode.</li>
+            <li>A second pseudo-label round: +0.0003.</li>
+            <li>Large majority votes over many runs. They always scored worse on the leaderboard than my best ensemble, even when their out-of-fold score was higher (0.9409 against 0.9386).</li>
+          </ul>
+
+          <h2 id="shake">The shake-up</h2>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Place</th><th>Public</th><th>Private</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>First (private)</td><td>0.94538</td><td>0.94112</td></tr>
+                <tr><td>Second (private)</td><td>0.94355</td><td>0.93924</td></tr>
+                <tr><td>Me</td><td>0.93825 (7th)</td><td class="win">0.93137 (5th)</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            Every top team dropped. I lost 0.007 and moved up two places, to 5th. The gaps at the
+            end were 0.0013 to third place and 0.0098 to first. Differences of 60 to 130 tiles
+            between my ensembles moved the public score by about 0.002, which is noise. A single
+            borderline bout (one exercise in one test subject, about 95 tiles) could swing the
+            score by 0.005.
+          </p>
+
+          <p>
+            I rejected configurations that flipped that bout to "null", even when out-of-fold
+            liked them. One such setting gained 0.002 out-of-fold and lost 0.005 on the public
+            board. Trusting the leaderboard over my own validation was uncomfortable, but it held up.
+          </p>
+
+          <h2 id="next">What I'd try next</h2>
+
+          <ul>
+            <li>A stronger refiner along the matched chains. With the true chain order it would be worth about +0.018; mine gains +0.003.</li>
+            <li>A pairwise re-ranker over the whitened space for the link scorer, whose exact-successor rate is stuck at 0.737.</li>
+            <li>Using the recording-session structure to set counts.</li>
+          </ul>
+
+          <p>
+            To be plain about it: this was AI-assisted, built on public notebooks, and outside the
+            prize places. The score is real, and the method notes above are what I'd want to have
+            read before starting.
+          </p>
+
+          <div class="post-end">
+            <h2>See the leaderboard</h2>
+            <p>
+              The final standings are public on Kaggle. There is no public repository or notebook
+              for my version.
+            </p>
+            <div class="hero-actions">
+              <a class="btn primary" href="https://www.kaggle.com/competitions/3rd-wear-dataset-challenge-hasca-2026/leaderboard" target="_blank" rel="noopener">Kaggle leaderboard</a>
+              <a class="btn" href="https://www.kaggle.com/code/goodpjw2008/wear-hasca-learned-links-counts-lb-0-92942" target="_blank" rel="noopener">goodpjw2008's notebook</a>
+              <a class="btn" href="index.html">More build logs</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <p>(c) 2026 Galaba Vamsi. Built with care, pixels, and plain language.</p>
+  </footer>
+
+  <script src="../config.js?v=refresh-6"></script>
+  <script src="../script.js?v=refresh-6"></script>
+  <script src="blog.js?v=chat-1"></script>
+  <script src="../pet.js?v=refresh-13"></script>
+</body>
+</html>
