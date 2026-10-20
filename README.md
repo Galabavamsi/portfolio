@@ -68,7 +68,8 @@ The same facts appear in several places. When one changes, update all of them:
 | `index.html` | Tech and Film profile content |
 | `pet.js` | BIT's `LINKS` and `FACTS` (a separate copy of the content) |
 | `blog/` | posts, plus the cards in `index.html#blog` |
-| `resume_vamsi.tex` → `resume_vamsi.pdf` | one-page resume, built with `xelatex` (fontspec, Arial) |
+| `resume.html` | resume chooser page: robotics, software and full-stack, machine learning |
+| `resumes/*.tex` → `resume_robotics.pdf`, `resume_software.pdf`, `resume_ml.pdf` | the three one-page resumes, built with `xelatex` (fontspec, Arial). `resume_vamsi.pdf` is a copy of the software one so old links keep working |
 | `README.md` | the open-source and research lists above |
 | [Galabavamsi/Galabavamsi](https://github.com/Galabavamsi/Galabavamsi) | GitHub profile README |
 
@@ -113,6 +114,6 @@ Run `python -m http.server 8000` and open `http://localhost:8000/`. Locally, BIT
 | `blog/` | posts (`index.html` listing, `blog.css`, `blog.js`, `figures/`) |
 | `config.js` | deployment config (public values only) |
 | `assets/` | portrait (`profile.webp`) and social preview card (`og-card.jpg`) |
-| `resume_vamsi.tex`, `resume_vamsi.pdf` | resume source and build |
+| `resumes/`, `resume_*.pdf` | resume sources and builds |
 | `supabase/` | chat proxy edge function (and the legacy leaderboard schema) |
 | `experiments/` | design experiments, run locally only; excluded from the Pages build (see `experiments/README.md`) |

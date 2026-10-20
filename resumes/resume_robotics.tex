@@ -15,7 +15,7 @@
 \definecolor{textlight}{HTML}{666666}
 \definecolor{rulecolor}{HTML}{C7C7C7}
 \hypersetup{colorlinks=true,urlcolor=primary,linkcolor=primary,
-  pdftitle={Galaba Vamsi - Resume},pdfauthor={Galaba Vamsi}}
+  pdftitle={Galaba Vamsi - Resume (Robotics)},pdfauthor={Galaba Vamsi}}
 
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
@@ -81,7 +81,7 @@
 % Single column, read top to bottom, so ATS parsers keep the order.
 {\fontsize{21}{23}\selectfont\textbf{Galaba Vamsi}}\par
 \vspace{0.25em}
-{\color{primary}Mechatronics at IIT Bhilai. Full-stack, AI/ML, and open-source robotics.}\par
+{\color{primary}Mechatronics at IIT Bhilai. Robotics software, simulation, and controls.}\par
 {\color{textlight}
 \href{tel:+917483047846}{+91 7483047846}\sep
 \href{mailto:galabavamsi12@gmail.com}{galabavamsi12@gmail.com}\sep
@@ -90,10 +90,10 @@
 \href{https://github.com/Galabavamsi}{github.com/Galabavamsi}}\par
 
 \section*{Summary}
-Graduating May 2027. 15 merged pull requests to open-source robotics tools: HFlow (robot-data conversion), Inspect Robots (evaluation), and Cerulion (runtime). I wrote and maintain inspect-robots-wandb on PyPI. Simulations in ROS~2/Gazebo, MuJoCo, MATLAB/Simulink, and Unity. Co-author of 2 RIS papers.\par
+Graduating May 2027. 15 merged pull requests to open-source robotics tools: HFlow (robot-data conversion), Inspect Robots (evaluation), and Cerulion (runtime). I wrote and maintain inspect-robots-wandb on PyPI. Simulation and controls work in ROS~2/Gazebo, MuJoCo, MATLAB/Simulink, and Unity. Co-author of the Inspect Robots workshop paper (CoRL 2026 SPAIS) and 2 RIS papers.\par
 
 \section*{Education}
-\edu{\textbf{B.Tech. in Mechatronics},{\color{primary}\enspace Indian Institute of Technology Bhilai}\sep\textbf{Coursework:} DSA, OOP, Deep Learning for Computer Vision, AI and ML, Digital Image Processing, Optimal Control, Advanced Control Theory.}{Aug 2023 -- May 2027}
+\edu{\textbf{B.Tech. in Mechatronics},{\color{primary}\enspace Indian Institute of Technology Bhilai}\sep\textbf{Coursework:} Optimal Control, Advanced Control Theory, Deep Learning for Computer Vision, AI and ML, Digital Image Processing, DSA, OOP.}{Aug 2023 -- May 2027}
 
 \section*{Open Source}
 \entry{HFlow}{Hebbian Robotics (YC S26)\sep\href{https://github.com/Hebbian-Robotics/hflow}{Repository}\sep\href{https://github.com/Hebbian-Robotics/hflow/pulls?q=is\%3Apr+author\%3AGalabavamsi}{My PRs}}{Sep 2026 -- Oct 2026}
@@ -104,7 +104,7 @@ Graduating May 2027. 15 merged pull requests to open-source robotics tools: HFlo
 
 \entry{Inspect Robots and inspect-robots-wandb}{Robocurve (YC S26)\sep\href{https://github.com/robocurve/inspect-robots}{Repository}\sep\href{https://pypi.org/project/inspect-robots-wandb/}{PyPI}\sep\href{https://github.com/Galabavamsi/inspect-robots-wandb}{Plugin source}}{Sep 2026 -- Oct 2026}
 \begin{itemize}
-  \item 2 merged PRs: a configurable LLM retry policy across 5 wire protocols (\href{https://github.com/robocurve/inspect-robots/pull/476}{\#476}) and unknown git state no longer logged as clean (\href{https://github.com/robocurve/inspect-robots/pull/475}{\#475}). 3 open: \href{https://github.com/robocurve/inspect-robots/pull/514}{\#514} checkpoint/resume (open, in review), \href{https://github.com/robocurve/inspect-robots/pull/550}{\#550} on\_eval\_error sink hook, \href{https://github.com/robocurve/inspect-robots/pull/551}{\#551} plugin docs.
+  \item Evaluation framework for physical-AI policies. 2 merged PRs: a configurable LLM retry policy across 5 wire protocols (\href{https://github.com/robocurve/inspect-robots/pull/476}{\#476}) and unknown git state no longer logged as clean (\href{https://github.com/robocurve/inspect-robots/pull/475}{\#475}). 3 open: \href{https://github.com/robocurve/inspect-robots/pull/514}{\#514} checkpoint/resume for long eval sets (in review), \href{https://github.com/robocurve/inspect-robots/pull/550}{\#550}, \href{https://github.com/robocurve/inspect-robots/pull/551}{\#551}.
   \item Wrote and maintain inspect-robots-wandb, a community W\&B plugin on PyPI, after the maintainers asked for the sink to live outside the core: 100\% coverage gate, CI on Python 3.10--3.13, trusted publishing.
 \end{itemize}
 
@@ -120,48 +120,46 @@ Graduating May 2027. 15 merged pull requests to open-source robotics tools: HFlo
   \item Rebuilt it in 2026 as RIS-SIM v2 (6 scenarios, 103 tests), then from scratch as sremu (Projects).
 \end{itemize}
 
-\entry{Co-founder, Human Slop}{Anti-AI social app\sep YC Startup School, Bengaluru\sep\href{https://humanslop.in/}{Web app}\sep\href{https://play.google.com/store/apps/details?id=com.humanslop.app}{Play Store}}{2026 -- Present}
+\entry{Co-founder, Human Slop}{Anti-AI social app\sep\href{https://humanslop.in/}{Web app}\sep\href{https://play.google.com/store/apps/details?id=com.humanslop.app}{Play Store}}{2026 -- Present}
 \begin{itemize}
-  \item Co-building it with my co-founder: an Expo (React Native) app for web and Android, a Fastify API, and PostgreSQL on Supabase, deployed on Render and Cloudflare. Live on the web and Google Play (50+ downloads).
-  \item Added a device biometric check at signup and a keystroke-timing score in the editor; both are heuristics, not proof of authorship.
+  \item Co-building an Expo (React Native) app for web and Android with a Fastify API and PostgreSQL on Supabase; live on the web and Google Play (50+ downloads).
 \end{itemize}
 
 \section*{Projects}
-\project{sremu -- Timed RIS Control Emulator}{2026, MIT}{IQ-level RIS emulator: timestamped RIS commands act on an exact, logged sample; deterministic and real-time controller-in-the-loop modes; runs unmodified GNU Radio 3.10; \textasciitilde2,100 tests; benchmarked on AWS. \href{https://github.com/Galabavamsi/sremu}{GitHub}}
-
-\project{Quarter-Car Active Suspension Study}{course project, simulation only, 2026}{Reproduced Na et al. (IEEE TSMC 2022) in MATLAB/Simulink: after fitting two plant parameters to its Case-10 experiment, the unchanged controller lands within about 6\% of its error indices. The paper's Case-B gains fail a hold-out test, and LQR and skyhook match or beat it at equal effort. \href{https://quarter-car-afc.vercel.app}{Site}\sep\href{https://github.com/Galabavamsi/quarter-car-afc-replication}{GitHub}}
+\project{Quarter-Car Active Suspension Study}{course project, simulation only, 2026}{Reproduced Na et al. (IEEE TSMC 2022) in MATLAB/Simulink: after fitting two plant parameters to its Case-10 experiment, the unchanged controller lands within about 6\% of its error indices. The paper's Case-B gains fail a hold-out test, and LQR and skyhook match or beat it at equal effort. Includes a Cortex-M4 timing estimate. \href{https://quarter-car-afc.vercel.app}{Site}\sep\href{https://github.com/Galabavamsi/quarter-car-afc-replication}{GitHub}}
 
 \project{Whiteboard Cleaning Robot}{2025, with Gajanand Kumawat}{3-DOF Cartesian gantry for a 90\,\texttimes\,90 cm whiteboard, simulated in ROS~2 Jazzy and Gazebo Harmonic: URDF/Xacro, ros2\_control, 10 cm-overlap raster path, and logged coverage analysis. \href{https://github.com/Galabavamsi/whiteboard_robot}{GitHub}}
 
-\project{Charter}{2026}{Razorpay AI Buildathon prototype: chat, voice, and MCP (10 tools) share one bounded commerce core with frozen INR quotes, Razorpay test-mode payments, audit trails, and row-level security (TypeScript, Fastify, PostgreSQL). \href{https://github.com/Galabavamsi/charter}{GitHub} $\cdot$ \href{https://youtu.be/WLBiC6wdRbI}{Demo}}
+\project{Prompt Robot Arm}{2026, simulation}{MuJoCo: a prompt such as ``sort red, blue, green'' is parsed (rule-based for now) into a plan and a pick-and-place sequence, moving from a kinematic gripper to a SCARA arm with analytic inverse kinematics. \href{https://github.com/Galabavamsi/prompt-robot-arm}{GitHub}}
+
+\project{Pneumatic Sorting Digital Twin (offline simulation)}{2026}{Unity simulation of three electropneumatic training kits: simulated axes, logical PLC I/O, HMI screens, and telemetry record and replay. Not yet connected to a physical PLC. \href{https://github.com/Galabavamsi/pneumatic-sorting-digital-twin}{GitHub}}
+
+\project{sremu -- Timed RIS Control Emulator}{2026, MIT}{IQ-level RIS emulator: timestamped RIS commands act on an exact, logged sample; deterministic and real-time controller-in-the-loop modes; runs unmodified GNU Radio 3.10; \textasciitilde2,100 tests. \href{https://github.com/Galabavamsi/sremu}{GitHub}}
 
 \project{Arista Wi-Fi RRM}{team; Inter IIT Tech Meet 14.0, 5th place, Dec 2025}{Client-aware radio resource management in NS-3 with I/Q-based interference classification (STFT, DBSCAN, Dual-CNN; 16 classes) on a 5-AP, 50-client 802.11k/v topology. \href{https://canva.link/puoqbe4okoid8rb}{Slides}}
 
-\project{AntennaNet}{2026}{Inverse antenna design: surrogate network plus KD-tree anchoring over about 2,000 simulated patch-antenna S11 spectra, extended to 12\,\texttimes\,12-pixel layouts checked by a method-of-moments solver; MEEP dataset scripts. \href{https://github.com/Galabavamsi/Antenna-Net}{GitHub}}
 \section*{Publications}
 \begin{itemize}
+  \item \textbf{Co-author}~--- \textit{Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI}, arXiv:2610.06306, 2026; accepted to the SPAIS Workshop at CoRL 2026 (poster). \href{https://arxiv.org/abs/2610.06306}{arXiv}
   \item \textbf{Co-author}~--- \href{https://ieeexplore.ieee.org/abstract/document/11392908/}{\textit{Experience with RF Energy Harvesting-Driven Self-Powered RIS}}, IEEE INDICON 2025.
   \item \textbf{Co-author}~--- \href{https://www.sciencedirect.com/science/article/pii/S1570870526001964}{\textit{A systematic literature review on simulation models and deployments for reconfigurable intelligent surfaces}}, Ad Hoc Networks (Elsevier), 2026.
-  \item \textbf{Co-author}~--- \textit{Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI}, arXiv:2610.06306, 2026; accepted to the SPAIS Workshop at CoRL 2026 (poster). \href{https://arxiv.org/abs/2610.06306}{arXiv}
   \item \textbf{Sole author (preprint draft, arXiv submission pending)}~--- \textit{Timed RIS Control in the Loop: A Sample-Accurate IQ-Level Emulator with Characterized Timing}, 2026. \href{https://github.com/Galabavamsi/sremu-paper/blob/master/preprint/sremu-preprint-draft.pdf}{Draft}
 \end{itemize}
 
 \section*{Skills}
 {\raggedright\linepenalty=1000
-\textbf{Robotics, simulation, and controls:} ROS~2 (rclpy, ros2\_control, URDF/Xacro), Gazebo Harmonic, MuJoCo, Unity (C\#), MATLAB/Simulink, LQR and Kalman filter design, LeRobot datasets\par
-\textbf{Languages:} Python, TypeScript/JavaScript, C/C++, Rust (open-source contributions), SQL, GLSL\par
-\textbf{ML, data, and scientific computing:} PyTorch, PyTorch Geometric, OpenCV, NumPy, CuPy, Apache Arrow, Weights \& Biases, MEEP (FDTD), CST Studio Suite, NS-3, GNU Radio\par
-\textbf{Software, cloud, and tooling:} FastAPI, Node.js (Fastify), React, React Native (Expo), Flutter, PostgreSQL, Supabase, WebSockets, Docker, AWS (CDK, Lambda, Step Functions, Bedrock), Git, Linux, GitHub Actions, pytest, Ruff, mypy, PyPI trusted publishing\par}
+\textbf{Robotics, simulation, and controls:} ROS~2 (rclpy, ros2\_control, URDF/Xacro), Gazebo Harmonic, MuJoCo, Unity (C\#), MATLAB/Simulink, LQR and Kalman filter design, LeRobot datasets, NS-3, GNU Radio\par
+\textbf{Languages:} Python, C/C++, Rust (open-source contributions), TypeScript/JavaScript, SQL, GLSL\par
+\textbf{ML and scientific computing:} PyTorch, OpenCV, NumPy, CuPy, Apache Arrow, Weights \& Biases, MEEP (FDTD), CST Studio Suite\par
+\textbf{Tooling:} Docker, Git, Linux, GitHub Actions, pytest, Ruff, mypy, PyPI trusted publishing, FastAPI, PostgreSQL, AWS\par}
 
 \section*{Achievements}
 {\raggedright\linepenalty=1000
-\textbf{5th of 232 teams}, 3rd WEAR Dataset Challenge @HASCA 2026 (Kaggle, final private leaderboard, macro-F1 0.93137)\sep
-\textbf{AIR 200}, Amazon ML Challenge 2026 (team)\sep
 \textbf{5th place}, Arista Networks Wi-Fi challenge, Inter IIT Tech Meet 14.0 (team,~Dec~2025)\sep
-\textbf{AIR 700}, Amazon ML Challenge 2025 (team; 20,000+ participants)\sep
-\textbf{1st place}, IIT Bhilai Web Development Competition\sep
-\textbf{Top 10 finalist}, Toyota Hackathon\sep
+\textbf{5th of 232 teams}, WEAR Dataset Challenge @HASCA 2026 (Kaggle, final private leaderboard)\sep
+\textbf{AIR 200}, Amazon ML Challenge 2026 (team)\sep
 \textbf{Top 1\%}, JEE Advanced\sep
-\textbf{PMSS} scholarship (2024)\par}
+\textbf{PMSS} scholarship (2024)\sep
+\textbf{Subroto Mukherjee} Scholarship (IAFBA)\par}
 
 \end{document}
