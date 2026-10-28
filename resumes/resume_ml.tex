@@ -98,7 +98,7 @@ Graduating May 2027. I build and evaluate ML systems: wearables recognition (Kag
 \section*{Projects}
 \project{WEAR Dataset Challenge @HASCA 2026}{Kaggle}{Wearable exercise recognition from one-second IMU and video tiles of four unseen subjects (macro-F1 over 19 classes): 5th of 232 teams on the final private leaderboard (0.93137; 7th public, 0.93825). A fork of a public notebook; my additions took my reproduction from 0.92497 to 0.93825 public: per-subject whitening, whitened video-continuity link features, ZCA video input, and a multi-run ensemble decode. A global whitening that raised out-of-fold score but lowered the leaderboard score was a leak, and I replaced it with per-subject whitening. Built with Claude. \href{https://www.kaggle.com/competitions/3rd-wear-dataset-challenge-hasca-2026/leaderboard}{Leaderboard}}
 
-\project{Pehchaan}{team of 2; top-30 finalist of 4,723, RAKSHAM (IIT Delhi $\times$ Amazon), 2026}{UPI voice-clone fraud defence; I led ML and backend.}
+\project{Pehchaan}{team of 2; top 10 of 4,723, RAKSHAM (IIT Delhi $\times$ Amazon), 2026}{UPI voice-clone fraud defence; I led ML and backend.}
 \begin{itemize}
   \item Fine-tuned XLS-R-300M + AASIST on consented Telugu, Hindi, and English speech and clones from 13 generators: 4.8\% EER vs 34.3\% off the shelf (6.0\% on 6 unseen generators).
   \item A 48-call real-carrier test exposed a gap (24.6\% EER). Learning the speakerphone channel and retraining cut it to 6.8\%, clones caught 48\% to 75\%, 0\% of genuine callers flagged. In simulation the risk engine holds 73\% of scams vs 0.21\% of genuine payments.
@@ -112,7 +112,7 @@ Graduating May 2027. I build and evaluate ML systems: wearables recognition (Kag
 
 \project{AntennaNet}{2026}{Inverse antenna design: surrogate network plus KD-tree anchoring over about 2,000 simulated S11 spectra, extended to 12\,\texttimes\,12-pixel layouts. \href{https://github.com/Galabavamsi/Antenna-Net}{GitHub}}
 
-\project{Electron-GNN}{team, in progress, 2026}{Two-tower GATv2 graph network predicting absorption-spectrum peaks from molecular geometry; so far trained and checked on two small molecules (water and ammonia). \href{https://github.com/Galabavamsi/Electron-GNN}{GitHub}}
+\project{Electron-GNN}{team, in progress, 2026}{GATv2 network predicting absorption-spectrum peaks from molecular geometry; so far checked only on water and ammonia. \href{https://github.com/Galabavamsi/Electron-GNN}{GitHub}}
 
 \section*{Experience}
 \entry{Research Intern}{IIT Bhilai\sep Advisor: Dr. Arzad Alam Kherani\sep\href{https://github.com/Galabavamsi/RIM-SIM-V2}{RIS-SIM v2}\sep\href{https://github.com/Galabavamsi/RIS-SIM}{v1}}{May 2025 -- Jul 2025}
@@ -120,9 +120,11 @@ Graduating May 2027. I build and evaluate ML systems: wearables recognition (Kag
   \item Built RIS-SIM, an open-source Python emulator for RIS-assisted radio links; designed RIS unit cells in CST Studio Suite (IEEE INDICON 2025, co-author). Rebuilt it in 2026 as RIS-SIM v2 (103 tests), then as sremu, an IQ-level emulator with about 2,100 tests (\href{https://github.com/Galabavamsi/sremu}{GitHub}).
 \end{itemize}
 
+\entry{Founder, Robotropic}{Physical-AI startup idea, pre-product\sep\href{https://www.robotropic.com}{Website}}{Oct 2026 -- Present}
+
 \entry{Co-founder, Human Slop}{Anti-AI social app\sep\href{https://humanslop.in/}{Web app}\sep\href{https://play.google.com/store/apps/details?id=com.humanslop.app}{Play Store}}{2026 -- Present}
 \begin{itemize}
-  \item Co-building an Expo app (web and Android), a Fastify API, and PostgreSQL on Supabase; live on Google Play (50+ downloads). Added a keystroke-timing score and a device biometric check; both are heuristics, not proof of authorship.
+  \item Co-building an Expo app (web and Android), a Fastify API, and PostgreSQL on Supabase; live on Google Play (50+ downloads).
 \end{itemize}
 
 \section*{Open Source}
@@ -153,7 +155,7 @@ Graduating May 2027. I build and evaluate ML systems: wearables recognition (Kag
 
 \section*{Achievements}
 {\raggedright\linepenalty=1000
-\textbf{5th of 232 teams}, WEAR Dataset Challenge @HASCA 2026 (Kaggle, final private leaderboard, macro-F1 0.93137)\sep
+\textbf{5th of 232 teams}, WEAR Dataset Challenge @HASCA 2026 (Kaggle)\sep
 \textbf{AIR 200} (2026) and \textbf{AIR 700} (2025; 20,000+ participants), Amazon ML Challenge (team)\sep
 \textbf{5th place}, Arista Networks Wi-Fi challenge, Inter IIT Tech Meet 14.0 (team,~Dec~2025)\sep
 \textbf{Top 1\%}, JEE Advanced\sep
