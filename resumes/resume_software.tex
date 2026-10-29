@@ -88,7 +88,7 @@
 \href{https://github.com/Galabavamsi}{github.com/Galabavamsi}}\par
 
 \section*{Summary}
-Mechatronics at IIT Bhilai. I ship full-stack products and AI agents: co-founder of Human Slop (live on the web and Google Play) and Robotropic; Charter, an MCP commerce agent; Pehchaan, top 10 of 4,500+ teams at RAKSHAM. 15 merged open-source PRs (11 code) and a maintained PyPI package.\par
+Mechatronics at IIT Bhilai. I ship full-stack products and AI agents: co-founder of Human Slop (live on the web and Google Play) and Robotropic; Charter, an MCP commerce agent; a guarded LLM chatbot with a measured eval; top 10 of 4,500+ teams at RAKSHAM. 15 merged open-source PRs (11 code) and a maintained PyPI package.\par
 
 \section*{Education}
 \edu{B.Tech. in Mechatronics, Indian Institute of Technology (IIT) Bhilai}{Aug 2023 - May 2027}{\textbf{Coursework:} DSA, OOP, AI and ML, Deep Learning for Computer Vision, Digital Image Processing.}
@@ -99,10 +99,9 @@ Mechatronics at IIT Bhilai. I ship full-stack products and AI agents: co-founder
   \item Building Harness, a workspace where a factory's team and AI agents change robot skills safely: each change is checked against safety limits, rolled out cell by cell, and recorded. I lead the simulated factory floor and the change gateway.
   \item Built robotropic.com: three.js lidar factory scene, early-access list on Cloudflare Workers and D1.
 \end{itemize}
-\entry{Co-founder, Human Slop}{Anti-AI social app, with Varun Rao\sep\href{https://humanslop.in/}{humanslop.in}}{2026 - Present}
+\entry{Co-founder, Human Slop}{Anti-AI social app, with Varun Rao\sep\href{https://humanslop.in/}{humanslop.in}}{Mar 2026 - Present}
 \begin{itemize}
-  \item Expo (React Native) app for web and Android, Fastify API, PostgreSQL on Supabase, deployed on Render and Cloudflare; live on the web and Google Play (50+ downloads).
-  \item Built a signup biometric check and an editor keystroke-timing score (heuristics, not proof of authorship).
+  \item Expo (React Native) app for web and Android, Fastify API, PostgreSQL on Supabase, deployed on Render and Cloudflare; live on the web and Google Play (50+ downloads). Built a signup biometric check and an editor keystroke-timing score (heuristics).
 \end{itemize}
 \entry{Research Intern, IIT Bhilai}{Advisor: Dr. Arzad Alam Kherani}{May 2025 - Jul 2025}
 \begin{itemize}
@@ -110,15 +109,15 @@ Mechatronics at IIT Bhilai. I ship full-stack products and AI agents: co-founder
 \end{itemize}
 
 \section*{Projects}
-\project{Pehchaan}{team of 2; Top 10, RAKSHAM (IIT Delhi, I4C and Amazon), 2026}{Voice-clone payment-fraud defence for UPI; I led ML and backend. \href{https://github.com/Galabavamsi/pehchaan}{github.com/Galabavamsi/pehchaan}}
-\begin{itemize}
-  \item FastAPI risk API that fuses signals by log-odds under 7 hard guardrails (p95 decision latency 3.8 ms, local benchmark); React payer, relative and analyst demo over WebSockets; Android SDK demo on two phones; 120 automated tests.
-  \item Consent registry that refuses to dial, record or clone without saved consent; fine-tuned detector at 4.8\% EER vs 34.3\% off the shelf.
-\end{itemize}
-
 \project{Charter}{Razorpay AI Buildathon, 2026}{Agentic commerce: chat, voice, and a 10-tool MCP server call one first-party API, so agents get no side door; only versioned policy changes money (frozen INR quotes, Razorpay test mode, PostgreSQL row-level security). TypeScript, Fastify, React; deployed to AWS Lightsail via GitHub Actions with OIDC. \href{https://charter.humanslop.in}{charter.humanslop.in} (live, test mode)\sep\href{https://github.com/Galabavamsi/charter}{github.com/Galabavamsi/charter}}
 
-\project{sremu}{2026, MIT, built with Claude Code}{Python IQ-level radio emulator with a ZeroMQ data plane that unmodified GNU Radio 3.10 talks to; timestamped commands act on an exact, logged sample; about 2,140 tests; bit-identical on Windows and Linux; benchmarked on AWS; sole-author preprint draft, arXiv submission pending. \href{https://github.com/Galabavamsi/sremu}{github.com/Galabavamsi/sremu}}
+\project{BIT, guarded portfolio chatbot}{2026}{LLM chatbot behind a Supabase Edge Function (TypeScript) with a typed decision model (TypeSafe Jev) as the gate. On 50 labelled messages it blocked 0 of 20 real questions (keyword rules: 12) and let 0 of 12 prompt-injection attempts through (regex: 10); median gate latency 304 ms. \href{https://galabavamsi.github.io/portfolio/blog/jev-gate-portfolio-chatbot.html}{galabavamsi.github.io/portfolio/blog}}
+
+\project{Homie}{2026}{Collaborative food-ordering MVP on Swiggy's MCP server: Flutter (Riverpod) app, Node.js (Express) REST API, PostgreSQL, and Socket.IO realtime rooms over Redis for multi-instance delivery; voting, shared cart, bill split, idempotent operations; OAuth 2.1 + PKCE with tokens kept on the server. \href{https://github.com/Galabavamsi/homie}{github.com/Galabavamsi/homie}}
+
+\project{Open-PyFX}{2026}{GPU video-effects app in Python, ModernGL, and GLSL shaders: CRT emulation, retro text, ASCII edge detection, and 4K export. \href{https://github.com/Galabavamsi/open-pyfx}{github.com/Galabavamsi/open-pyfx}}
+
+\project{sremu}{2026, MIT, built with Claude Code}{Python IQ-level radio emulator with a ZeroMQ data plane that unmodified GNU Radio 3.10 talks to; sample-exact timestamped commands; about 2,140 tests; benchmarked on AWS; sole-author preprint draft. \href{https://github.com/Galabavamsi/sremu}{github.com/Galabavamsi/sremu}}
 
 \section*{Open-Source Contributions}
 \entry{HFlow, Hebbian Robotics (YC S26)}{\href{https://github.com/Hebbian-Robotics/hflow}{github.com/Hebbian-Robotics/hflow}}{Sep 2026 - Oct 2026}
@@ -134,9 +133,9 @@ Mechatronics at IIT Bhilai. I ship full-stack products and AI agents: co-founder
 
 \section*{Skills}
 {\raggedright\linepenalty=1000
-\textbf{Languages:} TypeScript/JavaScript, Python, SQL, Rust\par
-\textbf{Backend and frontend:} Node.js (Fastify), FastAPI, React, React Native (Expo), PostgreSQL (row-level security), Supabase, WebSockets, REST APIs\par
-\textbf{AI:} LLM APIs, AI agents and tool use, MCP (Model Context Protocol), agent evaluation, PyTorch\par
+\textbf{Languages:} TypeScript/JavaScript, Python, SQL, Dart (Flutter), GLSL, Rust\par
+\textbf{Backend and frontend:} Node.js (Fastify, Express), FastAPI, React, Flutter, Socket.IO, Redis, React Native (Expo), PostgreSQL (row-level security), Supabase, WebSockets, REST APIs\par
+\textbf{AI:} LLM APIs, AI agents and tool use, MCP (Model Context Protocol), guardrails and evaluation, PyTorch\par
 \textbf{Infrastructure:} Docker, GitHub Actions (OIDC), AWS Lightsail, Cloudflare Workers and D1, Render, Linux, Git, pytest\par
 \textbf{AI-assisted development:} Claude Code; I set the design and verify results with tests and independent references.\par}
 
@@ -149,7 +148,7 @@ Mechatronics at IIT Bhilai. I ship full-stack products and AI agents: co-founder
 
 \section*{Publications}
 \begin{itemize}
-  \item \textbf{Co-author (8th of 15)}, \textit{Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI}, arXiv:2610.06306; SPAIS Workshop at CoRL 2026 (poster).
+  \item \textbf{Co-author}, \textit{Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI}, arXiv:2610.06306; SPAIS Workshop at CoRL 2026 (poster).
   \item \textbf{Co-author}, 2 RIS papers: IEEE INDICON 2025 and \textit{Ad Hoc Networks} (Elsevier), 2026.
 \end{itemize}
 
