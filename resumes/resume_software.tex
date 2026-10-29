@@ -15,7 +15,7 @@
 \definecolor{textlight}{HTML}{666666}
 \definecolor{rulecolor}{HTML}{C7C7C7}
 \hypersetup{colorlinks=true,urlcolor=primary,linkcolor=primary,
-  pdftitle={Galaba Vamsi - Resume (Software, Full-stack, AI)},pdfauthor={Galaba Vamsi}}
+  pdftitle={Galaba Vamsi - Resume (Software, Full-stack, AI Agents)},pdfauthor={Galaba Vamsi}}
 
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
@@ -59,13 +59,11 @@
   \noindent\textbf{#1}{\color{textlight}\enspace(#2)}\enspace#3\par
 }
 
-% \edu{text}{dates}: dates flush right on the first line; the text wraps beneath them.
-\newlength{\datewidth}
-\newcommand{\edu}[2]{%
+% \edu{degree and school}{dates}{coursework}: dates on the first line, coursework below.
+\newcommand{\edu}[3]{%
   \par\vspace{0.16em}%
-  \settowidth{\datewidth}{\quad#2}%
-  \parshape 2 0pt \dimexpr\linewidth-\datewidth\relax 0pt \linewidth
-  \noindent\makebox[0pt][l]{\hspace{\dimexpr\linewidth-\datewidth\relax}\quad{\color{textlight}#2}}#1\par
+  \noindent{\color{textdark}\textbf{#1}}\hfill{\color{textlight}#2}\par
+  \noindent #3\par
 }
 
 \newcommand{\sep}{\enspace|\enspace}
@@ -81,7 +79,7 @@
 % Single column, read top to bottom, so ATS parsers keep the order.
 {\fontsize{21}{23}\selectfont\textbf{Galaba Vamsi}}\par
 \vspace{0.25em}
-{\color{primary}Mechatronics at IIT Bhilai. Full-stack, AI/ML, and open-source engineering.}\par
+{\color{primary}\textbf{Software Engineer (Full-stack, AI Agents), Intern / New Grad (graduating May 2027)}}\par
 {\color{textlight}
 \href{tel:+917483047846}{+91 7483047846}\sep
 \href{mailto:galabavamsi12@gmail.com}{galabavamsi12@gmail.com}\sep
@@ -90,78 +88,69 @@
 \href{https://github.com/Galabavamsi}{github.com/Galabavamsi}}\par
 
 \section*{Summary}
-Graduating May 2027. Co-founder of Human Slop (Expo/React Native app, Fastify API, PostgreSQL; live on the web and Google Play). I build full-stack apps, AI agents, and ML models (Charter, Pehchaan, Kaggle and Amazon ML entries). 15 merged pull requests to open-source robotics tools; I wrote and maintain inspect-robots-wandb on PyPI.\par
+Mechatronics at IIT Bhilai. I ship full-stack products and AI agents: co-founder of Human Slop (live on the web and Google Play) and Robotropic; Charter, an MCP commerce agent; Pehchaan, top 10 of 4,500+ teams at RAKSHAM. 15 merged open-source PRs (11 code) and a maintained PyPI package.\par
 
 \section*{Education}
-\edu{\textbf{B.Tech. in Mechatronics},{\color{primary}\enspace Indian Institute of Technology Bhilai}\sep\textbf{Coursework:} DSA, OOP, AI and ML, Deep Learning for Computer Vision, Digital Image Processing, Optimal Control, Advanced Control Theory.}{Aug 2023 -- May 2027}
+\edu{B.Tech. in Mechatronics, Indian Institute of Technology (IIT) Bhilai}{Aug 2023 - May 2027}{\textbf{Coursework:} DSA, OOP, AI and ML, Deep Learning for Computer Vision, Digital Image Processing.}
 
 \section*{Experience}
-\entry{Founder, Robotropic}{Physical-AI startup: safe, recorded robot-skill changes\sep\href{https://www.robotropic.com}{Website}}{Oct 2026 -- Present}
-
-\entry{Co-founder, Human Slop}{Anti-AI social app\sep\href{https://humanslop.in/}{Web app}\sep\href{https://play.google.com/store/apps/details?id=com.humanslop.app}{Play Store}}{2026 -- Present}
+\entry{Co-founder, Robotropic}{Physical-AI startup, with Varun Rao\sep\href{https://www.robotropic.com}{robotropic.com}}{Oct 2026 - Present}
 \begin{itemize}
-  \item Co-building it with my co-founder: an Expo (React Native) app for web and Android, a Fastify API, and PostgreSQL on Supabase, deployed on Render and Cloudflare. Live on the web and Google Play (50+ downloads).
-  \item Added a device biometric check at signup and a keystroke-timing score in the editor; both are heuristics, not proof of authorship.
+  \item Building Harness, a workspace where a factory's team and AI agents change robot skills safely: each change is checked against safety limits, rolled out cell by cell, and recorded. I lead the simulated factory floor and the change gateway.
+  \item Built robotropic.com: three.js lidar factory scene, early-access list on Cloudflare Workers and D1.
 \end{itemize}
-
-\entry{Research Intern}{IIT Bhilai\sep Advisor: Dr. Arzad Alam Kherani\sep\href{https://github.com/Galabavamsi/RIM-SIM-V2}{RIS-SIM v2}\sep\href{https://github.com/Galabavamsi/RIS-SIM}{v1}}{May 2025 -- Jul 2025}
+\entry{Co-founder, Human Slop}{Anti-AI social app, with Varun Rao\sep\href{https://humanslop.in/}{humanslop.in}}{2026 - Present}
 \begin{itemize}
-  \item Built RIS-SIM, an open-source Python emulator for RIS-assisted radio links with USRP-style SDR interfaces; designed RIS unit cells in CST Studio Suite (IEEE INDICON 2025, co-author). Rebuilt it in 2026 as RIS-SIM v2 (6 scenarios, 20 Hz WebSocket dashboard, 103 tests), then as sremu (Projects).
+  \item Expo (React Native) app for web and Android, Fastify API, PostgreSQL on Supabase, deployed on Render and Cloudflare; live on the web and Google Play (50+ downloads).
+  \item Built a signup biometric check and an editor keystroke-timing score (heuristics, not proof of authorship).
 \end{itemize}
-
-\section*{Open Source}
-\entry{HFlow}{Hebbian Robotics (YC S26)\sep\href{https://github.com/Hebbian-Robotics/hflow}{Repository}\sep\href{https://github.com/Hebbian-Robotics/hflow/pulls?q=is\%3Apr+author\%3AGalabavamsi}{My PRs}}{Sep 2026 -- Oct 2026}
+\entry{Research Intern, IIT Bhilai}{Advisor: Dr. Arzad Alam Kherani}{May 2025 - Jul 2025}
 \begin{itemize}
-  \item 8 merged PRs to an SDK that verifies robot training data: conversion now keeps data whole or refuses it with a clear reason, e.g. depth videos that would silently drop from 12-bit to 10-bit (\href{https://github.com/Hebbian-Robotics/hflow/pull/400}{\#400}). A benchmark PR (\href{https://github.com/Hebbian-Robotics/hflow/pull/367}{\#367}) reported no safe speedup and changed nothing.
-\end{itemize}
-
-\entry{Inspect Robots and inspect-robots-wandb}{Robocurve (YC S26)\sep\href{https://github.com/robocurve/inspect-robots}{Repository}\sep\href{https://pypi.org/project/inspect-robots-wandb/}{PyPI}\sep\href{https://github.com/Galabavamsi/inspect-robots-wandb}{Plugin source}}{Sep 2026 -- Oct 2026}
-\begin{itemize}
-  \item 2 merged PRs: a configurable LLM retry policy across 5 wire protocols (\href{https://github.com/robocurve/inspect-robots/pull/476}{\#476}) and unknown git state no longer logged as clean (\href{https://github.com/robocurve/inspect-robots/pull/475}{\#475}). 3 open, including checkpoint/resume (\href{https://github.com/robocurve/inspect-robots/pull/514}{\#514}).
-  \item Wrote and maintain inspect-robots-wandb, a community W\&B plugin on PyPI: 100\% coverage gate, CI on Python 3.10--3.13, trusted publishing.
-\end{itemize}
-
-\entry{Cerulion}{Open-source Rust robot runtime\sep\href{https://github.com/cerulion-inc/cerulion}{Repository}}{Oct 2026}
-\begin{itemize}
-  \item 5 merged PRs: 1 CLI fix (\href{https://github.com/cerulion-inc/cerulion/pull/216}{\#216}) and 4 documentation/comment corrections.
+  \item Built RIS-SIM, an open-source Python radio-link emulator with USRP-style SDR interfaces (later rebuilt as sremu); co-author, IEEE INDICON 2025.
 \end{itemize}
 
 \section*{Projects}
-\project{Charter}{2026}{Razorpay AI Buildathon prototype: chat, voice, and MCP (10 tools) share one bounded commerce core with frozen INR quotes, Razorpay test-mode payments, audit trails, and row-level security (TypeScript, Fastify, PostgreSQL). \href{https://charter.humanslop.in}{Live (test mode)} $\cdot$ \href{https://github.com/Galabavamsi/charter}{GitHub} $\cdot$ \href{https://youtu.be/WLBiC6wdRbI}{Video}}
-
-\project{Pehchaan}{team of 2; top 10 of 4,723, RAKSHAM (IIT Delhi $\times$ Amazon), 2026}{UPI voice-clone fraud defence; I led ML and backend. Fine-tuned an XLS-R + AASIST detector: 4.8\% EER vs 34.3\% off the shelf. A real phone-call test exposed a gap (24.6\% EER); modelling the speakerphone channel and retraining cut it to 6.8\%, raised clones caught from 48\% to 75\%, and flagged 0\% of genuine callers. In simulation the risk engine holds 73\% of scams vs 0.21\% of genuine payments (p95 3.8 ms).}
-
-\project{sremu -- Timed RIS Control Emulator}{2026, MIT}{IQ-level RIS emulator: timestamped commands act on an exact, logged sample; deterministic and real-time controller-in-the-loop modes; runs unmodified GNU Radio 3.10; \textasciitilde2,100 tests; benchmarked on AWS. \href{https://github.com/Galabavamsi/sremu}{GitHub}}
-
-\project{Arista Wi-Fi RRM}{team; Inter IIT Tech Meet 14.0, 5th place, Dec 2025}{Client-aware radio resource management in NS-3 with I/Q-based interference classification (STFT, DBSCAN, Dual-CNN; 16 classes) on a 5-AP, 50-client topology. \href{https://canva.link/puoqbe4okoid8rb}{Slides}}
-
-\project{Open-PyFX}{2026}{GPU video-effects app in Python, ModernGL, and GLSL: CRT emulation, ASCII edge detection, and 4K export. \href{https://github.com/Galabavamsi/open-pyfx}{GitHub}}
-
-\project{Serenity}{team, 2024}{Flutter wellness app with an on-device TFLite mood classifier from the camera, a stress questionnaire, and exercises. \href{https://github.com/Galabavamsi/Serenity}{GitHub}}
-
-\section*{Publications}
+\project{Pehchaan}{team of 2; Top 10, RAKSHAM (IIT Delhi, I4C and Amazon), 2026}{Voice-clone payment-fraud defence for UPI; I led ML and backend. \href{https://github.com/Galabavamsi/pehchaan}{github.com/Galabavamsi/pehchaan}}
 \begin{itemize}
-  \item \textbf{Co-author}~--- \textit{Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI}, arXiv:2610.06306, 2026; accepted to the SPAIS Workshop at CoRL 2026 (poster). \href{https://arxiv.org/abs/2610.06306}{arXiv}
-  \item \textbf{Co-author}~--- \href{https://ieeexplore.ieee.org/abstract/document/11392908/}{\textit{Experience with RF Energy Harvesting-Driven Self-Powered RIS}}, IEEE INDICON 2025.
-  \item \textbf{Co-author}~--- \href{https://www.sciencedirect.com/science/article/pii/S1570870526001964}{\textit{A systematic literature review on simulation models and deployments for reconfigurable intelligent surfaces}}, Ad Hoc Networks (Elsevier), 2026.
-  \item \textbf{Sole author (preprint draft, arXiv submission pending)}~--- \textit{Timed RIS Control in the Loop: A Sample-Accurate IQ-Level Emulator with Characterized Timing}, 2026. \href{https://github.com/Galabavamsi/sremu-paper/blob/master/preprint/sremu-preprint-draft.pdf}{Draft}
+  \item FastAPI risk API that fuses signals by log-odds under 7 hard guardrails (p95 decision latency 3.8 ms, local benchmark); React payer, relative and analyst demo over WebSockets; Android SDK demo on two phones; 120 automated tests.
+  \item Consent registry that refuses to dial, record or clone without saved consent; fine-tuned detector at 4.8\% EER vs 34.3\% off the shelf.
 \end{itemize}
+
+\project{Charter}{Razorpay AI Buildathon, 2026}{Agentic commerce: chat, voice, and a 10-tool MCP server call one first-party API, so agents get no side door; only versioned policy changes money (frozen INR quotes, Razorpay test mode, PostgreSQL row-level security). TypeScript, Fastify, React; deployed to AWS Lightsail via GitHub Actions with OIDC. \href{https://charter.humanslop.in}{charter.humanslop.in} (live, test mode)\sep\href{https://github.com/Galabavamsi/charter}{github.com/Galabavamsi/charter}}
+
+\project{sremu}{2026, MIT, built with Claude Code}{Python IQ-level radio emulator with a ZeroMQ data plane that unmodified GNU Radio 3.10 talks to; timestamped commands act on an exact, logged sample; about 2,140 tests; bit-identical on Windows and Linux; benchmarked on AWS; sole-author preprint draft, arXiv submission pending. \href{https://github.com/Galabavamsi/sremu}{github.com/Galabavamsi/sremu}}
+
+\section*{Open-Source Contributions}
+\entry{HFlow, Hebbian Robotics (YC S26)}{\href{https://github.com/Hebbian-Robotics/hflow}{github.com/Hebbian-Robotics/hflow}}{Sep 2026 - Oct 2026}
+\begin{itemize}
+  \item 8 merged PRs (Python, Apache Arrow) to an SDK that verifies robot training data: LeRobot and robot-log conversion now keeps data whole or refuses it with a reason. Blocked silent 12- to 10-bit depth loss (PR \#400), typed Arrow columns from every message (PR \#657), fixed video-cache collisions (PR \#353).
+\end{itemize}
+\entry{Inspect Robots, Robocurve (YC S26)}{\href{https://github.com/robocurve/inspect-robots}{github.com/robocurve/inspect-robots}}{Sep 2026 - Oct 2026}
+\begin{itemize}
+  \item Evaluation framework for embodied-AI policies. 2 merged PRs: a configurable LLM-API retry policy across 5 wire protocols (PR \#476) and unknown git state no longer logged as clean (PR \#475); 3 open, including checkpoint/resume for long eval sets (PR \#514).
+  \item Wrote and maintain inspect-robots-wandb, a Weights \& Biases plugin (\href{https://pypi.org/project/inspect-robots-wandb/}{pypi.org/project/inspect-robots-wandb}): 100\% coverage gate, CI on Python 3.10-3.13, trusted publishing.
+\end{itemize}
+\entry{Cerulion, Rust robot runtime}{1 merged CLI fix (PR \#216), 4 documentation fixes\sep\href{https://github.com/cerulion-inc/cerulion}{github.com/cerulion-inc/cerulion}}{Oct 2026}
 
 \section*{Skills}
 {\raggedright\linepenalty=1000
-\textbf{Languages:} Python, TypeScript/JavaScript, SQL, C/C++, Rust (open-source contributions), Dart, GLSL\par
-\textbf{Software, cloud, and tooling:} FastAPI, Node.js (Fastify), React, React Native (Expo), Flutter, Next.js, PostgreSQL, Supabase, WebSockets, MCP, Docker, AWS (CDK, Lambda, Step Functions, Bedrock), Git, Linux, GitHub Actions, pytest, Ruff, mypy, PyPI trusted publishing\par
-\textbf{ML and data:} PyTorch, LightGBM, OpenCV, NumPy, CuPy, TFLite, Apache Arrow, Weights \& Biases\par}
+\textbf{Languages:} TypeScript/JavaScript, Python, SQL, Rust\par
+\textbf{Backend and frontend:} Node.js (Fastify), FastAPI, React, React Native (Expo), PostgreSQL (row-level security), Supabase, WebSockets, REST APIs\par
+\textbf{AI:} LLM APIs, AI agents and tool use, MCP (Model Context Protocol), agent evaluation, PyTorch\par
+\textbf{Infrastructure:} Docker, GitHub Actions (OIDC), AWS Lightsail, Cloudflare Workers and D1, Render, Linux, Git, pytest\par
+\textbf{AI-assisted development:} Claude Code; I set the design and verify results with tests and independent references.\par}
 
 \section*{Achievements}
-{\raggedright\linepenalty=1000
-\textbf{5th of 232 teams}, WEAR Dataset Challenge @HASCA 2026 (Kaggle, final private leaderboard, macro-F1 0.93137)\sep
-\textbf{AIR 200} (2026) and \textbf{AIR 700} (2025; 20,000+ participants), Amazon ML Challenge (team)\sep
-\textbf{5th place}, Arista Networks Wi-Fi challenge, Inter IIT Tech Meet 14.0 (team,~Dec~2025)\sep
-\textbf{1st place}, IIT Bhilai Web Development Competition\sep
-\textbf{Top 1\%}, JEE Advanced\sep
-\textbf{PMSS} scholarship (2024)\sep
-\textbf{Subroto Mukherjee} Scholarship (IAFBA, 2023)\sep
-\textbf{YC Startup School}, Bengaluru (attended)\par}
+\begin{itemize}
+  \item \textbf{Top 10 (Grand Jury round) of 4,500+ teams nationwide}, RAKSHAM AI Cybersecurity Hackathon (IIT Delhi, I4C and Amazon), Oct 2026; Pehchaan, team of 2.
+  \item \textbf{5th of 232 teams}, WEAR Dataset Challenge @HASCA 2026 (Kaggle); \textbf{All India Rank 200} (2026) and \textbf{700} (2025), Amazon ML Challenge (team); \textbf{5th place}, Arista Networks Wi-Fi challenge, Inter IIT Tech Meet 14.0 (team); \textbf{1st place}, IIT Bhilai Web Development Competition.
+  \item Prime Minister's Scholarship Scheme (PMSS) scholar, 2024; Subroto Mukherjee Scholarship (IAFBA), 2023; Top 1\% in JEE Advanced; attended YC Startup School, Bengaluru.
+\end{itemize}
+
+\section*{Publications}
+\begin{itemize}
+  \item \textbf{Co-author (8th of 15)}, \textit{Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI}, arXiv:2610.06306; SPAIS Workshop at CoRL 2026 (poster).
+  \item \textbf{Co-author}, 2 RIS papers: IEEE INDICON 2025 and \textit{Ad Hoc Networks} (Elsevier), 2026.
+\end{itemize}
 
 \end{document}
