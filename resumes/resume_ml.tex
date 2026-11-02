@@ -1,156 +1,91 @@
-\documentclass[10pt,a4paper]{article}
-
-\usepackage[a4paper,left=0.35in,right=0.35in,top=0.27in,bottom=0.25in]{geometry}
-\usepackage{fontspec}
-\setmainfont{Arial}
-\usepackage[english]{babel}
-\usepackage{enumitem}
-\usepackage{xcolor}
-\usepackage{hyperref}
-\usepackage{titlesec}
-\usepackage{microtype}
-
-\definecolor{primary}{HTML}{2463A5}
-\definecolor{textdark}{HTML}{303030}
-\definecolor{textlight}{HTML}{666666}
-\definecolor{rulecolor}{HTML}{C7C7C7}
-\hypersetup{colorlinks=true,urlcolor=primary,linkcolor=primary,
-  pdftitle={Galaba Vamsi - Resume (Machine Learning)},pdfauthor={Galaba Vamsi}}
-
-\pagestyle{empty}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{0pt}
-\urlstyle{same}
-
-% Body: 9.5 pt Arial on 11.4 pt leading, scaled by \linespread.
-\linespread{0.90}
-\renewcommand{\normalsize}{\fontsize{9.5}{11.4}\selectfont}
-
-% No hyphenation: split tool names (MAT-LAB, Web-Sockets) break ATS keyword matching.
-\hyphenpenalty=10000
-\exhyphenpenalty=10000
-\emergencystretch=1.5em
-\frenchspacing
-
-\titleformat{\section}
-  {\fontsize{10.5}{12}\selectfont\bfseries\color{primary}}
-  {}{0pt}{\MakeUppercase}
-  [\vspace{1pt}{\color{rulecolor}\titlerule[0.45pt]}]
-\titlespacing*{\section}{0pt}{3.4pt}{2.6pt}
-
-\setlist[itemize]{
-  label=\textbullet,
-  leftmargin=1.0em,
-  itemsep=0.08em,
-  topsep=0.06em,
-  parsep=0pt,
-  partopsep=0pt
-}
-
-% \entry{bold title}{context and links}{dates}
-\newcommand{\entry}[3]{%
-  \par\vspace{0.16em}%
-  \noindent{\color{textdark}\textbf{#1}}{\color{primary}\enspace#2}\hfill{\color{textlight}#3}\par
-}
-
-% \project{title}{context}{description with links}: a run-in title keeps each project short.
-\newcommand{\project}[3]{%
-  \par\vspace{0.1em}%
-  \noindent\textbf{#1}{\color{textlight}\enspace(#2)}\enspace#3\par
-}
-
-% \edu{degree and school}{dates}{coursework}: dates on the first line, coursework below.
-\newcommand{\edu}[3]{%
-  \par\vspace{0.16em}%
-  \noindent{\color{textdark}\textbf{#1}}\hfill{\color{textlight}#2}\par
-  \noindent #3\par
-}
-
-\newcommand{\sep}{\enspace|\enspace}
-
-% Arial maps ";" and U+037E to one glyph, so the PDF text layer reported Greek question
-% marks. ActualText keeps copy/paste and ATS parsing faithful to the source characters.
-\XeTeXgenerateactualtext=1
-
+\documentclass[10pt]{article}
+\input{preamble}
+\hypersetup{pdftitle={Galaba Vamsi - Resume (Machine Learning Engineer)},pdfauthor={Galaba Vamsi}}
 \begin{document}
-\normalsize
-\color{textdark}
 
-% Single column, read top to bottom, so ATS parsers keep the order.
-{\fontsize{21}{23}\selectfont\textbf{Galaba Vamsi}}\par
-\vspace{0.25em}
-{\color{primary}\textbf{Machine Learning Engineer, Intern / New Grad (graduating May 2027)}}\par
-{\color{textlight}
-\href{tel:+917483047846}{+91 7483047846}\sep
-\href{mailto:galabavamsi12@gmail.com}{galabavamsi12@gmail.com}\sep
-\href{https://galabavamsi.github.io/portfolio}{galabavamsi.github.io/portfolio}\\
-\href{https://www.linkedin.com/in/galabavamsi/}{linkedin.com/in/galabavamsi}\sep
-\href{https://github.com/Galabavamsi}{github.com/Galabavamsi}}\par
+\resumeheader[\lnk{mailto:galabavamsi12@gmail.com}{galabavamsi12@gmail.com}]{Galaba Vamsi}
+{Machine Learning Engineer | New Grad, May 2027}
+{\lnk{https://galabavamsi.github.io/portfolio}{galabavamsi.github.io/portfolio} | \lnk{https://linkedin.com/in/galabavamsi}{linkedin.com/in/galabavamsi} | \lnk{https://github.com/Galabavamsi}{github.com/Galabavamsi}}
 
-\section*{Summary}
-Mechatronics at IIT Bhilai. Applied ML that I test on the real thing: a voice-clone detector checked on live phone calls (top 10 of 4,500+ teams at RAKSHAM) and 5th of 232 teams in Kaggle's WEAR challenge. Co-author of an embodied-AI evaluation paper (CoRL 2026 workshop).\par
+\section{Summary}
+I build ML models and test them on real-world data, not just benchmarks; co-author of an embodied-AI evaluation paper.
 
-\section*{Education}
-\edu{B.Tech. in Mechatronics, Indian Institute of Technology (IIT) Bhilai}{Aug 2023 - May 2027}{\textbf{Coursework:} AI and ML, Deep Learning for Computer Vision, Digital Image Processing, Optimal Control, DSA, OOP.}
+\section{Education}
+\entry{B.Tech. in Mechatronics, Indian Institute of Technology (IIT) Bhilai}{Aug 2023 -- May 2027}{}
+Coursework: AI and ML, Deep Learning for Computer Vision, Digital Image Processing, Optimal Control, DSA\par
 
-\section*{Projects}
-\project{Pehchaan}{team of 2; Top 10, RAKSHAM (IIT Delhi, I4C and Amazon), 2026}{Voice-clone payment-fraud detection for UPI; I led ML and backend. \href{https://github.com/Galabavamsi/pehchaan}{github.com/Galabavamsi/pehchaan}}
+\section{Projects}
+\entry{Pehchaan: voice-clone fraud detection for UPI payments (team of 2; I led ML)}{Oct 2026}{PyTorch, XLS-R, AASIST, FastAPI, AWS GPU | Top 8 Grand Finalist of 4,500+ teams, RAKSHAM | \lnk{https://github.com/Galabavamsi/pehchaan}{github.com/Galabavamsi/pehchaan}}
 \begin{itemize}
-  \item Fine-tuned XLS-R-300M + AASIST on consented Telugu, Hindi, and English speech plus clones from 13 TTS and voice-conversion generators: 4.8\% equal error rate (EER) vs 34.3\% off the shelf; 6.0\% on 6 unseen generators (pre-registered splits, 19k test clips).
-  \item Found a sim-to-real distribution shift: 24.6\% EER on 48 live carrier calls. Modelled the speakerphone channel and retrained: 6.8\% EER, clones caught 48\% to 75\%, 0\% of genuine callers flagged. The detector stays a non-deciding signal until a 50-call, 5\%-false-flag gate passes.
+\item Fine-tuned XLS-R-300M + AASIST: 4.8\% equal error rate vs 34.3\% off the shelf; 6.0\% on held-out voice generators.
+\item Cut error on 41 real phone calls from 24.6\% to 6.8\% by adding real-call clips and a learned speakerphone channel.
+\item Ablation: real-call clips alone gave 9.3\%, the learned channel alone 18.6\%; on an unseen phone, 11.7\%.
+\item FastAPI risk API answers in 3.95 ms (p95); on two real phones, a cloned call put a payment on hold in 14 s.
+\end{itemize}
+\entry{VLA Policy Fine-Tuning on Robot Arms (π0.5)}{2026}{Python, PyTorch | private work}
+\begin{itemize}
+\item Fine-tuned and trained π0.5 vision-language-action (VLA) policies with custom training runs for robot-arm manipulation.
+\end{itemize}
+\entry{WEAR Dataset Challenge @HASCA 2026 (Kaggle): 5th of 232 teams}{Oct 2026}{PyTorch, LightGBM | write-up: \lnk{https://galabavamsi.github.io/portfolio/blog/wear-hasca-kaggle-5th.html}{galabavamsi.github.io/portfolio/blog}}
+\begin{itemize}
+\item Recognized 18 exercises from wearable IMU and video of 4 unseen people: macro-F1 0.93137 (private leaderboard).
+\item Improved a public notebook from 0.92497 to 0.93825 (public board) with per-subject whitening; rejected a data leak.
+\end{itemize}
+\entry{World Model for Robot Manipulation: JEPA on LeRobot Push-T}{Aug 2026}{PyTorch, LeRobot Push-T | write-up: \lnk{https://galabavamsi.github.io/portfolio/blog/jepa-world-model-pusht.html}{galabavamsi.github.io/portfolio/blog}}
+\begin{itemize}
+\item Trained a 1.9M-parameter JEPA world model (predicts the next state) in 7 minutes on an 8 GB laptop GPU.
+\item Published the negative result: predictions fell behind a no-change baseline after 2 steps; the planner scored 0.
+\end{itemize}
+\entry{Amazon ML Challenge (team): All India Rank 747 (2025), 200 (2026)}{2025 -- 2026}{Qwen2-VL, ViT, RoBERTa}
+\begin{itemize}
+\item Predicted product prices from images and text with Qwen2-VL 7B and a ViT/RoBERTa two-tower model.
+\end{itemize}
+\entry{Arista Wi-Fi Radio Resource Management (team): 5th of 23 IITs, Inter IIT Tech Meet 14.0}{Dec 2025}{PyTorch, NS-3}
+\begin{itemize}
+\item Classified 16 interference types from I/Q samples (STFT, DBSCAN, dual CNN) for a 5-AP, 50-client NS-3 network.
 \end{itemize}
 
-\project{WEAR Dataset Challenge @HASCA 2026}{Kaggle, 2026}{Exercise recognition from wearable IMU and video tiles of four unseen subjects: 5th of 232 teams (macro-F1 0.93137, private leaderboard). Built on a public notebook; per-subject whitening, ZCA video input, and a multi-run ensemble lifted my reproduction from 0.92497 to 0.93825 public. Rejected a global whitening that raised cross-validation but lowered the leaderboard (a cross-subject leak).}
-
-\project{World Model on a Laptop}{Push-T, 2026}{Reproduced the LeWorldModel (JEPA) recipe at 1.9M parameters on an 8 GB GPU; rollouts fell behind a frozen-latent baseline after about 2 steps and the planner scored 0, all reported in a public write-up.}
-
-\project{Amazon ML Challenge}{team, 2025 and 2026}{Product price prediction with a Qwen2-VL 7B vision-language model and a ViT/RoBERTa two-tower model (2025, All India Rank 700); All India Rank 200 in 2026.}
-
-\project{Arista Wi-Fi RRM}{team, Inter IIT Tech Meet 14.0, 5th place, Dec 2025}{I/Q interference classification (STFT, DBSCAN, Dual-CNN; 16 classes) for client-aware radio resource management in NS-3.}
-
-\section*{Experience}
-\entry{Co-founder, Robotropic}{Physical-AI startup, with Varun Rao\sep\href{https://www.robotropic.com}{robotropic.com}}{Oct 2026 - Present}
+\section{Experience}
+\entry{Co-founder, Robotropic (physical-AI startup) \mdseries | \lnk{https://www.robotropic.com}{robotropic.com}}{Oct 2026 -- Present}{}
 \begin{itemize}
-  \item Building Harness, a workspace where a factory's team and AI agents change robot skills safely: each change is checked against safety limits, rolled out cell by cell, and recorded. I lead the simulated factory floor and the change gateway.
+\item Building Harness to roll out new robot policies (VLA checkpoints) cell by cell, with shadow-run scorecards and rollback.
 \end{itemize}
-\entry{Research Intern, IIT Bhilai}{Advisor: Dr. Arzad Alam Kherani\sep COMET Foundation project}{May 2025 - Jul 2025}
+\entry{Co-founder, Human Slop (anti-AI social app) \mdseries | \lnk{https://humanslop.in}{humanslop.in}}{Mar 2026 -- Present}{}
 \begin{itemize}
-  \item Built RIS-SIM, an open-source Python emulator for reconfigurable intelligent surface (RIS) radio links with USRP-style SDR interfaces; designed RIS unit cells in CST Studio Suite (IEEE INDICON 2025, co-author). Rebuilt it in 2026 as RIS-SIM v2 (103 tests), then as sremu.
+\item Built a keystroke-timing heuristic that flags likely AI-written posts; app live on web and Google Play (50+ downloads).
 \end{itemize}
-\entry{Co-founder, Human Slop}{Anti-AI social app, with Varun Rao\sep\href{https://humanslop.in/}{humanslop.in}}{Mar 2026 - Present}
+\entry{Research Intern, IIT Bhilai \mdseries | Advisor: Dr. Arzad Alam Kherani}{May 2025 -- Jul 2025}{}
 \begin{itemize}
-  \item Expo (React Native) app for web and Android, Fastify API, PostgreSQL on Supabase; live on the web and Google Play (50+ downloads).
+\item Built RIS-SIM, an open-source Python radio emulator with SDR-style interfaces; co-author, IEEE INDICON 2025.
 \end{itemize}
 
-\section*{Open-Source Contributions}
-\entry{Inspect Robots, Robocurve (YC S26)}{\href{https://github.com/robocurve/inspect-robots}{github.com/robocurve/inspect-robots}}{Sep 2026 - Oct 2026}
+\section{Open-Source Contributions}
+\entry{HFlow, Hebbian Robotics (YC S26): 8 merged PRs, 7 issues filed (all fixed)}{Sep 2026 -- Oct 2026}{Robot training-data SDK | Python, Apache Arrow | \lnk{https://github.com/Hebbian-Robotics/hflow}{github.com/Hebbian-Robotics/hflow}}
 \begin{itemize}
-  \item Evaluation framework for embodied-AI policies. 2 merged PRs: a configurable LLM-API retry policy across 5 wire protocols (PR \#476) and unknown git state no longer logged as clean (PR \#475); 3 open, including checkpoint/resume for long eval sets (PR \#514).
-  \item Wrote and maintain inspect-robots-wandb, a Weights \& Biases plugin (\href{https://pypi.org/project/inspect-robots-wandb/}{pypi.org/project/inspect-robots-wandb}): 100\% coverage gate, CI on Python 3.10-3.13, trusted publishing.
+\item Fixed robot-log export silently dropping any field missing from the first message (PR \#657); 9 regression tests.
 \end{itemize}
-\entry{HFlow, Hebbian Robotics (YC S26)}{\href{https://github.com/Hebbian-Robotics/hflow}{github.com/Hebbian-Robotics/hflow}}{Sep 2026 - Oct 2026}
+\entry{Inspect Robots, Robocurve (YC S26): 2 merged PRs, 3 in review, paper co-author}{Sep 2026 -- Oct 2026}{Evals for LLM and VLA robot policies | Python | \lnk{https://github.com/robocurve/inspect-robots}{github.com/robocurve/inspect-robots}}
 \begin{itemize}
-  \item 8 merged PRs (Python, Apache Arrow) to an SDK that verifies robot training data: LeRobot and robot-log conversion now keeps data whole or refuses it with a reason. Blocked silent 12- to 10-bit depth loss (PR \#400), typed Arrow columns from every message (PR \#657), fixed video-cache collisions (PR \#353).
+\item Merged: configurable LLM-API retries honoring Retry-After across 5 protocols, 22 test cases (PR \#476).
+\item Published \lnk{https://pypi.org/project/inspect-robots-wandb}{inspect-robots-wandb} on PyPI: Weights \& Biases logging for robot-policy evals, 100\% test coverage.
+\end{itemize}
+\entry{Cerulion (YC S24), open-source robot operating system: 5 merged PRs, 4 issues filed}{Oct 2026}{Rust | \lnk{https://github.com/cerulion-inc/cerulion}{github.com/cerulion-inc/cerulion}}
+
+\section{Skills}
+\textbf{ML:} PyTorch, Hugging Face, fine-tuning (VLA pi0.5, speech, vision-language), LightGBM, Weights \& Biases\par
+\textbf{Evaluation:} equal error rate, held-out test sets, cross-validation, leakage checks, ablations\par
+\textbf{Languages and tools:} Python, SQL, TypeScript, FastAPI, Docker, AWS (EC2 GPU), Linux, Git, pytest\par
+
+\section{Achievements}
+\begin{itemize}
+\item \lnk{https://drive.google.com/file/d/1_q0edTjShyucpmN5cs0e9heGE8fM29ga/view?usp=drive_link}{Top 8 Grand Finalist of 4,500+ teams}, RAKSHAM AI Cybersecurity Hackathon (IIT Delhi, I4C and Amazon), 2026
+\item Prime Minister's Scholarship Scheme scholar (2024); Top 1\% in JEE Advanced; YC Startup School, Bengaluru
 \end{itemize}
 
-\section*{Publications and Preprints}
+\section{Publications}
 \begin{itemize}
-  \item \textbf{Co-author}, \textit{Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI}, arXiv:2610.06306; accepted to the SPAIS Workshop at CoRL 2026 (poster).
-  \item \textbf{Co-author}, 2 RIS papers: IEEE INDICON 2025 (RF energy-harvesting RIS) and \textit{Ad Hoc Networks} (Elsevier), 2026 (systematic review of RIS simulation models).
-  \item \textbf{Sole author}, \textit{Timed RIS Control in the Loop}, preprint draft, arXiv submission pending (\href{https://github.com/Galabavamsi/sremu-paper}{github.com/Galabavamsi/sremu-paper}).
-\end{itemize}
-
-\section*{Skills}
-{\raggedright\linepenalty=1000
-\textbf{ML:} PyTorch, fine-tuning (speech, vision-language), evaluation design (EER, held-out generators, cross-validation, leakage checks), ensembling, int8 inference, Weights \& Biases, LightGBM\par
-\textbf{Languages and serving:} Python, SQL, TypeScript, FastAPI, Docker, Git, Linux, GitHub Actions, pytest\par
-\textbf{AI-assisted development:} Claude Code; I set the design and verify results with tests and independent references.\par}
-
-\section*{Achievements}
-\begin{itemize}
-  \item \textbf{Top 10 (Grand Jury round) of 4,500+ teams nationwide}, RAKSHAM AI Cybersecurity Hackathon (IIT Delhi, I4C and Amazon), Oct 2026; Pehchaan, team of 2.
-  \item \textbf{5th of 232 teams}, WEAR Dataset Challenge @HASCA 2026 (Kaggle); \textbf{All India Rank 200} (2026) and \textbf{700} (2025), Amazon ML Challenge (team); \textbf{5th place}, Arista Networks Wi-Fi challenge, Inter IIT Tech Meet 14.0 (team).
-  \item Prime Minister's Scholarship Scheme (PMSS) scholar, 2024; Subroto Mukherjee Scholarship (IAFBA), 2023; Top 1\% in JEE Advanced; attended YC Startup School, Bengaluru.
+\item Co-author, \lnk{https://arxiv.org/abs/2610.06306}{\textit{Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI}} (Robocurve), CoRL 2026 workshop
+\item Co-author, 2 RIS papers: IEEE INDICON 2025 and \textit{Ad Hoc Networks} (Elsevier, 2026)
 \end{itemize}
 
 \end{document}
