@@ -1,0 +1,44 @@
+% Shared preamble for Galaba Vamsi's resumes. Compile each resume with XeLaTeX.
+% ATS rules followed: single column, standard section headings, real text (no images,
+% tables, text boxes or icons), common font, URLs written out, dates on the title line.
+\usepackage[a4paper,left=1.05cm,right=1.05cm,top=0.75cm,bottom=0.6cm]{geometry}
+\usepackage{fontspec}
+% Kerning off: with kerning on, some ATS parsers split words like "PyTorch" into "PyT orch".
+\IfFontExistsTF{Arial}{\setmainfont{Arial}[Kerning=Off]}{\setmainfont{Liberation Sans}[Kerning=Off]}
+\usepackage{xcolor}
+\definecolor{accent}{RGB}{24,74,140}
+\definecolor{muted}{RGB}{85,85,85}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\frenchspacing
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\emergencystretch=3em
+\raggedright
+\linespread{0.95}
+% Spread any spare space evenly through the page instead of leaving a gap at the bottom
+\flushbottom
+\AtEndDocument{\par\penalty-10000}
+
+% Section heading: bold, upper case, coloured, rule underneath
+\titleformat{\section}{\color{accent}\bfseries\fontsize{11}{13}\selectfont}{}{0pt}{\MakeUppercase}[{\color{accent!60}\titlerule[0.5pt]}]
+\titlespacing*{\section}{0pt}{5pt plus 4pt}{2pt plus 1pt}
+
+% Bullets
+\setlist[itemize]{leftmargin=12pt,label={\textbullet},topsep=1pt plus 1pt,itemsep=0.5pt plus 0.5pt,parsep=0pt,partopsep=0pt}
+
+% Header: \resumeheader[right-aligned contact]{Name}{Headline}{Links line}
+\newcommand{\resumeheader}[4][]{%
+  {\fontsize{20}{22}\selectfont\bfseries #2}\par\vspace{2pt}
+  {\color{accent}\bfseries #3}\hfill{\small #1}\par\vspace{1pt}
+  {\small #4}\par}
+\newcommand{\lnk}[2]{\href{#1}{\color{accent}#2}}
+
+% An entry: \entry{Bold title}{Right-aligned date}{Meta line (tech | link), may be empty}
+\newcommand{\entry}[3]{%
+  \vspace{1.5pt plus 3pt}{\textbf{#1}\hfill #2}\par
+  \if\relax\detokenize{#3}\relax\else{\small\color{muted}#3}\par\fi}
