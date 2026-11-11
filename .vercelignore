@@ -2,3 +2,6 @@
 experiments/
 supabase/
 applications/
+# Cloudflare Pages only (functions run there; the build script is for its build step).
+functions/
+scripts/

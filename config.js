@@ -4,7 +4,7 @@
    Safe to commit:
    - Supabase project URL
    - Supabase anon key
-   - Public chat endpoint URL
+   - Public chat and view-count endpoint paths
 
    Do not put the DeepSeek key here. The frontend talks to the
    Supabase Edge Function, and the function reads DEEPSEEK_KEY
@@ -14,7 +14,11 @@ window.GV_CONFIG = {
   SUPABASE_URL: 'https://exctwduhrnklcgbaphdb.supabase.co',
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4Y3R3ZHVocm5rbGNnYmFwaGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU4Nzc2NjUsImV4cCI6MjEwMTQ1MzY2NX0.vHb8nStI4UAZNtSfsxZAzudsEbHom4vGCpiKWFKtQZQ',
 
-  CHAT_ENDPOINT: 'https://exctwduhrnklcgbaphdb.supabase.co/functions/v1/chat',
+  // Same-origin routes: functions/api/[[path]].js on Cloudflare Pages (and the
+  // rewrites in vercel.json) forward them to Supabase. Browsers in India can't
+  // reach *.supabase.co directly since ISPs there started blocking it in 2026.
+  CHAT_ENDPOINT: '/api/chat',
+  VIEWS_ENDPOINT: '/api/views',
 
   // Keep local testing deterministic and use BIT's current on-page knowledge.
   // Deployed hosts still use the Supabase chat proxy.

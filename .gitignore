@@ -25,3 +25,5 @@ experiments/01-shan-shui/build/
 
 # Personal application documents (cover letters etc.), never deployed
 applications/
+dist/
+.wrangler/

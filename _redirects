@@ -1,0 +1,3 @@
+# Cloudflare Pages redirects. Old GitHub Pages paths had a /portfolio prefix.
+/portfolio      /       301
+/portfolio/*    /:splat 301
