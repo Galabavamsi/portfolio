@@ -2,3 +2,7 @@
 experiments/
 supabase/
 applications/
+# Cloudflare only: the Worker, its config and the build script.
+worker/
+wrangler.jsonc
+scripts/

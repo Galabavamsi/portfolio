@@ -23,9 +23,9 @@
 
   const LINKS = {
     email: 'mailto:galabavamsi12@gmail.com',
-    portfolio: 'https://galabavamsi.com',
-    techProfile: 'https://galabavamsi.com/#home',
-    filmProfile: 'https://galabavamsi.com/#film',
+    portfolio: 'https://www.galabavamsi.com',
+    techProfile: 'https://www.galabavamsi.com/#home',
+    filmProfile: 'https://www.galabavamsi.com/#film',
     linkedin: 'https://www.linkedin.com/in/galabavamsi/',
     github: 'https://github.com/Galabavamsi',
     twitter: 'https://x.com/Galaba_Vamsi',
@@ -79,8 +79,8 @@
     heatcast: 'https://github.com/Galabavamsi/heatcast',
     heatcastDemo: 'https://web-pearl-ten-99.vercel.app',
     pondPlanning: 'https://github.com/Galabavamsi/ai-village-pond-planning',
-    blog: 'https://galabavamsi.com/blog/',
-    blogWandb: 'https://galabavamsi.com/blog/inspect-robots-wandb.html',
+    blog: 'https://www.galabavamsi.com/blog/',
+    blogWandb: 'https://www.galabavamsi.com/blog/inspect-robots-wandb.html',
     risEnergy: 'https://ieeexplore.ieee.org/abstract/document/11392908/',
     risReview: 'https://www.sciencedirect.com/science/article/pii/S1570870526001964',
     grayAura: 'https://www.youtube.com/watch?v=ZRrBCcASFnA',

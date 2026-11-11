@@ -280,14 +280,16 @@
   (async function pageViews() {
     const cfg = window.GV_CONFIG || {};
     const footer = $('footer');
-    if (!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY || !footer) return;
-    const path = location.pathname.replace(/index\.html$/, '') || '/';
+    if (!cfg.VIEWS_ENDPOINT || !cfg.SUPABASE_ANON_KEY || !footer) return;
+    let path = location.pathname.replace(/index\.html$/, '') || '/';
+    // Cloudflare Pages and Vercel serve /resume.html as /resume; count both under one key.
+    if (!path.endsWith('/') && !/\.[a-z0-9]+$/i.test(path)) path += '.html';
     const local = ['localhost', '127.0.0.1'].includes(location.hostname) || location.protocol === 'file:';
     let counted = false;
     try { counted = sessionStorage.getItem('gv-viewed:' + path) === '1'; } catch { /* storage blocked */ }
     const fn = local || counted ? 'view_count' : 'track_view';
     try {
-      const res = await fetch(`${cfg.SUPABASE_URL}/rest/v1/rpc/${fn}`, {
+      const res = await fetch(`${cfg.VIEWS_ENDPOINT}/${fn}`, {
         method: 'POST',
         headers: {
           apikey: cfg.SUPABASE_ANON_KEY,

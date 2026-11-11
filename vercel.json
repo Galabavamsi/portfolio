@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/api/chat",
+      "destination": "https://exctwduhrnklcgbaphdb.supabase.co/functions/v1/chat"
+    },
+    {
+      "source": "/api/views/:fn(track_view|view_count)",
+      "destination": "https://exctwduhrnklcgbaphdb.supabase.co/rest/v1/rpc/:fn"
+    }
+  ]
+}
