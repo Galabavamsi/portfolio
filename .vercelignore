@@ -2,6 +2,7 @@
 experiments/
 supabase/
 applications/
-# Cloudflare Pages only (functions run there; the build script is for its build step).
-functions/
+# Cloudflare only: the Worker, its config and the build script.
+worker/
+wrangler.jsonc
 scripts/

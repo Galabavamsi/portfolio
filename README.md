@@ -4,7 +4,7 @@ Personal site of **Galaba Vamsi**. Mechatronics at IIT Bhilai. Builds full-stack
 
 **Live:** [www.galabavamsi.com](https://www.galabavamsi.com/)
 
-Plain HTML, CSS, and JavaScript. Cloudflare Pages serves `main` at www.galabavamsi.com; the only build step copies the public files into `dist/`. A Supabase edge function keeps the chat model's API key off the client, and a Pages Function on the same domain forwards to it.
+Plain HTML, CSS, and JavaScript. A Cloudflare Worker serves `main` at www.galabavamsi.com: static files from `dist/` (the only build step copies the public files there) and a small proxy at `/api/*`. A Supabase edge function keeps the chat model's API key off the client.
 
 ## What's on the site
 
@@ -89,38 +89,37 @@ Bump the `?v=` query strings on `style.css`, `config.js`, `script.js`, and `pet.
    supabase functions deploy chat --no-verify-jwt
    supabase secrets set DEEPSEEK_KEY=sk-your-deepseek-key
    ```
-3. Fill in `config.js` with the project URL and the anon key (Dashboard → Settings → API), and put the same URL and key in `functions/api/[[path]].js` and `vercel.json`.
+3. Fill in `config.js` with the project URL and the anon key (Dashboard → Settings → API), and put the same URL and key in `worker/index.js` and `vercel.json`.
 
-The browser never calls `*.supabase.co` directly: Indian ISPs (Jio, Airtel, ACT) have blocked that domain since February 2026. It posts to `/api/chat` and `/api/views/{track_view,view_count}` on the site's own domain, and `functions/api/[[path]].js` (Cloudflare) or the rewrites in `vercel.json` (Vercel) forward the request. The function passes the visitor's IP as `X-Forwarded-For`, so the chat's per-IP rate limit still applies.
+The browser never calls `*.supabase.co` directly: Indian ISPs (Jio, Airtel, ACT) have blocked that domain since February 2026. It posts to `/api/chat` and `/api/views/{track_view,view_count}` on the site's own domain, and `worker/index.js` (Cloudflare) or the rewrites in `vercel.json` (Vercel) forward the request. The Worker passes the visitor's IP as `X-Forwarded-For`, so the chat's per-IP rate limit still applies.
 
 > The anon key is public by design. The DeepSeek key lives only in the edge function's secrets, never in this repo. Keep `ALLOWED_ORIGINS` in `supabase/functions/chat/index.ts` in step with the site's domains (www.galabavamsi.com, galabavamsi.com and the old github.io origin).
 
 `supabase/schema.sql` creates the leaderboard table for the retired snake game; the current site does not use it.
 
-### Site (Cloudflare Pages)
+### Site (Cloudflare Workers)
 
-Cloudflare Pages builds `main` from this repo:
+The `portfolio` Worker (Workers Builds, connected to this repo) deploys `main`:
 
 | Setting | Value |
 |---|---|
 | Build command | `bash scripts/build-site.sh` |
-| Build output directory | `dist` |
-| Environment variable | `SKIP_DEPENDENCY_INSTALL=1` (the only npm dependency is the Supabase CLI, which the site doesn't need) |
+| Deploy command | `npx wrangler deploy` |
 | Custom domains | `www.galabavamsi.com` (primary) and `galabavamsi.com` |
 
-`scripts/build-site.sh` leaves `experiments/`, `supabase/`, `applications/`, `functions/`, `scripts/`, `resumes/` and repo tooling out of `dist/`. Pages picks up `functions/` from the repo root, `_redirects` and `404.html` from `dist/`. Pages serves `/resume.html` as `/resume`, so canonical links use the extensionless form.
+`wrangler.jsonc` serves `dist/` as static assets and runs `worker/index.js` only for `/api/*`, so page loads never count against the Workers request quota. `scripts/build-site.sh` leaves `experiments/`, `supabase/`, `applications/`, `worker/`, `scripts/`, `resumes/` and repo tooling out of `dist/`. `_redirects` and `404.html` in `dist/` handle redirects and missing pages. `/resume.html` is served as `/resume`, so canonical links use the extensionless form.
 
 A Cloudflare Redirect Rule sends `galabavamsi.com/*` to `https://www.galabavamsi.com/*` (301, query string kept), and "Always Use HTTPS" is on. Keep `DEV_DEEPSEEK_KEY` in `config.js` empty.
 
 ### Vercel (fallback) and old links (GitHub Pages)
 
-The Vercel project still deploys `main` and can serve the site if needed: `vercel.json` turns on clean URLs and adds the same `/api/*` rewrites, and `.vercelignore` keeps drafts and Pages-only files out.
+The Vercel project still deploys `main` and can serve the site if needed: `vercel.json` turns on clean URLs and adds the same `/api/*` rewrites, and `.vercelignore` keeps drafts and Cloudflare-only files out.
 
 GitHub Pages only forwards old links. Pushing to `main` runs `.github/workflows/static.yml`, which builds redirect pages with `.github/pages-redirect/build.py`: every `galabavamsi.github.io/portfolio/...` URL forwards to the same path on www.galabavamsi.com, keeping `?query` and `#hash`. `_redirects` also strips a stray `/portfolio/` prefix on the new domain.
 
 ### Local dev
 
-Run `python -m http.server 8000` and open `http://localhost:8000/`. Locally, BIT uses its keyword fallback unless `USE_REMOTE_CHAT_LOCALLY` is set in `config.js`. `/api/*` exists only under the Pages runtime: `bash scripts/build-site.sh && npx wrangler pages dev dist` serves the site with the proxy on port 8788.
+Run `python -m http.server 8000` and open `http://localhost:8000/`. Locally, BIT uses its keyword fallback unless `USE_REMOTE_CHAT_LOCALLY` is set in `config.js`. `/api/*` exists only under the Worker: `bash scripts/build-site.sh && npx wrangler dev` serves the site with the proxy on port 8787.
 
 ## Files
 
@@ -135,8 +134,8 @@ Run `python -m http.server 8000` and open `http://localhost:8000/`. Locally, BIT
 | `assets/` | portrait (`profile.webp`) and social preview card (`og-card.jpg`) |
 | `resumes/`, `resume_*.pdf` | resume sources and builds |
 | `supabase/` | chat edge function (and the legacy leaderboard schema) |
-| `functions/api/[[path]].js` | Cloudflare Pages Function: same-origin proxy to Supabase for chat and view counts |
-| `scripts/build-site.sh` | Cloudflare Pages build: copies the public site into `dist/` |
-| `_redirects`, `404.html` | Cloudflare Pages redirects and not-found page |
+| `worker/index.js`, `wrangler.jsonc` | Cloudflare Worker: static assets plus the same-origin Supabase proxy for chat and view counts |
+| `scripts/build-site.sh` | Cloudflare build: copies the public site into `dist/` |
+| `_redirects`, `404.html` | redirects and not-found page |
 | `vercel.json` | Vercel fallback: clean URLs and the same `/api/*` rewrites |
 | `experiments/` | design experiments, run locally only; excluded from the deploy by `scripts/build-site.sh` and `.vercelignore` (see `experiments/README.md`) |

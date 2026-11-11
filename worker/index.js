@@ -1,4 +1,6 @@
-// Same-origin proxy from the site to Supabase, run by Cloudflare Pages Functions.
+// Cloudflare Worker for www.galabavamsi.com. Static files in dist/ are served
+// straight from Workers static assets; only /api/* runs this code (see
+// run_worker_first in wrangler.jsonc). /api/* is a same-origin proxy to Supabase.
 //
 // Since February 2026, Indian ISPs (Jio, Airtel, ACT) have blocked *.supabase.co,
 // so a browser in India can't reach BIT's chat function or the view counter.
@@ -20,8 +22,15 @@ const ROUTES = {
 };
 const MAX_BODY = 64 * 1024;
 
-export async function onRequest({ request, params }) {
-  const route = [].concat(params.path || []).join('/');
+export default {
+  async fetch(request, env) {
+    const { pathname } = new URL(request.url);
+    if (pathname.startsWith('/api/')) return proxy(request, pathname.slice('/api/'.length));
+    return env.ASSETS.fetch(request);
+  },
+};
+
+async function proxy(request, route) {
   const target = ROUTES[route];
   if (!target) return new Response('Not found', { status: 404 });
   if (request.method !== 'POST') {

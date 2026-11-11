@@ -1,7 +1,7 @@
 # Publish galabavamsi.github.io/portfolio as redirects to www.galabavamsi.com
 name: Deploy static content to Pages
 
-# The real site is served by Cloudflare Pages at www.galabavamsi.com. This keeps old
+# The real site is served by Cloudflare at www.galabavamsi.com. This keeps old
 # galabavamsi.github.io/portfolio/... links working by forwarding each one to the
 # same path on the new domain (see .github/pages-redirect/build.py).
 on:

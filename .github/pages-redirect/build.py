@@ -1,6 +1,6 @@
 """Build the GitHub Pages site for galabavamsi.github.io/portfolio as redirects only.
 
-The real site lives at https://www.galabavamsi.com (Cloudflare Pages). Links sent out earlier
+The real site lives at https://www.galabavamsi.com (Cloudflare). Links sent out earlier
 point at galabavamsi.github.io/portfolio/..., so every page here forwards to the
 same path on the new domain:
   - each .html page gets a stub with a canonical link, a meta refresh and a JS
