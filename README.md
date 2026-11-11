@@ -91,13 +91,15 @@ Bump the `?v=` query strings on `style.css`, `config.js`, `script.js`, and `pet.
    ```
 3. Fill in `config.js` with the project URL, the anon key (Dashboard → Settings → API), and `https://YOUR-PROJECT-REF.supabase.co/functions/v1/chat`.
 
-> The anon key is public by design. The DeepSeek key lives only in the edge function's secrets, never in this repo. Keep `ALLOWED_ORIGIN` in `supabase/functions/chat/index.ts` set to the Pages origin.
+> The anon key is public by design. The DeepSeek key lives only in the edge function's secrets, never in this repo. Keep `ALLOWED_ORIGINS` in `supabase/functions/chat/index.ts` in step with the site's domains (galabavamsi.com, www, and the old github.io origin).
 
 `supabase/schema.sql` creates the leaderboard table for the retired snake game; the current site does not use it.
 
-### GitHub Pages
+### Site (Vercel) and old links (GitHub Pages)
 
-Pushing to `main` runs `.github/workflows/static.yml`, which publishes the repo root except `experiments/`. Keep `DEV_DEEPSEEK_KEY` in `config.js` empty.
+Vercel deploys `main` to galabavamsi.com (`www` redirects there). `.vercelignore` keeps `experiments/`, `supabase/` and `applications/` off the site. Keep `DEV_DEEPSEEK_KEY` in `config.js` empty.
+
+GitHub Pages only forwards old links. Pushing to `main` runs `.github/workflows/static.yml`, which builds redirect pages with `.github/pages-redirect/build.py`: every `galabavamsi.github.io/portfolio/...` URL forwards to the same path on galabavamsi.com, keeping `?query` and `#hash`.
 
 ### Local dev
 
@@ -116,4 +118,4 @@ Run `python -m http.server 8000` and open `http://localhost:8000/`. Locally, BIT
 | `assets/` | portrait (`profile.webp`) and social preview card (`og-card.jpg`) |
 | `resumes/`, `resume_*.pdf` | resume sources and builds |
 | `supabase/` | chat proxy edge function (and the legacy leaderboard schema) |
-| `experiments/` | design experiments, run locally only; excluded from the Pages build (see `experiments/README.md`) |
+| `experiments/` | design experiments, run locally only; excluded from the Vercel deploy by `.vercelignore` (see `experiments/README.md`) |

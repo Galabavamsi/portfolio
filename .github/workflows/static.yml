@@ -1,9 +1,12 @@
-# Deploy the static site to GitHub Pages (manual)
+# Publish galabavamsi.github.io/portfolio as redirects to galabavamsi.com
 name: Deploy static content to Pages
 
-# The site is served by Vercel at galabavamsi.com. GitHub Pages needs a public repo
-# or GitHub Pro, so this workflow is manual-only; run it if Pages is re-enabled.
+# The real site is served by Vercel at galabavamsi.com. This keeps old
+# galabavamsi.github.io/portfolio/... links working by forwarding each one to the
+# same path on the new domain (see .github/pages-redirect/build.py).
 on:
+  push:
+    branches: ['main']
   workflow_dispatch:
 
 permissions:
@@ -26,10 +29,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Stage site (experiments/ stays unpublished)
-        run: |
-          mkdir -p .site
-          rsync -a --exclude '.site' --exclude '.git' --exclude 'experiments' --exclude 'node_modules' ./ .site/
+      - name: Build redirect pages
+        run: python3 .github/pages-redirect/build.py
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
