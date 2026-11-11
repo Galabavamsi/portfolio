@@ -4,7 +4,7 @@ Personal site of **Galaba Vamsi**. Mechatronics at IIT Bhilai. Builds full-stack
 
 **Live:** [galabavamsi.com](https://galabavamsi.com/)
 
-Plain HTML, CSS, and JavaScript with no build step. GitHub Pages serves `main`; a Supabase edge function keeps the chat model's API key off the client.
+Plain HTML, CSS, and JavaScript with no build step. Vercel serves `main` at galabavamsi.com (`.vercelignore` keeps `experiments/` and `supabase/` off the site); a Supabase edge function keeps the chat model's API key off the client.
 
 ## What's on the site
 
@@ -69,7 +69,7 @@ The same facts appear in several places. When one changes, update all of them:
 | `pet.js` | BIT's `LINKS` and `FACTS` (a separate copy of the content) |
 | `blog/` | posts, plus the cards in `index.html#blog` |
 | `resume.html` | resume chooser page: robotics, software and full-stack, machine learning |
-| `resumes/*.tex` → `resume_robotics.pdf`, `resume_software.pdf`, `resume_ml.pdf` | the three one-page resumes, built with `xelatex` (fontspec, Arial). `resume_vamsi.pdf` is a copy of the software one so old links keep working |
+| `resumes/*.tex` → `resume_robotics.pdf`, `resume_software.pdf`, `resume_ml.pdf` | the three one-page resumes, built with `xelatex` (fontspec, Arial). `resume_vamsi.pdf` and `vamsi resume.pdf` are copies of the software one so old links keep working |
 | `README.md` | the open-source and research lists above |
 | [Galabavamsi/Galabavamsi](https://github.com/Galabavamsi/Galabavamsi) | GitHub profile README |
 
