@@ -1,9 +1,9 @@
-# Deploy the static site to GitHub Pages on every push to main
+# Deploy the static site to GitHub Pages (manual)
 name: Deploy static content to Pages
 
+# The site is served by Vercel at galabavamsi.com. GitHub Pages needs a public repo
+# or GitHub Pro, so this workflow is manual-only; run it if Pages is re-enabled.
 on:
-  push:
-    branches: ['main']
   workflow_dispatch:
 
 permissions:
