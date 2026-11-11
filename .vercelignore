@@ -1,0 +1,4 @@
+# Same exclusions the GitHub Pages workflow used: drafts stay unpublished.
+experiments/
+supabase/
+applications/

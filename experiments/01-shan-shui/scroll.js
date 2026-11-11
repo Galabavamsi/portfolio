@@ -62,7 +62,7 @@
       { h: 'Top 10 finalist', p: 'Toyota Hackathon' }, { h: 'PMSS scholar', p: 'Prime Minister\'s Scholarship Scheme, National Defence Fund (2024)' } ] },
     contact: { label: 'Contact', title: 'Working on robot data, evaluation, or simulation?',
       paras: ['Open to robotics software internships and new-grad roles (graduating May 2027), and to research collaborations. I read the code, write the tests, and say plainly what did not work.'],
-      links: [['Email', 'mailto:galabavamsi12@gmail.com'], ['LinkedIn', 'https://www.linkedin.com/in/galabavamsi/'], ['GitHub', 'https://github.com/Galabavamsi'], ['X', 'https://x.com/Galaba_Vamsi'], ['Main site', 'https://galabavamsi.github.io/portfolio/']] },
+      links: [['Email', 'mailto:galabavamsi12@gmail.com'], ['LinkedIn', 'https://www.linkedin.com/in/galabavamsi/'], ['GitHub', 'https://github.com/Galabavamsi'], ['X', 'https://x.com/Galaba_Vamsi'], ['Main site', 'https://galabavamsi.com/']] },
     colophon: { label: 'Colophon', title: 'About this scroll', small: true,
       paras: ['The landscape was painted once by LingDong-\'s {Shan, Shui}* generator (MIT), run offline with the text stations planned as clearings, and saved as image tiles. Nothing is drawn while you read. The scroll keeps going a little past this point.'],
       links: [['{Shan, Shui}* source', 'https://github.com/LingDong-/shan-shui-inf'], ['This experiment\'s source', 'https://github.com/Galabavamsi/portfolio/tree/main/experiments/01-shan-shui']] },

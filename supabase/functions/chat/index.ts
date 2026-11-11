@@ -12,7 +12,12 @@
    here so a public endpoint cannot be abused for arbitrary usage.
    ============================================================ */
 
-const PRODUCTION_ORIGIN = 'https://galabavamsi.github.io';
+const PRODUCTION_ORIGIN = 'https://galabavamsi.com';
+const ALLOWED_ORIGINS = new Set([
+  PRODUCTION_ORIGIN,
+  'https://www.galabavamsi.com',
+  'https://galabavamsi.github.io',
+]);
 const CHAT_GUARDRAIL = "Nice try. I'm only here to talk about Vamsi, and that part of me doesn't change. Want to hear about his projects, research, or films instead?";
 const CODE_REDIRECT = "I don't write code here, I just talk about the guy who does. Ask me about Vamsi's projects, research, or films.";
 const INJECTION_PATTERNS = [
@@ -169,7 +174,7 @@ function overRateLimit(req: Request) {
 
 function corsHeaders(req: Request) {
   const origin = req.headers.get('Origin') ?? '';
-  const isProduction = origin === PRODUCTION_ORIGIN;
+  const isProduction = ALLOWED_ORIGINS.has(origin);
   const isLocalDev = /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);
   const allowedOrigin = isProduction || isLocalDev ? origin : PRODUCTION_ORIGIN;
 

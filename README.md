@@ -2,7 +2,7 @@
 
 Personal site of **Galaba Vamsi**. Mechatronics at IIT Bhilai. Builds full-stack apps, AI agents, and ML models, and contributes to open-source robotics tools. The site covers his open-source contributions, RIS emulator research, projects, writing, and film.
 
-**Live:** [galabavamsi.github.io/portfolio](https://galabavamsi.github.io/portfolio/)
+**Live:** [galabavamsi.com](https://galabavamsi.com/)
 
 Plain HTML, CSS, and JavaScript with no build step. GitHub Pages serves `main`; a Supabase edge function keeps the chat model's API key off the client.
 
