@@ -22,8 +22,7 @@ Coursework: Data Structures and Algorithms, OOP, AI and ML, Deep Learning for Co
 \end{itemize}
 \entry{Co-founder, Robotropic (physical-AI startup) \mdseries | \lnk{https://www.robotropic.com}{robotropic.com}}{Oct 2026 -- Present}{}
 \begin{itemize}
-\item Lead the change gateway of Harness, which rolls out robot policies (VLA checkpoints) with safety checks and rollback.
-\item Built robotropic.com: a three.js lidar factory scene and an early-access list on Cloudflare Workers and D1.
+\item Lead the change gateway of Harness (safe robot-policy rollouts); built robotropic.com on Cloudflare Workers.
 \end{itemize}
 \entry{Research Intern, IIT Bhilai \mdseries | Advisor: Dr. Arzad Alam Kherani}{May 2025 -- Jul 2025}{}
 \begin{itemize}
@@ -35,18 +34,20 @@ Coursework: Data Structures and Algorithms, OOP, AI and ML, Deep Learning for Co
 \begin{itemize}
 \item Gave each team member all MCP servers through one URL and a personal API key (stored as HMAC).
 \item Added role-based tool permissions, rate limits, a per-user audit log, and human approval before write actions.
-\item Wrote 2 MCP servers (WooCommerce over OAuth 1.0a, a supplier catalog); Prometheus metrics with p50/p95 latency.
-\item Deployed on AWS EC2 with k3s; rebuilt the stack from scripts; 321 tests; end-to-end suites pass on production.
+\item Wrote 2 MCP servers (WooCommerce, supplier catalog); deployed on AWS EC2 with k3s and Prometheus; 321 tests.
 \end{itemize}
 \entry{Pehchaan: voice-clone fraud detection for UPI payments (team of 2)}{Oct 2026}{Python, FastAPI, Kotlin (Android), PyTorch | Top 8 Grand Finalist of 4,500+ teams, RAKSHAM | \lnk{https://github.com/Galabavamsi/pehchaan}{github.com/Galabavamsi/pehchaan}}
 \begin{itemize}
-\item Led backend and ML: a FastAPI risk API that decides in 3.95 ms (p95) and a Kotlin Android SDK for payment apps.
-\item On two real phones, a consented cloned-voice call moved a payment from pay to hold in 14 s.
+\item Led backend and ML: FastAPI risk API (3.95 ms p95) and Kotlin Android SDK; on real phones, pay to hold in 14 s.
 \end{itemize}
 \entry{Charter: agentic commerce (Razorpay AI Buildathon)}{2026}{TypeScript, Fastify, React, PostgreSQL, Docker | \lnk{https://github.com/Galabavamsi/charter}{github.com/Galabavamsi/charter} | live (test mode): \lnk{https://charter.humanslop.in}{charter.humanslop.in}}
 \begin{itemize}
 \item Routed chat, voice and an 11-tool MCP server through one checkout API, so AI agents get no side door to payments.
 \item Enforced PostgreSQL row-level security; CI tests against Postgres, then deploys to AWS Lightsail via GitHub OIDC.
+\end{itemize}
+\entry{FinReason Cup, IEEE Big Data Cup 2026 (team of 2): paper accepted}{Oct 2026}{LLM coding agents, Python | 11th of 27 teams (Task 1), 11th of 23 (Task 3)}
+\begin{itemize}
+\item Ran \textasciitilde 1,150 LLM-agent runs to write, cross-check and red-team exact-arithmetic solvers; 923/928 test answers right.
 \end{itemize}
 \entry{sremu: timed radio-control emulator}{2026}{Python, ZeroMQ, GNU Radio | solo, built with Claude Code | \lnk{https://github.com/Galabavamsi/sremu}{github.com/Galabavamsi/sremu}}
 \begin{itemize}
@@ -57,7 +58,6 @@ Coursework: Data Structures and Algorithms, OOP, AI and ML, Deep Learning for Co
 \entry{HFlow, Hebbian Robotics (YC S26): 8 merged PRs, 7 issues filed (all fixed)}{Sep 2026 -- Oct 2026}{Robot training-data SDK | Python, Apache Arrow | \lnk{https://github.com/Hebbian-Robotics/hflow}{github.com/Hebbian-Robotics/hflow}}
 \begin{itemize}
 \item Fixed robot-log export silently dropping any field missing from the first message (PR \#657); 9 regression tests.
-\item Unified path-safety checks across the CLI, API server and Python SDK, 13 files (PR \#360).
 \end{itemize}
 \entry{Inspect Robots, Robocurve (YC S26): 2 merged PRs, 3 in review, paper co-author}{Sep 2026 -- Oct 2026}{Evals for LLM and VLA robot policies | Python | \lnk{https://github.com/robocurve/inspect-robots}{github.com/robocurve/inspect-robots}}
 \begin{itemize}
@@ -85,6 +85,7 @@ Coursework: Data Structures and Algorithms, OOP, AI and ML, Deep Learning for Co
 \section{Publications}
 \begin{itemize}
 \item Co-author, \lnk{https://arxiv.org/abs/2610.06306}{\textit{Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI}} (Robocurve), CoRL 2026 workshop
+\item Co-author, \textit{HumanSlop at FinReason Cup 2026 Tasks 1 and 3: Verified Program Synthesis for Exact Financial Reasoning and Executable Rule Semantics for XBRL Audit Verification}, \lnk{https://the-finai.github.io/IEEE-bigdata-cup/}{IEEE Big Data Cup 2026} (accepted)
 \item Co-author, 2 RIS papers: IEEE INDICON 2025 and \textit{Ad Hoc Networks} (Elsevier, 2026)
 \end{itemize}
 

@@ -8,7 +8,7 @@
 {\lnk{https://galabavamsi.com}{galabavamsi.com} | \lnk{https://linkedin.com/in/galabavamsi}{linkedin.com/in/galabavamsi} | \lnk{https://github.com/Galabavamsi}{github.com/Galabavamsi}}
 
 \section{Summary}
-I build ML models and test them on real-world data, not just benchmarks; co-author of an embodied-AI evaluation paper.
+I build ML models and test them on real-world data, not just benchmarks; co-author of 4 papers.
 
 \section{Education}
 \entry{B.Tech. in Mechatronics, Indian Institute of Technology (IIT) Bhilai}{Aug 2023 -- May 2027}{}
@@ -20,7 +20,11 @@ Coursework: AI and ML, Deep Learning for Computer Vision, Digital Image Processi
 \item Fine-tuned XLS-R-300M + AASIST: 4.8\% equal error rate vs 34.3\% off the shelf; 6.0\% on held-out voice generators.
 \item Cut error on 41 real phone calls from 24.6\% to 6.8\% by adding real-call clips and a learned speakerphone channel.
 \item Ablation: real-call clips alone gave 9.3\%, the learned channel alone 18.6\%; on an unseen phone, 11.7\%.
-\item FastAPI risk API answers in 3.95 ms (p95); on two real phones, a cloned call put a payment on hold in 14 s.
+\end{itemize}
+\entry{FinReason Cup, IEEE Big Data Cup 2026 (team of 2): paper accepted}{Oct 2026}{LLM coding agents, Python, exact rational arithmetic | 11th of 27 teams (Task 1), 11th of 23 (Task 3)}
+\begin{itemize}
+\item Built 290 exact-arithmetic solvers with LLM agents, each verified on every labeled case; 923/928 test answers right.
+\item XBRL audit: re-implemented 3 XBRL US data-quality rules from source; 98.4\% dev accuracy vs a 33.1\% baseline.
 \end{itemize}
 \entry{VLA Policy Fine-Tuning on Robot Arms (π0.5)}{2026}{Python, PyTorch | private work}
 \begin{itemize}
@@ -28,22 +32,13 @@ Coursework: AI and ML, Deep Learning for Computer Vision, Digital Image Processi
 \end{itemize}
 \entry{WEAR Dataset Challenge @HASCA 2026 (Kaggle): 5th of 232 teams}{Oct 2026}{PyTorch, LightGBM | write-up: \lnk{https://galabavamsi.com/blog/wear-hasca-kaggle-5th.html}{galabavamsi.com/blog}}
 \begin{itemize}
-\item Recognized 18 exercises from wearable IMU and video of 4 unseen people: macro-F1 0.93137 (private leaderboard).
-\item Improved a public notebook from 0.92497 to 0.93825 (public board) with per-subject whitening; rejected a data leak.
+\item Recognized 18 exercises from wearable IMU and video of 4 unseen people: macro-F1 0.93137; rejected a data leak.
 \end{itemize}
 \entry{World Model for Robot Manipulation: JEPA on LeRobot Push-T}{Aug 2026}{PyTorch, LeRobot Push-T | write-up: \lnk{https://galabavamsi.com/blog/jepa-world-model-pusht.html}{galabavamsi.com/blog}}
 \begin{itemize}
-\item Trained a 1.9M-parameter JEPA world model (predicts the next state) in 7 minutes on an 8 GB laptop GPU.
-\item Published the negative result: predictions fell behind a no-change baseline after 2 steps; the planner scored 0.
+\item Trained a 1.9M-parameter JEPA world model in 7 min on an 8 GB GPU; published why its planner scored 0.
 \end{itemize}
-\entry{Amazon ML Challenge (team): All India Rank 747 (2025), 200 (2026)}{2025 -- 2026}{Qwen2-VL, ViT, RoBERTa}
-\begin{itemize}
-\item Predicted product prices from images and text with Qwen2-VL 7B and a ViT/RoBERTa two-tower model.
-\end{itemize}
-\entry{Arista Wi-Fi Radio Resource Management (team): 5th of 23 IITs, Inter IIT Tech Meet 14.0}{Dec 2025}{PyTorch, NS-3}
-\begin{itemize}
-\item Classified 16 interference types from I/Q samples (STFT, DBSCAN, dual CNN) for a 5-AP, 50-client NS-3 network.
-\end{itemize}
+\entry{Amazon ML Challenge (team): All India Rank 747 (2025), 200 (2026)}{2025 -- 2026}{Price prediction from images and text | Qwen2-VL 7B, ViT/RoBERTa two-tower model}
 
 \section{Experience}
 \entry{Co-founder, Robotropic (physical-AI startup) \mdseries | \lnk{https://www.robotropic.com}{robotropic.com}}{Oct 2026 -- Present}{}
@@ -79,12 +74,14 @@ Coursework: AI and ML, Deep Learning for Computer Vision, Digital Image Processi
 \section{Achievements}
 \begin{itemize}
 \item \lnk{https://drive.google.com/file/d/1_q0edTjShyucpmN5cs0e9heGE8fM29ga/view?usp=drive_link}{Top 8 Grand Finalist of 4,500+ teams}, RAKSHAM AI Cybersecurity Hackathon (IIT Delhi, I4C and Amazon), 2026
+\item 5th of 23 IITs, Arista Wi-Fi challenge, Inter IIT Tech Meet 14.0 (2025): 16-class interference classifier from I/Q data
 \item Prime Minister's Scholarship Scheme scholar (2024); Top 1\% in JEE Advanced; YC Startup School, Bengaluru
 \end{itemize}
 
 \section{Publications}
 \begin{itemize}
 \item Co-author, \lnk{https://arxiv.org/abs/2610.06306}{\textit{Inspect Robots: Evaluating the Capabilities and Safety of Embodied AI}} (Robocurve), CoRL 2026 workshop
+\item Co-author, \textit{HumanSlop at FinReason Cup 2026 Tasks 1 and 3: Verified Program Synthesis for Exact Financial Reasoning and Executable Rule Semantics for XBRL Audit Verification}, \lnk{https://the-finai.github.io/IEEE-bigdata-cup/}{IEEE Big Data Cup 2026} (accepted)
 \item Co-author, 2 RIS papers: IEEE INDICON 2025 and \textit{Ad Hoc Networks} (Elsevier, 2026)
 \end{itemize}
 
