@@ -339,11 +339,11 @@
 
         <article class="panel project">
           <div class="item-top">
-            <h3>Pneumatic Sorting Digital Twin (offline simulation)</h3>
+            <h3>Pneumatic Sorting Digital Twin (live PLC link, Meta Quest AR)</h3>
             <span>2026</span>
           </div>
-          <p>Unity simulation of three electropneumatic training kits (sorting, stamping, vacuum transfer): simulated axes, logical PLC I/O, HMI screens, and telemetry record and replay. Not yet connected to a physical PLC.</p>
-          <p class="tags">Unity / C# / Simulation</p>
+          <p>Unity twins of five electropneumatic training kits, built from their CAD. Kits 1–3 have Structured Text programs for the rig's Allen-Bradley Micro850 PLC; Kit 1's program sorts real metal and plastic parts, and its twin mirrors the running PLC over EtherNet/IP (about 26 ms per full read). A read-only .NET gateway feeds a dashboard and a Meta Quest 3 AR view that places a twin at full size beside the real kit. Kits 4–5 follow sequences worked out from the CAD, not yet confirmed on hardware. Built with Claude Code.</p>
+          <p class="tags">Unity / C# / Micro850 PLC / EtherNet/IP / WebXR</p>
           <div class="panel-actions">
             <a class="text-link" href="https://github.com/Galabavamsi/pneumatic-sorting-digital-twin" target="_blank" rel="noopener">GitHub</a>
           </div>
@@ -983,6 +983,6 @@
 
   <script src="config.js?v=refresh-7"></script>
   <script src="script.js?v=refresh-7"></script>
-  <script src="pet.js?v=refresh-26"></script>
+  <script src="pet.js?v=refresh-27"></script>
 </body>
 </html>
